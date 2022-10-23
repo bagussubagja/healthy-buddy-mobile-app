@@ -1,0 +1,92 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+
+class CustomTextField extends StatelessWidget {
+  String? titleText;
+  String? hintText;
+  TextEditingController? controller;
+  Widget? widget;
+  Widget? suffixIcon;
+  Widget? prefixIcon;
+  Function()? onTap;
+  bool? obscureText;
+  bool? readOnly;
+  bool? isObscure;
+  double? height;
+  TextInputType? textInputType;
+  CustomTextField(
+      {Key? key,
+      this.titleText,
+      this.hintText,
+      this.controller,
+      this.widget,
+      this.onTap,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.obscureText,
+      this.readOnly,
+      this.isObscure,
+      this.textInputType,
+      this.height})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        titleText == null
+            ? const SizedBox.shrink()
+            : Text(
+                titleText!,
+                style: regularStyle,
+              ),
+        const SizedBox(
+          height: 5,
+        ),
+        Container(
+          height: height ?? 50,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  style: readOnly == true
+                      ? regularStyle.copyWith(color: Colors.grey, fontSize: 12)
+                      : regularStyle.copyWith(color: Colors.grey, fontSize: 12),
+                  cursorColor: greenColor,
+                  keyboardType: textInputType,
+                  obscureText: obscureText ?? false,
+                  onTap: onTap,
+                  readOnly: readOnly ?? false,
+                  controller: controller,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    suffixIcon: suffixIcon,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: greenColor)),
+                    prefixIcon: prefixIcon,
+                    contentPadding:
+                        const EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                    alignLabelWithHint: true,
+                    hintText: hintText,
+                    hintStyle: regularStyle.copyWith(color: Colors.grey),
+                  ),
+                ),
+              ),
+              widget == null
+                  ? const SizedBox.shrink()
+                  : Container(
+                      child: widget,
+                    )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
