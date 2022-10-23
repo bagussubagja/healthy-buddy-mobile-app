@@ -54,6 +54,7 @@ class HomePage extends StatelessWidget {
         ),
         body: SafeArea(
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
               MarginHeight(height: 15),
@@ -101,7 +102,7 @@ class HomePage extends StatelessWidget {
           'Kategori',
           style: titleStyle.copyWith(color: greenColor),
         ),
-        MarginHeight(height: 10),
+        MarginHeight(height: 2.5.h),
         SizedBox(
           height: 12.h,
           width: double.infinity,
@@ -118,7 +119,7 @@ class HomePage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      height: 8.h,
+                      height: 7.h,
                       decoration: BoxDecoration(
                         color: greenColor.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(10),
@@ -138,7 +139,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        MarginHeight(height: 15),
+        MarginHeight(height: 1.h),
         _topArticle(context)
       ],
     );
@@ -154,7 +155,7 @@ class HomePage extends StatelessWidget {
         ),
         MarginHeight(height: 10),
         SizedBox(
-          height: 15.h,
+          height: 14.h,
           width: double.infinity,
           child: Center(
             child: ListView.separated(
@@ -163,6 +164,7 @@ class HomePage extends StatelessWidget {
               },
               itemCount: _emoticon.length,
               shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return Column(
@@ -231,7 +233,7 @@ class HomePage extends StatelessWidget {
           children: [
             Text(
               'Top Article',
-              style: titleStyle.copyWith(color: greenDarkerColor),
+              style: titleStyle.copyWith(color: greenColor),
             ),
             TextButton(
                 onPressed: () {},
@@ -250,6 +252,7 @@ class HomePage extends StatelessWidget {
             itemCount: 6,
             itemBuilder: (context, index) {
               return ListTile(
+                tileColor: greyColor,
                 leading: Container(
                   height: 30,
                   width: 30,

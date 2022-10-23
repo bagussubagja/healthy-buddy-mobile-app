@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
@@ -8,8 +8,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Sizer(
@@ -17,7 +15,8 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Poppins"),
-          home: HomePage(),
+          initialRoute: AppRoutes.onboardingScreen,
+          routes: AppRoutes.routes,
         );
       },
     );

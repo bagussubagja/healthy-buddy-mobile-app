@@ -6,6 +6,7 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 class CustomTextField extends StatelessWidget {
   String? titleText;
   String? hintText;
+  Color? color;
   TextEditingController? controller;
   Widget? widget;
   Widget? suffixIcon;
@@ -29,7 +30,8 @@ class CustomTextField extends StatelessWidget {
       this.readOnly,
       this.isObscure,
       this.textInputType,
-      this.height})
+      this.height,
+      this.color})
       : super(key: key);
 
   @override
@@ -50,14 +52,15 @@ class CustomTextField extends StatelessWidget {
           height: height ?? 50,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              color: color ?? Colors.white,
+              borderRadius: BorderRadius.circular(12)),
           child: Row(
             children: [
               Expanded(
                 child: TextFormField(
                   style: readOnly == true
-                      ? regularStyle.copyWith(color: Colors.grey, fontSize: 12)
-                      : regularStyle.copyWith(color: Colors.grey, fontSize: 12),
+                      ? regularStyle.copyWith(color: Colors.grey, fontSize: 16)
+                      : regularStyle.copyWith(color: Colors.grey, fontSize: 16),
                   cursorColor: greenColor,
                   keyboardType: textInputType,
                   obscureText: obscureText ?? false,
