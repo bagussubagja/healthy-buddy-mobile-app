@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
@@ -118,15 +119,20 @@ class HomePage extends StatelessWidget {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      height: 7.h,
-                      decoration: BoxDecoration(
-                        color: greenColor.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Image.asset(
-                        '$imageDirectory/${_categoryIcon[index]}',
-                        scale: 1.5.h,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.foodiesScreen);
+                      },
+                      child: Container(
+                        height: 7.h,
+                        decoration: BoxDecoration(
+                          color: greenColor.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.asset(
+                          '$imageDirectory/${_categoryIcon[index]}',
+                          scale: 1.5.h,
+                        ),
                       ),
                     ),
                     Text(
