@@ -26,7 +26,7 @@ class _BodyPageScreenState extends State<BodyPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colors.white,
       bottomNavigationBar: SalomonBottomBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),

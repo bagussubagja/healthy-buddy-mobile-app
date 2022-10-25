@@ -16,6 +16,7 @@ Future<List<FoodArticleModel>?> getFoodArticles(
         await client.get(uri, headers: {'Authorization': 'Bearer $bearer'});
     if (respone.statusCode == 200) {
       var json = respone.body;
+      print(json);
       return foodArticleModelFromJson(json);
     }
   } catch (e) {

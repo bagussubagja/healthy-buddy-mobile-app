@@ -1,6 +1,6 @@
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/foodies/foodies_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/foodies_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
 
