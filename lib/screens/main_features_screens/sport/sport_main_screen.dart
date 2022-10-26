@@ -3,23 +3,23 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/food_articles_notifier/food_articles_notifier.dart';
-import 'package:healthy_buddy_mobile_app/models/food_article/carousel_ver_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:appinio_animated_toggle_tab/appinio_animated_toggle_tab.dart';
 
 import '../../../shared/assets_directory.dart';
 
-class FoodiesScreen extends StatefulWidget {
-  const FoodiesScreen({super.key});
+class SportScreen extends StatefulWidget {
+  const SportScreen({super.key});
 
   @override
-  State<FoodiesScreen> createState() => _FoodiesScreenState();
+  State<SportScreen> createState() => _SportScreenState();
 }
 
-class _FoodiesScreenState extends State<FoodiesScreen> {
+class _SportScreenState extends State<SportScreen> {
   bool _isLoading = true;
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
@@ -30,24 +30,23 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   }
 
   final List<String> _iconImage = [
-    "food-article.png",
-    "food-pedia.png",
-    "food-receipt.png",
-    "food-store.png"
+    "sport-article.png",
+    "sport-pedia.png",
+    "sport-store.png"
   ];
   final List<String> _iconLabel = [
-    "Food Article",
-    "Food Pedia",
-    "Food Receipt",
-    "Food Store"
+    "Sport Article",
+    "Sport Pedia",
+    "Sport Store",
   ];
+
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    final itemCarousel =
-        Provider.of<FoodArticlesCarouselClass>(context, listen: false);
-    itemCarousel.getFoodArticleDataCarouselVer(context: context);
+    final itemCarousel = Provider.of<CarouselClass>(context, listen: false);
+    itemCarousel.getDataCarousel(context: context, section: "sport");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
     Timer(const Duration(seconds: 5), loadingCompleted);
@@ -90,9 +89,53 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     MarginHeight(height: 1.h),
                     _carouselSection(),
                     MarginHeight(height: 3.h),
-                    _foodiesCategory(),
+                    _sportCategory(),
                     MarginHeight(height: 2.h),
-                    _tipOfTheDay()
+                    Center(
+                      child: AppinioAnimatedToggleTab(
+                        callback: (int i) {
+                          setState(() {
+                            _currentIndex = i;
+                          });
+                        },
+                        tabTexts: const [
+                          'Easy',
+                          'Medium',
+                          'Hard',
+                        ],
+                        height: 40,
+                        width: 300,
+                        boxDecoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        animatedBoxDecoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFc3d2db).withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(2, 2),
+                            ),
+                          ],
+                          color: greenColor.withOpacity(0.25),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                          border: Border.all(
+                            color: greenDarkerColor,
+                            width: 1,
+                          ),
+                        ),
+                        activeStyle: TextStyle(
+                          color: greenDarkerColor,
+                        ),
+                        inactiveStyle: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    _currentIndex == 0 ? Text("Test") : Text('data'),
+                    // _tipOfTheDay()
                   ],
                 ),
               ),
@@ -105,12 +148,12 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Foodies',
+          'Sport',
           style: titleStyle.copyWith(color: greenColor),
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          'Disini tempat mencari makanan sehat!',
+          'Hal spesial untuk kamu, olahragawan!',
           style: regularStyle.copyWith(color: greyTextColor),
         ),
       ],
@@ -118,8 +161,8 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   }
 
   Widget _carouselSection() {
-    final itemCarousel = Provider.of<FoodArticlesCarouselClass>(context);
-    final item = itemCarousel.foodArticleCarousel?[0];
+    final itemCarousel = Provider.of<CarouselClass>(context);
+    final item = itemCarousel.carousel?[0];
     return CarouselSlider.builder(
       itemCount: 3,
       itemBuilder: (context, index, realIndex) {
@@ -132,7 +175,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
               children: [
                 ClipRRect(
                   child: Image.network(
-                    item?.thumbnail?[index] ?? _placeHolder,
+                    item?.thumbnail[index] ?? _placeHolder,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -156,7 +199,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${item?.title?[index].substring(0, 45)}..",
+                          "${item?.title[index].substring(0, 45)}..",
                           style: regularStyle.copyWith(color: whiteColor),
                         ),
                         GestureDetector(
@@ -185,7 +228,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     );
   }
 
-  Widget _foodiesCategory() {
+  Widget _sportCategory() {
     return SizedBox(
       height: 14.5.h,
       width: double.infinity,

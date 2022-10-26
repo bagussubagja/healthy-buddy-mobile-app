@@ -121,7 +121,11 @@ class HomePage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.foodiesScreen);
+                        if (index == 0) {
+                          Navigator.pushNamed(context, AppRoutes.foodiesScreen);
+                        } else {
+                          Navigator.pushNamed(context, AppRoutes.sportScreen);
+                        }
                       },
                       child: Container(
                         height: 7.h,

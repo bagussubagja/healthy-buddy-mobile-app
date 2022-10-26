@@ -8,7 +8,7 @@ class ProviderList {
       create: (_) => FoodArticlesClass(),
     ),
     ChangeNotifierProvider(
-      create: (_) => FoodArticlesCarouselClass(),
+      create: (_) => CarouselClass(),
     ),
   ];
 }

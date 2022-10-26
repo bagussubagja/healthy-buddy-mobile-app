@@ -41,6 +41,7 @@ dependencies:
   carousel_slider: ^4.1.1
   provider: ^6.0.4
   http: ^0.13.5
+  appinio_animated_toggle_tab: ^1.0.2
 
 dev_dependencies:
   flutter_test:
