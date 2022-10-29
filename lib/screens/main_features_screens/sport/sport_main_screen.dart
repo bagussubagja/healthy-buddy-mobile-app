@@ -134,7 +134,7 @@ class _SportScreenState extends State<SportScreen> {
                         ),
                       ),
                     ),
-                    _currentIndex == 0 ? Text("Test") : Text('data'),
+                    _currentIndex == 0 ? const Text("Test") : const Text('data'),
                     // _tipOfTheDay()
                   ],
                 ),
@@ -177,6 +177,7 @@ class _SportScreenState extends State<SportScreen> {
                   child: Image.network(
                     item?.thumbnail[index] ?? _placeHolder,
                     fit: BoxFit.cover,
+                    
                   ),
                 ),
                 Container(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/food_articles_notifier/food_articles_notifier.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -88,7 +89,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     MarginHeight(height: 1.h),
                     _carouselSection(),
                     MarginHeight(height: 3.h),
-                    _foodiesCategory(),
+                    _foodiesCategory(context),
                     MarginHeight(height: 2.h),
                     _tipOfTheDay()
                   ],
@@ -183,7 +184,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     );
   }
 
-  Widget _foodiesCategory() {
+  Widget _foodiesCategory(BuildContext context) {
     return SizedBox(
       height: 14.5.h,
       width: double.infinity,
@@ -201,7 +202,9 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
+                  },
                   child: Container(
                     height: 7.h,
                     decoration: BoxDecoration(

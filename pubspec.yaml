@@ -42,6 +42,8 @@ dependencies:
   provider: ^6.0.4
   http: ^0.13.5
   appinio_animated_toggle_tab: ^1.0.2
+  cached_network_image: ^3.2.2
+  toggle_switch: ^2.0.1
 
 dev_dependencies:
   flutter_test:
