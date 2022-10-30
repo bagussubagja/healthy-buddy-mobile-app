@@ -123,8 +123,10 @@ class HomePage extends StatelessWidget {
                       onTap: () {
                         if (index == 0) {
                           Navigator.pushNamed(context, AppRoutes.foodiesScreen);
-                        } else {
+                        } else if (index == 1) {
                           Navigator.pushNamed(context, AppRoutes.sportScreen);
+                        } else {
+                          Navigator.pushNamed(context, AppRoutes.myDocScreen);
                         }
                       },
                       child: Container(

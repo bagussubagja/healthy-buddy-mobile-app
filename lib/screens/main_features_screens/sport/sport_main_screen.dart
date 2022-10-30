@@ -8,7 +8,6 @@ import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:appinio_animated_toggle_tab/appinio_animated_toggle_tab.dart';
 
 import '../../../shared/assets_directory.dart';
 
@@ -39,6 +38,8 @@ class _SportScreenState extends State<SportScreen> {
     "Sport Pedia",
     "Sport Store",
   ];
+  final List<String> _exerciseLevel = ["Easy", "Medium", "Hard"];
+  List<bool> _selectedToogle = [true, false, false];
 
   int _currentIndex = 0;
 
@@ -86,56 +87,14 @@ class _SportScreenState extends State<SportScreen> {
                 child: ListView(
                   children: [
                     _headerSection(),
-                    MarginHeight(height: 1.h),
+                    MarginHeight(height: 2.h),
                     _carouselSection(),
-                    MarginHeight(height: 3.h),
+                    MarginHeight(height: 2.h),
                     _sportCategory(),
                     MarginHeight(height: 2.h),
-                    Center(
-                      child: AppinioAnimatedToggleTab(
-                        callback: (int i) {
-                          setState(() {
-                            _currentIndex = i;
-                          });
-                        },
-                        tabTexts: const [
-                          'Easy',
-                          'Medium',
-                          'Hard',
-                        ],
-                        height: 40,
-                        width: 300,
-                        boxDecoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        animatedBoxDecoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFFc3d2db).withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              offset: const Offset(2, 2),
-                            ),
-                          ],
-                          color: greenColor.withOpacity(0.25),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          border: Border.all(
-                            color: greenDarkerColor,
-                            width: 1,
-                          ),
-                        ),
-                        activeStyle: TextStyle(
-                          color: greenDarkerColor,
-                        ),
-                        inactiveStyle: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    _currentIndex == 0 ? const Text("Test") : const Text('data'),
-                    // _tipOfTheDay()
+                    _exerciseLevelSection(),
+                    MarginHeight(height: 2.h),
+                    _exerciseSection()
                   ],
                 ),
               ),
@@ -177,7 +136,6 @@ class _SportScreenState extends State<SportScreen> {
                   child: Image.network(
                     item?.thumbnail[index] ?? _placeHolder,
                     fit: BoxFit.cover,
-                    
                   ),
                 ),
                 Container(
@@ -271,6 +229,125 @@ class _SportScreenState extends State<SportScreen> {
         ),
       ),
     );
+  }
+
+  Widget _exerciseLevelSection() {
+    return Center(
+      child: SizedBox(
+        height: 30,
+        child: ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    for (int i = 0; i < _selectedToogle.length; i++) {
+                      if (i == index) {
+                        _selectedToogle[i] = true;
+                      } else {
+                        _selectedToogle[i] = false;
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(2),
+                  height: 30,
+                  width: 80,
+                  decoration: BoxDecoration(
+                      color: _selectedToogle[index]
+                          ? greenColor.withOpacity(0.2)
+                          : greyColor,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: _selectedToogle[index]
+                              ? greenDarkerColor
+                              : greyTextColor)),
+                  child: Text(
+                    _exerciseLevel[index],
+                    style: regularStyle.copyWith(
+                        color: _selectedToogle[index]
+                            ? greenDarkerColor
+                            : greyTextColor,
+                        fontSize: 14),
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return MarginWidth(width: 10.w);
+            },
+            itemCount: 3),
+      ),
+    );
+  }
+
+  Widget _exerciseSection() {
+    return ListView.separated(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Container(
+            padding: const EdgeInsets.all(10),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: greyColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20.h,
+                  width: 30.w,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      'assets/images/onboardscreen.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                MarginWidth(width: 4.w),
+                SizedBox(
+                  width: 50.w,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Sprint',
+                        style: titleStyle,
+                      ),
+                      Text(
+                        'Sprinting is running over a short distance at the top-most speed of the body in a limited period of time.',
+                        style: regularStyle.copyWith(fontSize: 10.sp),
+                      ),
+                      Container(
+                        alignment: Alignment.bottomRight,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: greenColor, elevation: 0),
+                          onPressed: () {},
+                          child: Text(
+                            'Try it!',
+                            style: regularStyle,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return MarginHeight(height: 20);
+        },
+        itemCount: 10);
   }
 
   Widget _tipOfTheDay() {

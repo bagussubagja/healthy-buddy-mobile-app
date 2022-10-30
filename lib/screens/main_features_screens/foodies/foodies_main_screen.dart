@@ -24,9 +24,11 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
   void loadingCompleted() {
-    setState(() {
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   final List<String> _iconImage = [
@@ -248,6 +250,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
             )
           ],
         ),
+        MarginHeight(height: 1.25.h),
         ListView.builder(
           shrinkWrap: true,
           primary: false,
