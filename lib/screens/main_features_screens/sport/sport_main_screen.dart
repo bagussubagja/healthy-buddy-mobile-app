@@ -23,9 +23,11 @@ class _SportScreenState extends State<SportScreen> {
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
   void loadingCompleted() {
-    setState(() {
+    if (mounted) {
+      setState(() {
       _isLoading = false;
     });
+    }
   }
 
   final List<String> _iconImage = [

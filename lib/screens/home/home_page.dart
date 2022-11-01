@@ -55,7 +55,6 @@ class HomePage extends StatelessWidget {
         ),
         body: SafeArea(
           child: ListView(
-            physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
               MarginHeight(height: 15),
