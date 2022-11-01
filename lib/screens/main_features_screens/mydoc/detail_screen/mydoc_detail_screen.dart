@@ -15,12 +15,24 @@ class MyDocDetailScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: ListView(
+          shrinkWrap: true,
           children: [
+            _imageSection(context),
             MarginHeight(height: 9.h),
-            Text(
-              'Appointment',
-              style: titleStyle.copyWith(color: greenColor),
-            )
+            Padding(
+              padding: defaultPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _appointmentSection(),
+                  _docdescription(),
+                  MarginHeight(height: 2.h),
+                  _detailDocData(),
+                  MarginHeight(height: 4.h),
+                  _appointmentButton()
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -52,12 +64,11 @@ class MyDocDetailScreen extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_horiz_rounded,
-                color: blackColor,
-              ),
-            ),
+                onPressed: () {},
+                icon: Icon(
+                  Icons.favorite,
+                  color: blackColor,
+                ))
           ],
         ),
         Positioned(
@@ -83,6 +94,7 @@ class MyDocDetailScreen extends StatelessWidget {
                     Text(
                       'Prof. Dr. Arfi Firman Pradipta',
                       style: titleStyle.copyWith(fontSize: 13.sp),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     MarginHeight(height: 1.h),
                     Text(
@@ -112,6 +124,129 @@ class MyDocDetailScreen extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Widget _appointmentSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Appointment',
+          style: titleStyle.copyWith(color: greenColor),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Wednesday, 4th August 2022',
+              style: regularStyle,
+            ),
+            OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: greenColor,
+                ),
+                onPressed: () {},
+                child: Text(
+                  'Change',
+                  style: regularStyle,
+                ))
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _docdescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'About',
+          style: titleStyle.copyWith(color: greenColor),
+        ),
+        Text(
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          style: regularStyle,
+          textAlign: TextAlign.justify,
+        )
+      ],
+    );
+  }
+
+  Widget _detailDocData() {
+    return SizedBox(
+      height: 10.h,
+      child: Center(
+        child: ListView.separated(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Container(
+                alignment: Alignment.center,
+                width: 25.w,
+                decoration: BoxDecoration(
+                  color: greenColor.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '242',
+                      style: titleStyle.copyWith(color: greenColor),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      'Patients',
+                      style: regularStyle,
+                    )
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return MarginWidth(width: 10);
+            },
+            itemCount: 3),
+      ),
+    );
+  }
+
+  Widget _appointmentButton() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      height: 8.h,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: greenColor.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Fee : \$150',
+            style: regularStyle.copyWith(color: whiteColor),
+          ),
+          Container(
+            height: 5.h,
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: greenColor.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              'Appointment',
+              style: regularStyle.copyWith(color: whiteColor),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

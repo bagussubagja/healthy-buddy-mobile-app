@@ -31,7 +31,9 @@ class MyDocMainScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: Icon(
             Icons.arrow_back_ios,
             color: blackColor,
@@ -223,7 +225,8 @@ class MyDocMainScreen extends StatelessWidget {
                           elevation: 0,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, AppRoutes.myDocDetailScreen);
+                          Navigator.pushNamed(
+                              context, AppRoutes.myDocDetailScreen);
                         },
                         child: Text(
                           'Appointment',
