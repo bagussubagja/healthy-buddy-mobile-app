@@ -52,7 +52,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     itemCarousel.getDataCarousel(context: context, section: "foodies");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
-    Timer(const Duration(seconds: 5), loadingCompleted);
+    Timer(const Duration(seconds: 3), loadingCompleted);
   }
 
   @override
@@ -94,7 +94,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     MarginHeight(height: 3.h),
                     _foodiesCategory(context),
                     MarginHeight(height: 2.h),
-                    _tipOfTheDay()
+                    _articleOfTheDay()
                   ],
                 ),
               ),
@@ -143,10 +143,12 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                         ),
                       ),
                     ),
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(Icons.error),
+                    ),
                   ),
                 ),
                 Container(
@@ -244,7 +246,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     );
   }
 
-  Widget _tipOfTheDay() {
+  Widget _articleOfTheDay() {
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     return Column(
       children: [

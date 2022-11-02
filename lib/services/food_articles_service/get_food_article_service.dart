@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/food_article_model.dart';
+import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<FoodArticleModel>?> getFoodArticles(
@@ -16,8 +17,11 @@ Future<List<FoodArticleModel>?> getFoodArticles(
       return foodArticleModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+      "There's Something Error",
+      style: regularStyle,
+    )));
   }
   return [];
 }

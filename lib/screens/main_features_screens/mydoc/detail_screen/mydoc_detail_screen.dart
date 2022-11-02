@@ -29,7 +29,9 @@ class MyDocDetailScreen extends StatelessWidget {
                   MarginHeight(height: 2.h),
                   _detailDocData(),
                   MarginHeight(height: 4.h),
-                  _appointmentButton()
+                  Positioned(
+                    child: _appointmentButton(),
+                  ),
                 ],
               ),
             ),
