@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/food_articles_notifier/food_articles_notifier.dart';
@@ -135,9 +136,22 @@ class _SportScreenState extends State<SportScreen> {
               fit: StackFit.expand,
               children: [
                 ClipRRect(
-                  child: Image.network(
-                    item?.thumbnail[index] ?? _placeHolder,
-                    fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    imageUrl: item?.thumbnail[index] ?? _placeHolder,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(Icons.error),
+                    ),
                   ),
                 ),
                 Container(

@@ -14,11 +14,18 @@ class HomePage extends StatelessWidget {
     'angry.png',
     'happy.png',
     'sad.png',
-    'amazing.png'
   ];
-  final List<String> _emotionTitle = ['Marah', 'Bahagia', 'Sedih', 'Hebat'];
+  final List<String> _emotionTitle = [
+    'Marah',
+    'Bahagia',
+    'Sedih',
+  ];
 
-  final List<String> _categoryIcon = ['foodies.png', 'sport.png', 'mydoc.png'];
+  final List<String> _categoryIcon = [
+    'foodies.png',
+    'sport.png',
+    'mydoc.png',
+  ];
 
   final List<String> _categoryLabel = ['Foodies', 'Sport', 'MyDoc'];
 
@@ -171,7 +178,7 @@ class HomePage extends StatelessWidget {
           child: Center(
             child: ListView.separated(
               separatorBuilder: (context, index) {
-                return MarginWidth(width: 5.w);
+                return MarginWidth(width: 10.w);
               },
               itemCount: _emoticon.length,
               shrinkWrap: true,

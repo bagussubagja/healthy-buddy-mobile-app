@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -86,53 +87,58 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            return Container(
-              width: 55.w,
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              decoration: BoxDecoration(
-                color: greenColor.withOpacity(0.75),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 200,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        'assets/images/onboardscreen.png',
-                        fit: BoxFit.cover,
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.foodReceiptDetailScreen);
+              },
+              child: Container(
+                width: 55.w,
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                decoration: BoxDecoration(
+                  color: greenColor.withOpacity(0.75),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          'assets/images/onboardscreen.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  MarginHeight(height: 1.h),
-                  Text(
-                    'Lorem Ipsum Dolor Sit Amet',
-                    style:
-                        titleStyle.copyWith(fontSize: 12.sp, color: whiteColor),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RatingBarIndicator(
-                        rating: 4,
-                        itemBuilder: (context, index) => Icon(
-                          Icons.star,
-                          color: whiteColor,
+                    MarginHeight(height: 1.h),
+                    Text(
+                      'Lorem Ipsum Dolor Sit Amet',
+                      style: titleStyle.copyWith(
+                          fontSize: 12.sp, color: whiteColor),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RatingBarIndicator(
+                          rating: 4,
+                          itemBuilder: (context, index) => Icon(
+                            Icons.star,
+                            color: whiteColor,
+                          ),
+                          itemCount: 5,
+                          itemSize: 17.5,
+                          direction: Axis.horizontal,
                         ),
-                        itemCount: 5,
-                        itemSize: 17.5,
-                        direction: Axis.horizontal,
-                      ),
-                      Text(
-                        '4.5',
-                        style: regularStyle.copyWith(color: whiteColor),
-                      )
-                    ],
-                  )
-                ],
+                        Text(
+                          '4.5',
+                          style: regularStyle.copyWith(color: whiteColor),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             );
           },

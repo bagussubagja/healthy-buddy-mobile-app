@@ -10,6 +10,7 @@ import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/assets_directory.dart';
 
@@ -40,7 +41,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   ];
   final List<String> _iconLabel = [
     "Food Article",
-    "Food Pedia",
+    "Food Recom",
     "Food Receipt",
     "Food Store"
   ];
@@ -218,8 +219,16 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
+                  onTap: () async {
+                    if (index == 0) {
+                      Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
+                    } else {
+                      final url = Uri.parse(
+                          'https://foodies-recomendation.herokuapp.com/');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    }
                   },
                   child: Container(
                     height: 7.h,

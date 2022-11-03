@@ -70,10 +70,10 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         UnconstrainedBox(
           child: SizedBox(
-            height: 200,
-            width: 200,
+            height: 30.h,
+            width: 60.w,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(1000),
               child: Image.asset(
                 'assets/images/avatar-demo.jpg',
                 fit: BoxFit.cover,
