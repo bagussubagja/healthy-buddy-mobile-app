@@ -59,9 +59,10 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -265,7 +266,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
           children: [
             Text(
               "Article of the Day",
-              style: titleStyle,
+              style: titleStyle.copyWith(color: blackColor),
             ),
             Text(
               'Lihat Semua',
@@ -286,7 +287,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
               padding: defaultPadding,
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: greyColor, borderRadius: BorderRadius.circular(12)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -300,11 +301,13 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                   MarginHeight(height: 1.h),
                   Text(
                     itemArticle?.title ?? 'Loading...',
-                    style: titleStyle.copyWith(fontSize: 14.sp),
+                    style:
+                        titleStyle.copyWith(fontSize: 14.sp, color: blackColor),
                   ),
                   Text(
                     '${itemArticle?.description?.substring(0, 50)}...',
-                    style: regularStyle.copyWith(fontSize: 12.sp),
+                    style: regularStyle.copyWith(
+                        fontSize: 12.sp, color: greyTextColor),
                   ),
                 ],
               ),

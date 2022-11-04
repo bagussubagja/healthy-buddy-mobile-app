@@ -17,9 +17,11 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
   final List<String> _foodCategory = ["Breakfast", "Lunch", "Dinner", "Drink"];
   List<bool> _selectedToogle = [true, false, false, false];
 
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -50,8 +52,8 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
             _recommendedFoodCard(),
             MarginHeight(height: 3.h),
             _foodCategories(),
-            MarginHeight(height: 10),
-            _listFoodByCategory()
+            MarginHeight(height: 3.h),
+            _listFoodByCategory(_currentIndex)
           ],
         ),
       )),
@@ -74,7 +76,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
         MarginHeight(height: 15),
         Text(
           'Rekomendasi',
-          style: titleStyle.copyWith(color: greyTextColor),
+          style: titleStyle.copyWith(color: greenColor),
         ),
       ],
     );
@@ -170,6 +172,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                         _selectedToogle[i] = false;
                       }
                     }
+                    _currentIndex = index;
                   });
                 },
                 child: Container(
@@ -205,35 +208,37 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
     );
   }
 
-  Widget _listFoodByCategory() {
+  Widget _listFoodByCategory(int currentIndex) {
     return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return Container(
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: greyColor, borderRadius: BorderRadius.circular(12)),
+                color: Colors.white, borderRadius: BorderRadius.circular(12)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 58.w,
+                  width: 50.w,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        'Omelette',
-                        style: titleStyle.copyWith(fontSize: 16.sp),
+                        currentIndex == 0 ? "Omelette" : "Seblak",
+                        style: titleStyle.copyWith(
+                            fontSize: 16.sp, color: blackColor),
                       ),
                       Text(
                         'Omelette (also spelled omelet) is a dish made from beaten eggs, fried with butter or oil in a frying pan (without stirring as in scrambled egg).',
-                        style: regularStyle.copyWith(fontSize: 10.sp),
+                        style: regularStyle.copyWith(
+                            fontSize: 10.sp, color: blackColor),
                       ),
                       MarginHeight(height: 5),
                       Row(
@@ -248,20 +253,22 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                               MarginWidth(width: 5),
                               Text(
                                 '10 Min',
-                                style: regularStyle.copyWith(fontSize: 12),
+                                style: regularStyle.copyWith(
+                                    fontSize: 12, color: greyTextColor),
                               )
                             ],
                           ),
                           Row(
                             children: [
                               Icon(
-                                Icons.emoji_emotions_rounded,
+                                Icons.sentiment_satisfied_rounded,
                                 color: greyTextColor,
                               ),
                               MarginWidth(width: 5),
                               Text(
                                 'Easy',
-                                style: regularStyle.copyWith(fontSize: 12),
+                                style: regularStyle.copyWith(
+                                    fontSize: 12, color: greyTextColor),
                               )
                             ],
                           )
@@ -287,7 +294,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
           );
         },
         separatorBuilder: (context, index) {
-          return MarginHeight(height: 10);
+          return MarginHeight(height: 2.5.h);
         },
         itemCount: 10);
   }

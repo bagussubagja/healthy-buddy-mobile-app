@@ -72,6 +72,7 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: defaultPadding,
                 child: CustomTextField(
+                  color: bgColor,
                   prefixIcon: const Icon(
                     Icons.search,
                   ),
@@ -84,11 +85,11 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(10),
                     ),
-                    color: Colors.white),
+                    color: bgColor),
                 child: Padding(
                   padding: defaultPadding,
                   child: _whiteSection(context),

@@ -51,6 +51,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
         ),
         builder: (context, player) {
           return Scaffold(
+            backgroundColor: bgColor,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -65,11 +66,12 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.more_horiz_rounded,
-                      color: blackColor,
-                    ))
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.more_horiz_rounded,
+                    color: blackColor,
+                  ),
+                )
               ],
             ),
             body: SafeArea(
@@ -77,54 +79,170 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: player,
-                      ),
-                    ),
+                    _youtubePlayer(player),
+                    MarginHeight(height: 0.5.h),
+                    _videoTitle(),
+                    _ratingSection(),
+                    MarginHeight(height: 1.h),
+                    _estimationFoodLevel(),
                     MarginHeight(height: 2.h),
-                    Text(
-                      controller.metadata.title,
-                      style: titleStyle.copyWith(color: blackColor),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.access_time_rounded,
-                              color: greyTextColor,
-                            ),
-                            MarginWidth(width: 5),
-                            Text(
-                              '10 Min',
-                              style: regularStyle.copyWith(fontSize: 12),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.emoji_emotions_rounded,
-                              color: greyTextColor,
-                            ),
-                            MarginWidth(width: 5),
-                            Text(
-                              'Easy',
-                              style: regularStyle.copyWith(fontSize: 12),
-                            )
-                          ],
-                        )
-                      ],
-                    )
+                    _ingredientSection(),
+                    MarginHeight(height: 1.h),
+                    _foodServiceStyle()
                   ],
                 ),
               ),
             ),
           );
         });
+  }
+
+  Widget _youtubePlayer(Widget player) {
+    return SizedBox(
+      width: double.infinity,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: player,
+      ),
+    );
+  }
+
+  Widget _videoTitle() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Pancakes",
+          style: titleStyle.copyWith(color: blackColor),
+        ),
+        IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.favorite_rounded,
+              color: greyTextColor,
+            ))
+      ],
+    );
+  }
+
+  Widget _ratingSection() {
+    return RatingBarIndicator(
+      rating: 4,
+      itemBuilder: (context, index) => Icon(
+        Icons.star,
+        color: greenColor,
+      ),
+      itemCount: 5,
+      itemSize: 17.5,
+      direction: Axis.horizontal,
+    );
+  }
+
+  Widget _estimationFoodLevel() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.access_time_rounded,
+              color: greyTextColor,
+            ),
+            MarginWidth(width: 3.w),
+            Text(
+              '10 Min',
+              style: regularStyle.copyWith(fontSize: 12, color: greyTextColor),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Icon(
+              Icons.sentiment_satisfied_rounded,
+              color: greyTextColor,
+            ),
+            MarginWidth(width: 3.w),
+            Text(
+              'Easy',
+              style: regularStyle.copyWith(fontSize: 12, color: greyTextColor),
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _ingredientSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Ingredients',
+          style: titleStyle.copyWith(color: blackColor),
+        ),
+        GridView.builder(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 15.h,
+                childAspectRatio: 2 / 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10),
+            shrinkWrap: true,
+            primary: false,
+            itemBuilder: (context, index) {
+              return Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: greenColor.withOpacity(0.3),
+                ),
+                height: 100,
+                width: double.infinity,
+                child: Text(
+                  'Blueberry',
+                  style: regularStyle.copyWith(color: blackColor),
+                ),
+              );
+            },
+            itemCount: 6),
+      ],
+    );
+  }
+
+  Widget _foodServiceStyle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Food Service Style',
+          style: titleStyle.copyWith(
+            color: blackColor,
+          ),
+        ),
+        MarginHeight(height: 1.h),
+        SizedBox(
+          height: 15.h,
+          child: ListView.builder(
+            itemCount: 5,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Container(
+                width: 20.h,
+                margin: const EdgeInsets.only(left: 0, right: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'assets/images/onboardscreen.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          ),
+        )
+      ],
+    );
   }
 }
