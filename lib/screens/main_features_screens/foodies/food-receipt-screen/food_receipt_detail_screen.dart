@@ -86,9 +86,9 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                     MarginHeight(height: 1.h),
                     _estimationFoodLevel(),
                     MarginHeight(height: 2.h),
-                    _ingredientSection(),
+                    _foodServiceStyle(),
                     MarginHeight(height: 1.h),
-                    _foodServiceStyle()
+                    _ingredientSection(),
                   ],
                 ),
               ),

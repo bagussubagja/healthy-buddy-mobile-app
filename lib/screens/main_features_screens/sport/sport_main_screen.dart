@@ -26,8 +26,8 @@ class _SportScreenState extends State<SportScreen> {
   void loadingCompleted() {
     if (mounted) {
       setState(() {
-      _isLoading = false;
-    });
+        _isLoading = false;
+      });
     }
   }
 
@@ -59,6 +59,7 @@ class _SportScreenState extends State<SportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,

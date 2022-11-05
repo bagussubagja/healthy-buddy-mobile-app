@@ -1,5 +1,6 @@
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/foodies_main_screen.dart';
@@ -8,8 +9,10 @@ import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/no_internet_found_screen.dart';
 
 class AppRoutes {
+  static const String notInternetScreen = '/nointernet';
   static const String loginScreen = '/login';
   static const String registerScreen = '/register';
   static const String homePageScreen = '/home';
@@ -19,9 +22,11 @@ class AppRoutes {
   static const String sportScreen = '/sport';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocDetailScreen = '/myDocDetailScreen';
-  static const String bodyScreen = '/';
+  static const String bodyScreen = '/index';
+  static const String statePageUI = '/state';
 
   static final routes = {
+    notInternetScreen: (context) => NoInternetFoundScreen(),
     loginScreen: (context) => LoginScreen(),
     registerScreen: (context) => RegisterScreen(),
     homePageScreen: (context) => HomePage(),
@@ -31,6 +36,7 @@ class AppRoutes {
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
     sportScreen: (context) => const SportScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
-    myDocDetailScreen: (context) => MyDocDetailScreen()
+    myDocDetailScreen: (context) => MyDocDetailScreen(),
+    statePageUI: (context) => StatePageUI(),
   };
 }
