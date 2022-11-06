@@ -3,6 +3,7 @@ import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/foodies_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String foodiesScreen = '/foodies';
   static const String foodReceiptMenu = '/foodReceiptMenu';
   static const String foodReceiptDetailScreen = '/foodReceiptDetailScreen';
+  static const String foodStoreMainScreen = '/foodStore';
   static const String sportScreen = '/sport';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocDetailScreen = '/myDocDetailScreen';
@@ -26,7 +28,7 @@ class AppRoutes {
   static const String statePageUI = '/state';
 
   static final routes = {
-    notInternetScreen: (context) => NoInternetFoundScreen(),
+    notInternetScreen: (context) => const NoInternetFoundScreen(),
     loginScreen: (context) => LoginScreen(),
     registerScreen: (context) => RegisterScreen(),
     homePageScreen: (context) => HomePage(),
@@ -34,9 +36,10 @@ class AppRoutes {
     foodiesScreen: (context) => const FoodiesScreen(),
     foodReceiptMenu: (context) => FoodReceiptMenuScreen(),
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
+    foodStoreMainScreen: (context) => FoodStoreMainScreen(),
     sportScreen: (context) => const SportScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
     myDocDetailScreen: (context) => MyDocDetailScreen(),
-    statePageUI: (context) => StatePageUI(),
+    statePageUI: (context) => const StatePageUI(),
   };
 }

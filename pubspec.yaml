@@ -48,6 +48,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^3.0.2
   lottie: ^1.4.3
+  awesome_snackbar_content: ^0.0.8
 
 dev_dependencies:
   flutter_test:

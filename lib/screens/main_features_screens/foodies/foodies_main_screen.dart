@@ -23,6 +23,7 @@ class FoodiesScreen extends StatefulWidget {
 
 class _FoodiesScreenState extends State<FoodiesScreen> {
   bool _isLoading = true;
+  bool _isContentShow = false;
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
   void loadingCompleted() {
@@ -31,6 +32,12 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  void showContent() {
+    setState(() {
+      _isContentShow = true;
+    });
   }
 
   final List<String> _iconImage = [
@@ -54,6 +61,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
     Timer(const Duration(seconds: 3), loadingCompleted);
+    Timer(const Duration(seconds: 5), showContent);
   }
 
   @override
@@ -96,7 +104,13 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     MarginHeight(height: 3.h),
                     _foodiesCategory(context),
                     MarginHeight(height: 2.h),
-                    _articleOfTheDay()
+                    Visibility(
+                      visible: _isContentShow,
+                      replacement: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      child: _articleOfTheDay(),
+                    )
                   ],
                 ),
               ),
@@ -222,13 +236,17 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                 GestureDetector(
                   onTap: () async {
                     if (index == 0) {
-                      Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
-                    } else {
+                    } else if (index == 1) {
                       final url = Uri.parse(
                           'https://foodies-recomendation.herokuapp.com/');
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url);
                       }
+                    } else if (index == 2) {
+                      Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
+                    } else if (index == 3) {
+                      Navigator.pushNamed(
+                          context, AppRoutes.foodStoreMainScreen);
                     }
                   },
                   child: Container(

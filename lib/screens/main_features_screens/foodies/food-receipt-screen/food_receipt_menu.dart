@@ -51,7 +51,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
             MarginHeight(height: 1.h),
             _recommendedFoodCard(),
             MarginHeight(height: 3.h),
-            _foodCategories(),
+            _foodToogleButton(),
             MarginHeight(height: 3.h),
             _listFoodByCategory(_currentIndex)
           ],
@@ -153,7 +153,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
     );
   }
 
-  Widget _foodCategories() {
+  Widget _foodToogleButton() {
     return Center(
       child: SizedBox(
         height: 30,

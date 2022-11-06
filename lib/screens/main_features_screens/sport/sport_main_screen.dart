@@ -96,7 +96,7 @@ class _SportScreenState extends State<SportScreen> {
                     MarginHeight(height: 2.h),
                     _sportCategory(),
                     MarginHeight(height: 2.h),
-                    _exerciseLevelSection(),
+                    _sportLevelToogleButton(),
                     MarginHeight(height: 2.h),
                     _exerciseSection()
                   ],
@@ -248,7 +248,7 @@ class _SportScreenState extends State<SportScreen> {
     );
   }
 
-  Widget _exerciseLevelSection() {
+  Widget _sportLevelToogleButton() {
     return Center(
       child: SizedBox(
         height: 30,
