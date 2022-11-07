@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -37,12 +39,18 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: greenColor,
-        child: Icon(
-          Icons.shopping_cart_outlined,
-          color: whiteColor,
+      floatingActionButton: Badge(
+        badgeContent: Text(
+          _currentIndex.toString(),
+          style: regularStyle.copyWith(color: whiteColor),
+        ),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: greenColor,
+          child: Icon(
+            Icons.shopping_cart_outlined,
+            color: whiteColor,
+          ),
         ),
       ),
       appBar: AppBar(
@@ -163,9 +171,20 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                       elevation: 0,
                     ),
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Berhasil Mendapatkan Potongan Harga!')));
+                      final snackBar = SnackBar(
+                        elevation: 0,
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.transparent,
+                        content: AwesomeSnackbarContent(
+                          title: 'Selamat!',
+                          message:
+                              'Kamu telah mendapatkan potongan harga 15% dari setiap item yang akan kamu beli!',
+                          contentType: ContentType.success,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(snackBar);
                     },
                     child: Text(
                       'Dapatkan!',

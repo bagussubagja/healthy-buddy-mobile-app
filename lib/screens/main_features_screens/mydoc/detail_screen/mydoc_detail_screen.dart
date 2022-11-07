@@ -14,26 +14,32 @@ class MyDocDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          shrinkWrap: true,
+        child: Stack(
           children: [
-            _imageSection(context),
-            MarginHeight(height: 9.h),
-            Padding(
-              padding: defaultPadding,
+            SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _appointmentSection(),
-                  _docdescription(),
-                  MarginHeight(height: 2.h),
-                  _detailDocData(),
-                  MarginHeight(height: 4.h),
-                  Positioned(
-                    child: _appointmentButton(),
+                  _imageSection(context),
+                  MarginHeight(height: 9.h),
+                  Padding(
+                    padding: defaultPadding.copyWith(bottom: 8.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _appointmentSection(),
+                        _docdescription(),
+                        MarginHeight(height: 2.h),
+                        _detailDocData(),
+                        MarginHeight(height: 4.h),
+                      ],
+                    ),
                   ),
                 ],
               ),
+            ),
+            Positioned(
+              bottom: 0,
+              child: _appointmentButton(),
             ),
           ],
         ),
@@ -222,10 +228,11 @@ class MyDocDetailScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10),
       height: 8.h,
-      width: double.infinity,
+      width: 100.w,
       decoration: BoxDecoration(
-        color: greenColor.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(10),
+        color: greenColor,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,7 +246,7 @@ class MyDocDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15, right: 15),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: greenColor.withOpacity(0.7),
+              color: greenDarkerColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(

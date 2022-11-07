@@ -49,6 +49,8 @@ dependencies:
   connectivity_plus: ^3.0.2
   lottie: ^1.4.3
   awesome_snackbar_content: ^0.0.8
+  badges: ^2.0.3
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:
