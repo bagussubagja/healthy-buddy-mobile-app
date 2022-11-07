@@ -3,6 +3,7 @@ import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/foodies_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String foodReceiptMenu = '/foodReceiptMenu';
   static const String foodReceiptDetailScreen = '/foodReceiptDetailScreen';
   static const String foodStoreMainScreen = '/foodStore';
+  static const String foodStoreDetailScreen = '/foodStoreDetail';
   static const String sportScreen = '/sport';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocDetailScreen = '/myDocDetailScreen';
@@ -37,6 +39,7 @@ class AppRoutes {
     foodReceiptMenu: (context) => FoodReceiptMenuScreen(),
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
     foodStoreMainScreen: (context) => FoodStoreMainScreen(),
+    foodStoreDetailScreen: (context) => FoodStoreDetailScreen(),
     sportScreen: (context) => const SportScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
     myDocDetailScreen: (context) => MyDocDetailScreen(),

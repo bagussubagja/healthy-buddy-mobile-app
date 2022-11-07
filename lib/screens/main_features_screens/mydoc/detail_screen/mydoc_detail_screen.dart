@@ -47,7 +47,7 @@ class MyDocDetailScreen extends StatelessWidget {
       children: [
         SizedBox(
           width: double.infinity,
-          height: 400,
+          height: 50.h,
           child: Image.asset(
             'assets/images/dokter1.jpg',
             fit: BoxFit.cover,

@@ -35,9 +35,11 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   }
 
   void showContent() {
-    setState(() {
-      _isContentShow = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isContentShow = true;
+      });
+    }
   }
 
   final List<String> _iconImage = [

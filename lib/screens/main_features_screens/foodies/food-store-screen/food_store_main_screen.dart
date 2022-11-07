@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:sizer/sizer.dart';
@@ -24,6 +25,8 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
 
   List<bool> _selectedToogle = [true, false, false, false];
 
+  List<String> _foodStoreCategory = ["Buah", "Sayuran", "Instan", "Minuman"];
+
   int _currentIndex = 0;
   @override
   void initState() {
@@ -34,6 +37,14 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: greenColor,
+        child: Icon(
+          Icons.shopping_cart_outlined,
+          color: whiteColor,
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: bgColor,
         elevation: 0,
@@ -204,7 +215,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                               ? greenDarkerColor
                               : greyTextColor)),
                   child: Text(
-                    "Helloo",
+                    _foodStoreCategory[index],
                     style: regularStyle.copyWith(
                         color: _selectedToogle[index]
                             ? greenDarkerColor
@@ -232,53 +243,58 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
         shrinkWrap: true,
         primary: false,
         itemBuilder: (context, index) {
-          return Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            height: 100,
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'assets/images/discount-offers.jpg',
-                    fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.foodStoreDetailScreen);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              height: 100,
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      'assets/images/discount-offers.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                MarginHeight(height: 0.5.h),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Blueberry',
-                        style: regularStyle.copyWith(color: blackColor),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '\$ 10',
-                            style: regularStyle,
-                          ),
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            color: blackColor,
-                          )
-                        ],
-                      )
-                    ],
+                  MarginHeight(height: 0.5.h),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Blueberry',
+                          style: regularStyle.copyWith(color: blackColor),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '\$ 10',
+                              style: regularStyle,
+                            ),
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              color: blackColor,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
