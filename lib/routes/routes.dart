@@ -1,6 +1,7 @@
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
@@ -19,9 +20,10 @@ class AppRoutes {
   static const String registerScreen = '/register';
   static const String homePageScreen = '/home';
   static const String foodiesScreen = '/foodies';
-  static const String foodReceiptMenu = '/foodReceiptMenu';
+  static const String foodReceiptMenu = '/foodReceipt';
+  static const String foodArticleMenu = '/foodArticle';
   static const String foodReceiptDetailScreen = '/foodReceiptDetailScreen';
-  static const String foodStoreMainScreen = '/foodStore';
+  static const String foodStoreMenu = '/foodStore';
   static const String foodStoreDetailScreen = '/foodStoreDetail';
   static const String sportScreen = '/sport';
   static const String myDocScreen = '/myDocScreen';
@@ -36,9 +38,10 @@ class AppRoutes {
     homePageScreen: (context) => HomePage(),
     bodyScreen: (context) => BodyPageScreen(),
     foodiesScreen: (context) => const FoodiesScreen(),
+    foodArticleMenu: (context) =>  FoodArticleScreen(),
     foodReceiptMenu: (context) => FoodReceiptMenuScreen(),
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
-    foodStoreMainScreen: (context) => FoodStoreMainScreen(),
+    foodStoreMenu: (context) => FoodStoreMainScreen(),
     foodStoreDetailScreen: (context) => FoodStoreDetailScreen(),
     sportScreen: (context) => const SportScreen(),
     myDocScreen: (context) => MyDocMainScreen(),

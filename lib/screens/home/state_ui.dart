@@ -29,7 +29,7 @@ class _StatePageUIState extends State<StatePageUI> {
           context, AppRoutes.notInternetScreen, (route) => false);
     } else {
       Navigator.pushNamedAndRemoveUntil(
-          context, AppRoutes.bodyScreen, (route) => false);
+          context, AppRoutes.foodiesScreen, (route) => false);
     }
   }
 

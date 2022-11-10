@@ -193,7 +193,14 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                           style: regularStyle.copyWith(color: whiteColor),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            final url = Uri.parse(itemCarousel
+                                .carousel![0].link[index]
+                                .toString());
+                            if (await canLaunchUrl(url)) {
+                              await launchUrl(url);
+                            }
+                          },
                           child: Text(
                             "Read More",
                             style: regularStyle.copyWith(
@@ -238,6 +245,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                 GestureDetector(
                   onTap: () async {
                     if (index == 0) {
+                      Navigator.pushNamed(context, AppRoutes.foodArticleMenu);
                     } else if (index == 1) {
                       final url = Uri.parse(
                           'https://foodies-recomendation.herokuapp.com/');
@@ -247,8 +255,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     } else if (index == 2) {
                       Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
                     } else if (index == 3) {
-                      Navigator.pushNamed(
-                          context, AppRoutes.foodStoreMainScreen);
+                      Navigator.pushNamed(context, AppRoutes.foodStoreMenu);
                     }
                   },
                   child: Container(
