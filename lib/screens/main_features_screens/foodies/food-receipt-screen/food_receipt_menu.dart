@@ -1,9 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
+import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class FoodReceiptMenuScreen extends StatefulWidget {
@@ -16,6 +22,25 @@ class FoodReceiptMenuScreen extends StatefulWidget {
 class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
   final List<String> _foodCategory = ["Breakfast", "Lunch", "Dinner", "Drink"];
   List<bool> _selectedToogle = [true, false, false, false];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final item = Provider.of<FoodReceiptClass>(context, listen: false);
+    item.getFoodReceipt(context: context);
+    final itemBreakfast =
+        Provider.of<FoodReceiptByBreakfast>(context, listen: false);
+    itemBreakfast.getFoodReceiptCategory(
+        context: context, category: 'Breakfast');
+    final itemByLunch = Provider.of<FoodReceiptByLunch>(context, listen: false);
+    itemByLunch.getFoodReceiptCategory(context: context, category: 'Lunch');
+    final itemByDinner =
+        Provider.of<FoodReceiptByDinner>(context, listen: false);
+    itemByDinner.getFoodReceiptCategory(context: context, category: 'Dinner');
+    final itemByDrink = Provider.of<FoodReceiptByDrink>(context, listen: false);
+    itemByDrink.getFoodReceiptCategory(context: context, category: 'Drink');
+  }
 
   int _currentIndex = 0;
   @override
@@ -83,15 +108,23 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
   }
 
   Widget _recommendedFoodCard() {
+    final item = Provider.of<FoodReceiptClass>(context);
     return SizedBox(
       height: 40.h,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemBuilder: (context, index) {
+            final food = item.receiptModels?[index];
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.foodReceiptDetailScreen);
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodReceiptDetailScreen(
+                      foodReceiptModel: food,
+                    );
+                  },
+                ));
               },
               child: Container(
                 width: 55.w,
@@ -105,18 +138,19 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      height: 200,
+                      height: 25.h,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          'assets/images/onboardscreen.png',
+                        child: Image.network(
+                          item.receiptModels?[index].galleryPhoto[0] ??
+                              imgPlaceHolder,
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     MarginHeight(height: 1.h),
                     Text(
-                      'Lorem Ipsum Dolor Sit Amet',
+                      item.receiptModels?[index].name ?? "Loading",
                       style: titleStyle.copyWith(
                           fontSize: 12.sp, color: whiteColor),
                     ),
@@ -124,7 +158,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         RatingBarIndicator(
-                          rating: 4,
+                          rating: item.receiptModels?[index].rating ?? 0,
                           itemBuilder: (context, index) => Icon(
                             Icons.star,
                             color: whiteColor,
@@ -134,7 +168,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                           direction: Axis.horizontal,
                         ),
                         Text(
-                          '4.5',
+                          item.receiptModels?[index].rating.toString() ?? '0',
                           style: regularStyle.copyWith(color: whiteColor),
                         )
                       ],
@@ -149,7 +183,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
               width: 3.w,
             );
           },
-          itemCount: 10),
+          itemCount: 5),
     );
   }
 
@@ -209,93 +243,348 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
   }
 
   Widget _listFoodByCategory(int currentIndex) {
+    final itemByBreakfast = Provider.of<FoodReceiptByBreakfast>(context);
+    final itemByLunch = Provider.of<FoodReceiptByLunch>(context);
+    final itemByDinner = Provider.of<FoodReceiptByDinner>(context);
+    final itemByDrink = Provider.of<FoodReceiptByDrink>(context);
+    int itemCount(int x) {
+      if (x == 0) {
+        return itemByBreakfast.receiptModelCategory?.length ?? 0;
+      } else if (x == 1) {
+        return itemByLunch.receiptModelCategory?.length ?? 0;
+      } else if (x == 2) {
+        return itemByDinner.receiptModelCategory?.length ?? 0;
+      } else if (x == 3) {
+        return itemByDrink.receiptModelCategory?.length ?? 0;
+      } else {
+        return 0;
+      }
+    }
+
     return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(12)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 50.w,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        currentIndex == 0 ? "Omelette" : "Seblak",
-                        style: titleStyle.copyWith(
-                            fontSize: 16.sp, color: blackColor),
-                      ),
-                      Text(
-                        'Omelette (also spelled omelet) is a dish made from beaten eggs, fried with butter or oil in a frying pan (without stirring as in scrambled egg).',
-                        style: regularStyle.copyWith(
-                            fontSize: 10.sp, color: blackColor),
-                      ),
-                      MarginHeight(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.access_time_rounded,
-                                color: greyTextColor,
-                              ),
-                              MarginWidth(width: 5),
-                              Text(
-                                '10 Min',
-                                style: regularStyle.copyWith(
-                                    fontSize: 12, color: greyTextColor),
+          return GestureDetector(
+            onTap: () {
+              if (_currentIndex == 0) {
+                final itemBreakfastStored =
+                    itemByBreakfast.receiptModelCategory?[index];
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodReceiptDetailScreen(
+                      foodReceiptModel: itemBreakfastStored,
+                    );
+                  },
+                ));
+              } else if (_currentIndex == 1) {
+                final itemLunchStored =
+                    itemByLunch.receiptModelCategory?[index];
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodReceiptDetailScreen(
+                      foodReceiptModel: itemLunchStored,
+                    );
+                  },
+                ));
+              } else if (_currentIndex == 2) {
+                final itemDinnerStored =
+                    itemByDinner.receiptModelCategory?[index];
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodReceiptDetailScreen(
+                      foodReceiptModel: itemDinnerStored,
+                    );
+                  },
+                ));
+              } else if (_currentIndex == 3) {
+                final itemDrinkStored =
+                    itemByDrink.receiptModelCategory?[index];
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodReceiptDetailScreen(
+                      foodReceiptModel: itemDrinkStored,
+                    );
+                  },
+                ));
+              }
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 50.w,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        _currentIndex == 0
+                            ? Text(
+                                itemByBreakfast
+                                        .receiptModelCategory?[index].name ??
+                                    "Loading",
+                                style: titleStyle.copyWith(
+                                    fontSize: 16.sp, color: blackColor),
                               )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.sentiment_satisfied_rounded,
-                                color: greyTextColor,
-                              ),
-                              MarginWidth(width: 5),
-                              Text(
-                                'Easy',
+                            : _currentIndex == 1
+                                ? Text(
+                                    itemByLunch.receiptModelCategory?[index]
+                                            .name ??
+                                        "Loading",
+                                    style: titleStyle.copyWith(
+                                        fontSize: 16.sp, color: blackColor),
+                                  )
+                                : _currentIndex == 2
+                                    ? Text(
+                                        itemByDinner
+                                                .receiptModelCategory?[index]
+                                                .name ??
+                                            "Loading",
+                                        style: titleStyle.copyWith(
+                                            fontSize: 16.sp, color: blackColor),
+                                      )
+                                    : Text(
+                                        itemByDrink.receiptModelCategory?[index]
+                                                .name ??
+                                            "Loading",
+                                        style: titleStyle.copyWith(
+                                            fontSize: 16.sp, color: blackColor),
+                                      ),
+                        _currentIndex == 0
+                            ? Text(
+                                '${itemByBreakfast.receiptModelCategory?[index].description.substring(0, 100)}..',
                                 style: regularStyle.copyWith(
-                                    fontSize: 12, color: greyTextColor),
+                                    fontSize: 10.sp, color: blackColor),
                               )
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(right: 5),
-                  width: 30.w,
-                  height: 17.h,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/onboardscreen.png',
-                      fit: BoxFit.cover,
+                            : _currentIndex == 1
+                                ? Text(
+                                    '${itemByLunch.receiptModelCategory?[index].description.substring(0, 100)}..',
+                                    style: regularStyle.copyWith(
+                                        fontSize: 10.sp, color: blackColor),
+                                  )
+                                : _currentIndex == 2
+                                    ? Text(
+                                        '${itemByDinner.receiptModelCategory?[index].description.substring(0, 100)}..',
+                                        style: regularStyle.copyWith(
+                                            fontSize: 10.sp, color: blackColor),
+                                      )
+                                    : Text(
+                                        '${itemByDrink.receiptModelCategory?[index].description.substring(0, 100)}..',
+                                        style: regularStyle.copyWith(
+                                            fontSize: 10.sp, color: blackColor),
+                                      ),
+                        MarginHeight(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_rounded,
+                                  color: greyTextColor,
+                                ),
+                                MarginWidth(width: 5),
+                                _currentIndex == 0
+                                    ? Text(
+                                        '${itemByBreakfast.receiptModelCategory?[index].duration} Min',
+                                        style: regularStyle.copyWith(
+                                            fontSize: 12, color: greyTextColor),
+                                      )
+                                    : _currentIndex == 1
+                                        ? Text(
+                                            '${itemByLunch.receiptModelCategory?[index].duration} Min',
+                                            style: regularStyle.copyWith(
+                                                fontSize: 12,
+                                                color: greyTextColor),
+                                          )
+                                        : _currentIndex == 2
+                                            ? Text(
+                                                '${itemByDinner.receiptModelCategory?[index].duration} Min',
+                                                style: regularStyle.copyWith(
+                                                    fontSize: 12,
+                                                    color: greyTextColor),
+                                              )
+                                            : Text(
+                                                '${itemByDrink.receiptModelCategory?[index].duration} Min',
+                                                style: regularStyle.copyWith(
+                                                    fontSize: 12,
+                                                    color: greyTextColor),
+                                              )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.sentiment_satisfied_rounded,
+                                  color: greyTextColor,
+                                ),
+                                MarginWidth(width: 5),
+                                _currentIndex == 0
+                                    ? Text(
+                                        itemByBreakfast
+                                                .receiptModelCategory?[index]
+                                                .levelOfMaking ??
+                                            "Loading",
+                                        style: regularStyle.copyWith(
+                                            fontSize: 12, color: greyTextColor),
+                                      )
+                                    : _currentIndex == 1
+                                        ? Text(
+                                            itemByLunch
+                                                    .receiptModelCategory?[
+                                                        index]
+                                                    .levelOfMaking ??
+                                                "Loading",
+                                            style: regularStyle.copyWith(
+                                                fontSize: 12,
+                                                color: greyTextColor),
+                                          )
+                                        : _currentIndex == 2
+                                            ? Text(
+                                                itemByDinner
+                                                        .receiptModelCategory?[
+                                                            index]
+                                                        .levelOfMaking ??
+                                                    "Loading",
+                                                style: regularStyle.copyWith(
+                                                    fontSize: 12,
+                                                    color: greyTextColor),
+                                              )
+                                            : Text(
+                                                itemByDrink
+                                                        .receiptModelCategory?[
+                                                            index]
+                                                        .levelOfMaking ??
+                                                    "Loading",
+                                                style: regularStyle.copyWith(
+                                                    fontSize: 12,
+                                                    color: greyTextColor),
+                                              )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    padding: const EdgeInsets.only(right: 5),
+                    width: 30.w,
+                    height: 17.h,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: _currentIndex == 0
+                            ? CachedNetworkImage(
+                                imageUrl: itemByBreakfast
+                                        .receiptModelCategory?[index]
+                                        .galleryPhoto[0] ??
+                                    imgPlaceHolder,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Center(
+                                  child: Icon(Icons.error),
+                                ),
+                              )
+                            : _currentIndex == 1
+                                ? CachedNetworkImage(
+                                    imageUrl: itemByLunch
+                                            .receiptModelCategory?[index]
+                                            .galleryPhoto[0] ??
+                                        imgPlaceHolder,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Center(
+                                      child: Icon(Icons.error),
+                                    ),
+                                  )
+                                : _currentIndex == 2
+                                    ? CachedNetworkImage(
+                                        imageUrl: itemByDinner
+                                                .receiptModelCategory?[index]
+                                                .galleryPhoto[0] ??
+                                            imgPlaceHolder,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            const Center(
+                                          child: Icon(Icons.error),
+                                        ),
+                                      )
+                                    : CachedNetworkImage(
+                                        imageUrl: itemByDrink
+                                                .receiptModelCategory?[index]
+                                                .galleryPhoto[0] ??
+                                            imgPlaceHolder,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            const Center(
+                                          child: Icon(Icons.error),
+                                        ),
+                                      )),
+                  ),
+                ],
+              ),
             ),
           );
         },
         separatorBuilder: (context, index) {
           return MarginHeight(height: 2.5.h);
         },
-        itemCount: 10);
+        itemCount: itemCount(_currentIndex));
   }
 }

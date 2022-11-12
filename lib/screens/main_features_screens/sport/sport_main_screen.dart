@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/core/food_articles_notifier/food_articles_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../core/extras/extras_notifier.dart';
 import '../../../shared/assets_directory.dart';
 
 class SportScreen extends StatefulWidget {
@@ -62,7 +63,7 @@ class _SportScreenState extends State<SportScreen> {
       backgroundColor: bgColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -311,7 +312,7 @@ class _SportScreenState extends State<SportScreen> {
             padding: const EdgeInsets.all(10),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: greyColor,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -336,11 +337,12 @@ class _SportScreenState extends State<SportScreen> {
                     children: [
                       Text(
                         'Sprint',
-                        style: titleStyle,
+                        style: titleStyle.copyWith(color: blackColor),
                       ),
                       Text(
                         'Sprinting is running over a short distance at the top-most speed of the body in a limited period of time.',
-                        style: regularStyle.copyWith(fontSize: 10.sp),
+                        style: regularStyle.copyWith(
+                            fontSize: 10.sp, color: greyTextColor),
                       ),
                       Container(
                         alignment: Alignment.bottomRight,
@@ -365,64 +367,5 @@ class _SportScreenState extends State<SportScreen> {
           return MarginHeight(height: 20);
         },
         itemCount: 10);
-  }
-
-  Widget _tipOfTheDay() {
-    final item = Provider.of<FoodArticlesClass>(context, listen: false);
-    return Column(
-      children: [
-        MarginHeight(height: 2.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Article of the Day",
-              style: titleStyle,
-            ),
-            Text(
-              'Lihat Semua',
-              style: regularStyle.copyWith(color: greyTextColor),
-            )
-          ],
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          primary: false,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: item.foodArticle?.length,
-          itemBuilder: (context, index) {
-            final itemArticle = item.foodArticle?[index];
-            return Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              padding: defaultPadding,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: greyColor, borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      itemArticle?.thumbnail ?? _placeHolder,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  MarginHeight(height: 1.h),
-                  Text(
-                    itemArticle?.title ?? 'Loading...',
-                    style: titleStyle.copyWith(fontSize: 14.sp),
-                  ),
-                  Text(
-                    '${itemArticle?.description?.substring(0, 50)}...',
-                    style: regularStyle.copyWith(fontSize: 12.sp),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    );
   }
 }

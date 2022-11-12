@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<String> _emoticon = [
     'angry.png',
     'happy.png',
     'sad.png',
   ];
+
   final List<String> _emotionTitle = [
     'Marah',
     'Bahagia',
@@ -28,6 +36,14 @@ class HomePage extends StatelessWidget {
   ];
 
   final List<String> _categoryLabel = ['Foodies', 'Sport', 'MyDoc'];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final item = Provider.of<TopArticleClass>(context, listen: false);
+    item.getArticle(context: context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -245,6 +261,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _topArticle(BuildContext context) {
+    final item = Provider.of<TopArticleClass>(context);
     return Column(
       children: [
         Row(
@@ -268,19 +285,24 @@ class HomePage extends StatelessWidget {
             shrinkWrap: true,
             primary: false,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 6,
+            itemCount: item.articles?.length ?? 0,
             itemBuilder: (context, index) {
               return ListTile(
                 tileColor: greyColor,
-                leading: Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                      color: greenColor.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5)),
+                leading: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      item.articles?[index].thumbnail ?? imgPlaceHolder,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                title: const Text('Ini Title'),
-                subtitle: const Text('Lorem Ipsum Dolor Sit Amet'),
+                title: Text(item.articles?[index].title ?? "Loading"),
+                subtitle: Text(
+                    '${item.articles?[index].description.substring(0, 40)}...'),
               );
             },
           ),

@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
+import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:sizer/sizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -8,7 +11,8 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../widgets/margin_width.dart';
 
 class FoodReceiptDetailScreen extends StatefulWidget {
-  const FoodReceiptDetailScreen({super.key});
+  FoodReceiptModel? foodReceiptModel;
+  FoodReceiptDetailScreen({super.key, this.foodReceiptModel});
 
   @override
   State<FoodReceiptDetailScreen> createState() =>
@@ -21,7 +25,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
   @override
   void initState() {
     super.initState();
-    const url = 'https://www.youtube.com/watch?v=u7QfzLYeBBY';
+    String url = widget.foodReceiptModel?.linkVideo ?? vidPlaceHolder;
     controller = YoutubePlayerController(
         initialVideoId: YoutubePlayer.convertUrlToId(url)!,
         flags: const YoutubePlayerFlags(
@@ -110,10 +114,14 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
   Widget _videoTitle() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          "Pancakes",
-          style: titleStyle.copyWith(color: blackColor),
+        SizedBox(
+          width: 75.w,
+          child: Text(
+            widget.foodReceiptModel?.name ?? "Loading",
+            style: titleStyle.copyWith(color: blackColor),
+          ),
         ),
         IconButton(
             onPressed: () {},
@@ -127,7 +135,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
 
   Widget _ratingSection() {
     return RatingBarIndicator(
-      rating: 4,
+      rating: widget.foodReceiptModel?.rating ?? 0,
       itemBuilder: (context, index) => Icon(
         Icons.star,
         color: greenColor,
@@ -150,7 +158,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
             ),
             MarginWidth(width: 3.w),
             Text(
-              '10 Min',
+              '${widget.foodReceiptModel?.duration ?? 0} Min',
               style: regularStyle.copyWith(fontSize: 12, color: greyTextColor),
             )
           ],
@@ -163,7 +171,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
             ),
             MarginWidth(width: 3.w),
             Text(
-              'Easy',
+              widget.foodReceiptModel?.levelOfMaking ?? 'Easy',
               style: regularStyle.copyWith(fontSize: 12, color: greyTextColor),
             )
           ],
@@ -200,12 +208,13 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                 height: 100,
                 width: double.infinity,
                 child: Text(
-                  'Blueberry',
+                  widget.foodReceiptModel?.ingredients[index] ?? 'Loading',
                   style: regularStyle.copyWith(color: blackColor),
+                  textAlign: TextAlign.center,
                 ),
               );
             },
-            itemCount: 6),
+            itemCount: widget.foodReceiptModel?.ingredients.length ?? 0),
       ],
     );
   }
@@ -233,9 +242,25 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                 margin: const EdgeInsets.only(left: 0, right: 10),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'assets/images/onboardscreen.png',
-                    fit: BoxFit.cover,
+                  child: ClipRRect(
+                    child: CachedNetworkImage(
+                      imageUrl: widget.foodReceiptModel?.galleryPhoto[index] ??
+                          imgPlaceHolder,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Center(
+                        child: Icon(Icons.error),
+                      ),
+                    ),
                   ),
                 ),
               );

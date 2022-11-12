@@ -29,7 +29,7 @@ class HealthyBuddyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Poppins"),
-          initialRoute: AppRoutes.statePageUI,
+          initialRoute: AppRoutes.bodyScreen,
           routes: AppRoutes.routes,
         );
       },

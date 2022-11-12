@@ -20,9 +20,11 @@ class FoodStoreMainScreen extends StatefulWidget {
 class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   bool _isVisible = false;
   void showContent() {
-    setState(() {
-      _isVisible = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isVisible = true;
+      });
+    }
   }
 
   List<bool> _selectedToogle = [true, false, false, false];
