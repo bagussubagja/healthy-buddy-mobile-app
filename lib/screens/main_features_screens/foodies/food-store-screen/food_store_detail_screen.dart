@@ -1,15 +1,25 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
 
-class FoodStoreDetailScreen extends StatelessWidget {
-  const FoodStoreDetailScreen({super.key});
+class FoodStoreDetailScreen extends StatefulWidget {
+  FoodStoreModel? foodStoreModel;
+  FoodStoreDetailScreen({super.key, this.foodStoreModel});
 
+  @override
+  State<FoodStoreDetailScreen> createState() => _FoodStoreDetailScreenState();
+}
+
+class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
+  int _galleryIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,58 +47,7 @@ class FoodStoreDetailScreen extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              height: 7.h,
-              width: 100.w,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-                color: whiteColor,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.shopping_cart_outlined,
-                          color: greenColor,
-                        ),
-                        Text(
-                          'Keranjang',
-                          style: regularStyle,
-                        )
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: greenColor),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.add,
-                          color: whiteColor,
-                        ),
-                        Text(
-                          'Beli Langsung',
-                          style: regularStyle,
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
+          _buttonPayment()
         ],
       )),
     );
@@ -105,9 +64,23 @@ class FoodStoreDetailScreen extends StatelessWidget {
             borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40)),
-            child: Image.asset(
-              'assets/images/discount-offers.jpg',
-              fit: BoxFit.cover,
+            child: CachedNetworkImage(
+              imageUrl: widget.foodStoreModel?.gallery[_galleryIndex] ??
+                  imgPlaceHolder,
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(Icons.error),
+              ),
             ),
           ),
         ),
@@ -131,18 +104,21 @@ class FoodStoreDetailScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Blueberry',
-              style: titleStyle.copyWith(color: blackColor),
+            SizedBox(
+              width: 65.w,
+              child: Text(
+                widget.foodStoreModel?.name ?? "Loading",
+                style: titleStyle.copyWith(color: blackColor),
+              ),
             ),
             Row(
               children: [
                 Text(
-                  '\$',
+                  'Rp',
                   style: titleStyle.copyWith(color: greenColor),
                 ),
                 Text(
-                  '10',
+                  widget.foodStoreModel?.price.toString() ?? "Loading...",
                   style: titleStyle.copyWith(color: blackColor),
                 )
               ],
@@ -150,7 +126,7 @@ class FoodStoreDetailScreen extends StatelessWidget {
           ],
         ),
         Text(
-          'Buah-buahan',
+          widget.foodStoreModel?.category ?? "Loading",
           style: regularStyle.copyWith(color: greyTextColor),
         )
       ],
@@ -166,7 +142,7 @@ class FoodStoreDetailScreen extends StatelessWidget {
           style: titleStyle.copyWith(color: blackColor),
         ),
         Text(
-          'Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.',
+          widget.foodStoreModel?.description ?? "Loading",
           style: regularStyle.copyWith(color: blackColor),
         )
       ],
@@ -187,14 +163,35 @@ class FoodStoreDetailScreen extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/onboardscreen.png',
-                      fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _galleryIndex = index;
+                    });
+                  },
+                  child: SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.foodStoreModel?.gallery[index] ??
+                            imgPlaceHolder,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => const Center(
+                          child: Icon(Icons.error),
+                        ),
+                      ),
                     ),
                   ),
                 );
@@ -205,6 +202,60 @@ class FoodStoreDetailScreen extends StatelessWidget {
               itemCount: 5),
         )
       ],
+    );
+  }
+
+  Widget _buttonPayment() {
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        height: 7.h,
+        width: 100.w,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+          color: whiteColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            OutlinedButton(
+              onPressed: () {},
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.shopping_cart_outlined,
+                    color: greenColor,
+                  ),
+                  Text(
+                    'Keranjang',
+                    style: regularStyle,
+                  )
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(backgroundColor: greenColor),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.add,
+                    color: whiteColor,
+                  ),
+                  Text(
+                    'Beli Langsung',
+                    style: regularStyle,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

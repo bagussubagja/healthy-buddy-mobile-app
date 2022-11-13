@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -54,6 +55,15 @@ class _SportScreenState extends State<SportScreen> {
     itemCarousel.getDataCarousel(context: context, section: "sport");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
+    final easyExercise =
+        Provider.of<SportExerciseEasyClass>(context, listen: false);
+    easyExercise.getSport(context: context, category: 'Easy');
+    final mediumExercise =
+        Provider.of<SportExerciseMediumClass>(context, listen: false);
+    mediumExercise.getSport(context: context, category: 'Medium');
+    final hardExercise =
+        Provider.of<SportExerciseHardClass>(context, listen: false);
+    hardExercise.getSport(context: context, category: 'Hard');
     Timer(const Duration(seconds: 5), loadingCompleted);
   }
 
@@ -97,9 +107,9 @@ class _SportScreenState extends State<SportScreen> {
                     MarginHeight(height: 2.h),
                     _sportCategory(),
                     MarginHeight(height: 2.h),
-                    _sportLevelToogleButton(),
+                    _sportLevelToogleButton(_currentIndex),
                     MarginHeight(height: 2.h),
-                    _exerciseSection()
+                    _exerciseSection(_currentIndex)
                   ],
                 ),
               ),
@@ -249,7 +259,7 @@ class _SportScreenState extends State<SportScreen> {
     );
   }
 
-  Widget _sportLevelToogleButton() {
+  Widget _sportLevelToogleButton(int currentIndex) {
     return Center(
       child: SizedBox(
         height: 30,
@@ -269,6 +279,7 @@ class _SportScreenState extends State<SportScreen> {
                       }
                     }
                   });
+                  _currentIndex = index;
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -303,7 +314,22 @@ class _SportScreenState extends State<SportScreen> {
     );
   }
 
-  Widget _exerciseSection() {
+  Widget _exerciseSection(int currentIndex) {
+    final easyItem = Provider.of<SportExerciseEasyClass>(context);
+    final mediumItem = Provider.of<SportExerciseMediumClass>(context);
+    final hardItem = Provider.of<SportExerciseHardClass>(context);
+    int itemCount(int x) {
+      if (x == 0) {
+        return easyItem.sportExercise?.length ?? 0;
+      } else if (x == 1) {
+        return mediumItem.sportExercise?.length ?? 0;
+      } else if (x == 2) {
+        return hardItem.sportExercise?.length ?? 0;
+      } else {
+        return 0;
+      }
+    }
+
     return ListView.separated(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -323,42 +349,163 @@ class _SportScreenState extends State<SportScreen> {
                   width: 30.w,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/onboardscreen.png',
-                      fit: BoxFit.cover,
-                    ),
+                    child: _currentIndex == 0
+                        ? CachedNetworkImage(
+                            imageUrl:
+                                easyItem.sportExercise?[index].thumbnail ??
+                                    _placeHolder,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => const Center(
+                              child: Icon(Icons.error),
+                            ),
+                          )
+                        : _currentIndex == 1
+                            ? CachedNetworkImage(
+                                imageUrl: mediumItem
+                                        .sportExercise?[index].thumbnail ??
+                                    _placeHolder,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Center(
+                                  child: Icon(Icons.error),
+                                ),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl:
+                                    hardItem.sportExercise?[index].thumbnail ??
+                                        _placeHolder,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Center(
+                                  child: Icon(Icons.error),
+                                ),
+                              ),
                   ),
                 ),
                 MarginWidth(width: 4.w),
                 SizedBox(
-                  width: 50.w,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Sprint',
-                        style: titleStyle.copyWith(color: blackColor),
-                      ),
-                      Text(
-                        'Sprinting is running over a short distance at the top-most speed of the body in a limited period of time.',
-                        style: regularStyle.copyWith(
-                            fontSize: 10.sp, color: greyTextColor),
-                      ),
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: greenColor, elevation: 0),
-                          onPressed: () {},
-                          child: Text(
-                            'Try it!',
-                            style: regularStyle,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
+                    width: 50.w,
+                    child: _currentIndex == 0
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                easyItem.sportExercise?[index].name ??
+                                    "Loading",
+                                style: titleStyle.copyWith(
+                                    color: blackColor, fontSize: 14.sp),
+                              ),
+                              Text(
+                                '${easyItem.sportExercise?[index].description.substring(0, 80)}...',
+                                style: regularStyle.copyWith(
+                                    fontSize: 10.sp, color: greyTextColor),
+                              ),
+                              Container(
+                                alignment: Alignment.bottomRight,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: greenColor,
+                                      elevation: 0),
+                                  onPressed: () {},
+                                  child: Text(
+                                    'Try it!',
+                                    style: regularStyle,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : _currentIndex == 1
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    mediumItem.sportExercise?[index].name ??
+                                        "Loading",
+                                    style: titleStyle.copyWith(
+                                        color: blackColor, fontSize: 14.sp),
+                                  ),
+                                  Text(
+                                    '${mediumItem.sportExercise?[index].description.substring(0, 80)}...',
+                                    style: regularStyle.copyWith(
+                                        fontSize: 10.sp, color: greyTextColor),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: greenColor,
+                                          elevation: 0),
+                                      onPressed: () {},
+                                      child: Text(
+                                        'Try it!',
+                                        style: regularStyle,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    hardItem.sportExercise?[index].name ??
+                                        "Loading",
+                                    style: titleStyle.copyWith(
+                                        color: blackColor, fontSize: 14.sp),
+                                  ),
+                                  Text(
+                                    '${hardItem.sportExercise?[index].description.substring(0, 80)}...',
+                                    style: regularStyle.copyWith(
+                                        fontSize: 10.sp, color: greyTextColor),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomRight,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: greenColor,
+                                          elevation: 0),
+                                      onPressed: () {},
+                                      child: Text(
+                                        'Try it!',
+                                        style: regularStyle,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ))
               ],
             ),
           );
@@ -366,6 +513,6 @@ class _SportScreenState extends State<SportScreen> {
         separatorBuilder: (context, index) {
           return MarginHeight(height: 20);
         },
-        itemCount: 10);
+        itemCount: itemCount(_currentIndex));
   }
 }
