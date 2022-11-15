@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
@@ -11,8 +13,10 @@ import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/no_internet_found_screen.dart';
+import 'package:http/http.dart';
 
 class AppRoutes {
   static const String notInternetScreen = '/nointernet';
@@ -26,6 +30,7 @@ class AppRoutes {
   static const String foodStoreMenu = '/foodStore';
   static const String foodStoreDetailScreen = '/foodStoreDetail';
   static const String sportScreen = '/sport';
+  static const String sportStore = '/sportStore';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocDetailScreen = '/myDocDetailScreen';
   static const String bodyScreen = '/index';
@@ -38,14 +43,36 @@ class AppRoutes {
     homePageScreen: (context) => HomePage(),
     bodyScreen: (context) => BodyPageScreen(),
     foodiesScreen: (context) => const FoodiesScreen(),
-    foodArticleMenu: (context) =>  FoodArticleScreen(),
+    foodArticleMenu: (context) => FoodArticleScreen(),
     foodReceiptMenu: (context) => FoodReceiptMenuScreen(),
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
     foodStoreMenu: (context) => FoodStoreMainScreen(),
     foodStoreDetailScreen: (context) => FoodStoreDetailScreen(),
     sportScreen: (context) => const SportScreen(),
+    sportStore: (context) => SportStoreMainScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
     myDocDetailScreen: (context) => MyDocDetailScreen(),
     statePageUI: (context) => const StatePageUI(),
   };
+
+  static Route<dynamic> handlingGenerateRoute(RouteSettings settings) {
+    String route = settings.name ?? '/';
+
+    switch (route) {
+      case AppRoutes.foodStoreDetailScreen:
+        final food = settings.arguments as FoodStoreModel;
+        return getPage(
+          FoodStoreDetailScreen(
+            foodStoreModel: food,
+          ),
+        );
+
+      default:
+        return getPage(const Scaffold(
+          body: Text("Route Tidak Ada"),
+        ));
+    }
+  }
 }
+
+MaterialPageRoute<dynamic> getPage(Widget page) => MaterialPageRoute(builder: (context) => page);

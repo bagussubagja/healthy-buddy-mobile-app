@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../core/extras/extras_notifier.dart';
+import '../../../core/extras/carousel_item_notifier.dart';
 import '../../../shared/assets_directory.dart';
 
 class FoodiesScreen extends StatefulWidget {
@@ -23,25 +23,8 @@ class FoodiesScreen extends StatefulWidget {
 }
 
 class _FoodiesScreenState extends State<FoodiesScreen> {
-  bool _isLoading = true;
-  bool _isContentShow = false;
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
-  void loadingCompleted() {
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  void showContent() {
-    if (mounted) {
-      setState(() {
-        _isContentShow = true;
-      });
-    }
-  }
 
   final List<String> _iconImage = [
     "food-article.png",
@@ -63,8 +46,6 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     itemCarousel.getDataCarousel(context: context, section: "foodies");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
-    Timer(const Duration(seconds: 3), loadingCompleted);
-    Timer(const Duration(seconds: 5), showContent);
   }
 
   @override
@@ -92,32 +73,28 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
               ))
         ],
       ),
-      body: _isLoading == true
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: Padding(
-                padding: defaultPadding,
-                child: ListView(
-                  children: [
-                    _headerSection(),
-                    MarginHeight(height: 1.h),
-                    _carouselSection(),
-                    MarginHeight(height: 3.h),
-                    _foodiesCategory(context),
-                    MarginHeight(height: 2.h),
-                    Visibility(
-                      visible: _isContentShow,
-                      replacement: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      child: _articleOfTheDay(),
-                    )
-                  ],
+      body: SafeArea(
+        child: Padding(
+          padding: defaultPadding,
+          child: ListView(
+            children: [
+              _headerSection(),
+              MarginHeight(height: 1.h),
+              _carouselSection(),
+              MarginHeight(height: 3.h),
+              _foodiesCategory(context),
+              MarginHeight(height: 2.h),
+              Visibility(
+                visible: true,
+                replacement: const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-            ),
+                child: _articleOfTheDay(),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -141,89 +118,91 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   Widget _carouselSection() {
     final itemCarousel = Provider.of<CarouselClass>(context);
     final item = itemCarousel.carousel?[0];
-    return CarouselSlider.builder(
-      itemCount: 3,
-      itemBuilder: (context, index, realIndex) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            color: greyColor,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  child: CachedNetworkImage(
-                    imageUrl: item?.thumbnail[index] ?? _placeHolder,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(Icons.error),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.black,
-                      greyColor.withOpacity(0.1),
-                    ],
-                  )),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${item?.title[index].substring(0, 45)}..",
-                          style: regularStyle.copyWith(color: whiteColor),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            final url = Uri.parse(itemCarousel
-                                .carousel![0].link[index]
-                                .toString());
-                            if (await canLaunchUrl(url)) {
-                              await launchUrl(url);
-                            }
-                          },
-                          child: Text(
-                            "Read More",
-                            style: regularStyle.copyWith(
-                                color: greyTextColor, fontSize: 13),
+    return itemCarousel.isLoading
+        ? const CircularProgressIndicator()
+        : CarouselSlider.builder(
+            itemCount: 3,
+            itemBuilder: (context, index, realIndex) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  color: greyColor,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ClipRRect(
+                        child: CachedNetworkImage(
+                          imageUrl: item?.thumbnail[index] ?? _placeHolder,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) => const Center(
+                            child: Icon(Icons.error),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black,
+                            greyColor.withOpacity(0.1),
+                          ],
+                        )),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${item?.title[index].substring(0, 45)}..",
+                                style: regularStyle.copyWith(color: whiteColor),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  final url = Uri.parse(itemCarousel
+                                      .carousel![0].link[index]
+                                      .toString());
+                                  if (await canLaunchUrl(url)) {
+                                    await launchUrl(url);
+                                  }
+                                },
+                                child: Text(
+                                  "Read More",
+                                  style: regularStyle.copyWith(
+                                      color: greyTextColor, fontSize: 13),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              );
+            },
+            options: CarouselOptions(
+              enlargeCenterPage: true,
+              height: 200,
+              autoPlay: true,
+              aspectRatio: 16 / 9,
             ),
-          ),
-        );
-      },
-      options: CarouselOptions(
-        enlargeCenterPage: true,
-        height: 200,
-        autoPlay: true,
-        aspectRatio: 16 / 9,
-      ),
-    );
+          );
   }
 
   Widget _foodiesCategory(BuildContext context) {
@@ -285,7 +264,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   }
 
   Widget _articleOfTheDay() {
-    final item = Provider.of<FoodArticlesClass>(context, listen: false);
+    final item = Provider.of<FoodArticlesClass>(context);
     return Column(
       children: [
         MarginHeight(height: 2.h),
@@ -303,45 +282,49 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
           ],
         ),
         MarginHeight(height: 1.25.h),
-        ListView.builder(
-          shrinkWrap: true,
-          primary: false,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: item.foodArticle?.length,
-          itemBuilder: (context, index) {
-            final itemArticle = item.foodArticle?[index];
-            return Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              padding: defaultPadding,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      itemArticle?.thumbnail ?? _placeHolder,
-                      fit: BoxFit.cover,
+        item.isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                primary: false,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: item.foodArticle?.length,
+                itemBuilder: (context, index) {
+                  final itemArticle = item.foodArticle?[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    padding: defaultPadding,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: itemArticle?.thumbnail ?? _placeHolder,
+                          ),
+                        ),
+                        MarginHeight(height: 1.h),
+                        Text(
+                          itemArticle?.title ?? 'Loading...',
+                          style: titleStyle.copyWith(
+                              fontSize: 14.sp, color: blackColor),
+                        ),
+                        Text(
+                          '${itemArticle?.description?.substring(0, 50)}...',
+                          style: regularStyle.copyWith(
+                              fontSize: 12.sp, color: greyTextColor),
+                        ),
+                      ],
                     ),
-                  ),
-                  MarginHeight(height: 1.h),
-                  Text(
-                    itemArticle?.title ?? 'Loading...',
-                    style:
-                        titleStyle.copyWith(fontSize: 14.sp, color: blackColor),
-                  ),
-                  Text(
-                    '${itemArticle?.description?.substring(0, 50)}...',
-                    style: regularStyle.copyWith(
-                        fontSize: 12.sp, color: greyTextColor),
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          },
-        ),
       ],
     );
   }

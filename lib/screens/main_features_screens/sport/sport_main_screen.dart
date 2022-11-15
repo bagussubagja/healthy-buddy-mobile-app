@@ -11,7 +11,7 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/extras/extras_notifier.dart';
+import '../../../core/extras/carousel_item_notifier.dart';
 import '../../../shared/assets_directory.dart';
 
 class SportScreen extends StatefulWidget {
@@ -127,7 +127,7 @@ class _SportScreenState extends State<SportScreen> {
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          'Hal spesial untuk kamu, olahragawan!',
+          'Hal yang spesial untuk kamu!',
           style: regularStyle.copyWith(color: greyTextColor),
         ),
       ],
@@ -233,7 +233,9 @@ class _SportScreenState extends State<SportScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    //Navigator.pushNamed(context, AppRoutes.sportStore, arguments: );
+                  },
                   child: Container(
                     height: 7.h,
                     decoration: BoxDecoration(
@@ -422,8 +424,7 @@ class _SportScreenState extends State<SportScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                easyItem.sportExercise?[index].name ??
-                                    "Loading",
+                                '${easyItem.sportExercise?[index].name}..',
                                 style: titleStyle.copyWith(
                                     color: blackColor, fontSize: 14.sp),
                               ),
@@ -481,8 +482,7 @@ class _SportScreenState extends State<SportScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    hardItem.sportExercise?[index].name ??
-                                        "Loading",
+                                    '${hardItem.sportExercise?[index].name}...',
                                     style: titleStyle.copyWith(
                                         color: blackColor, fontSize: 14.sp),
                                   ),

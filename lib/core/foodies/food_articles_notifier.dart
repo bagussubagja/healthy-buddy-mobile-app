@@ -6,12 +6,14 @@ import 'package:healthy_buddy_mobile_app/services/foodies_services/food_articles
 
 class FoodArticlesClass extends ChangeNotifier {
   List<FoodArticleModel>? foodArticle;
+  bool isLoading = false;
+
   getFoodArticleData({required BuildContext context}) async {
+    isLoading = true;
+    print("test");
     foodArticle = (await getFoodArticles(context: context));
+    print("ada");
+    isLoading = false;
     notifyListeners();
   }
 }
-
-
-
-
