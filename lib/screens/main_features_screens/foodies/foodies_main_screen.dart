@@ -118,9 +118,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   Widget _carouselSection() {
     final itemCarousel = Provider.of<CarouselClass>(context);
     final item = itemCarousel.carousel?[0];
-    return itemCarousel.isLoading
-        ? const CircularProgressIndicator()
-        : CarouselSlider.builder(
+    return CarouselSlider.builder(
             itemCount: 3,
             itemBuilder: (context, index, realIndex) {
               return ClipRRect(

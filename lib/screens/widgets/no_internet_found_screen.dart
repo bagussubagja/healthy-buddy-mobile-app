@@ -36,9 +36,18 @@ class NoInternetFoundScreen extends StatelessWidget {
                 Navigator.pushNamedAndRemoveUntil(
                     context, AppRoutes.statePageUI, (route) => false);
               },
-              child: Text(
-                'Try Again!',
-                style: regularStyle,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.refresh_rounded,
+                    color: whiteColor,
+                  ),
+                  Text(
+                    'Try Again',
+                    style: regularStyle,
+                  ),
+                ],
               ))
         ],
       ),

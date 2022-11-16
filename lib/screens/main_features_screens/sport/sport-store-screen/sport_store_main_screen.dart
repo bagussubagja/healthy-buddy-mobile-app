@@ -119,7 +119,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
             child: ListView(
               children: [
                 Text(
-                  'Food Store',
+                  'Sport Store',
                   style: titleStyle.copyWith(color: greenColor),
                 ),
                 Text(

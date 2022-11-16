@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -235,6 +236,11 @@ class _SportScreenState extends State<SportScreen> {
                 GestureDetector(
                   onTap: () {
                     //Navigator.pushNamed(context, AppRoutes.sportStore, arguments: );
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return SportStoreMainScreen();
+                      },
+                    ));
                   },
                   child: Container(
                     height: 7.h,

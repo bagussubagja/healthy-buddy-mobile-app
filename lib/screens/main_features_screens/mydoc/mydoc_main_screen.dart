@@ -111,9 +111,7 @@ class MyDocMainScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
-                  },
+                  onTap: () {},
                   child: Container(
                     height: 7.h,
                     decoration: BoxDecoration(
