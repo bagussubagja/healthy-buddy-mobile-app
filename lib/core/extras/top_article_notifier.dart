@@ -4,8 +4,11 @@ import 'package:healthy_buddy_mobile_app/services/top-article-services/top_artic
 
 class TopArticleClass extends ChangeNotifier {
   List<TopArticleModel>? articles;
+  bool isLoading = false;
   getArticle({required BuildContext context}) async {
+    isLoading = true;
     articles = (await getTopArticles(context: context));
+    isLoading = false;
     notifyListeners();
   }
 }

@@ -6,8 +6,8 @@ import 'package:healthy_buddy_mobile_app/services/my_doc_service/my_doc_service.
 class MyDocByPulmonologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
   getDoctor({required BuildContext context, required String specialist}) async {
-    mydocModel =
-        (await getDoctorBySpecialist(context: context, specialist: 'Pulmonology'));
+    mydocModel = (await getDoctorBySpecialist(
+        context: context, specialist: 'Pulmonology'));
     notifyListeners();
   }
 }
@@ -15,8 +15,8 @@ class MyDocByPulmonologyClass extends ChangeNotifier {
 class MyDocByCardiologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
   getDoctor({required BuildContext context, required String specialist}) async {
-    mydocModel =
-        (await getDoctorBySpecialist(context: context, specialist: 'Cardiology'));
+    mydocModel = (await getDoctorBySpecialist(
+        context: context, specialist: 'Cardiology'));
     notifyListeners();
   }
 }
@@ -24,8 +24,8 @@ class MyDocByCardiologyClass extends ChangeNotifier {
 class MyDocByMentalHealthClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
   getDoctor({required BuildContext context, required String specialist}) async {
-    mydocModel =
-        (await getDoctorBySpecialist(context: context, specialist: 'Mental Health'));
+    mydocModel = (await getDoctorBySpecialist(
+        context: context, specialist: 'Mental Health'));
     notifyListeners();
   }
 }
@@ -33,17 +33,21 @@ class MyDocByMentalHealthClass extends ChangeNotifier {
 class MyDocByHepatologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
   getDoctor({required BuildContext context, required String specialist}) async {
-    mydocModel =
-        (await getDoctorBySpecialist(context: context, specialist: 'Hepatology'));
+    mydocModel = (await getDoctorBySpecialist(
+        context: context, specialist: 'Hepatology'));
     notifyListeners();
   }
 }
 
 class MyDocByExperienceClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
-  getDoctor({required BuildContext context, required String isExperience}) async {
+  bool isloading = false;
+  getDoctor(
+      {required BuildContext context, required String isExperience}) async {
+    isloading = true;
     mydocModel =
         (await getDoctorByExperience(context: context, isExperience: 'true'));
+    isloading = false;
     notifyListeners();
   }
 }

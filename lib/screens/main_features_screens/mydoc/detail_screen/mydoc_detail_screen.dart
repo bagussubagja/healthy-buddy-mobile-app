@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
+import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../widgets/margin_width.dart';
@@ -18,6 +20,15 @@ class MyDocDetailScreen extends StatefulWidget {
 
 class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   final List<String> _docLabel = ["Patients", "Year exp", "Rating"];
+  List<String> _numLabel = [];
+  @override
+  void initState() {
+    super.initState();
+    _numLabel.add(widget.myDocModel!.patients.toString());
+    _numLabel.add(widget.myDocModel!.yearExp.toString());
+    _numLabel.add(widget.myDocModel!.rating.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,12 +56,40 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                 ],
               ),
             ),
+            Positioned(width: 100.w, top: 0, child: _topSection()),
             Positioned(
               bottom: 0,
               child: _appointmentButton(),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _topSection() {
+    return Container(
+      height: 6.h,
+      color: Colors.black12,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: blackColor,
+            ),
+          ),
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.favorite,
+                color: blackColor,
+              ))
+        ],
       ),
     );
   }
@@ -62,30 +101,10 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
         SizedBox(
           width: double.infinity,
           height: 50.h,
-          child: Image.asset(
-            'assets/images/dokter1.jpg',
+          child: Image.network(
+            widget.myDocModel?.thumbnail ?? imgPlaceHolder,
             fit: BoxFit.cover,
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: blackColor,
-              ),
-            ),
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.favorite,
-                  color: blackColor,
-                ))
-          ],
         ),
         Positioned(
           top: 320,
@@ -213,7 +232,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.myDocModel?.patients.toString() ?? "0",
+                      _numLabel[index],
                       style: titleStyle.copyWith(color: greenColor),
                       textAlign: TextAlign.center,
                     ),
@@ -240,14 +259,16 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
       width: 100.w,
       decoration: BoxDecoration(
         color: greenColor,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Fee : \$150',
+            rupiah(widget.myDocModel?.price),
             style: regularStyle.copyWith(color: whiteColor),
           ),
           Container(

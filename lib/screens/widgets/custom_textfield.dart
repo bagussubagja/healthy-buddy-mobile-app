@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   Widget? suffixIcon;
   Widget? prefixIcon;
   Function()? onTap;
+  Function(String)? onChanged;
   bool? obscureText;
   bool? readOnly;
   bool? isObscure;
@@ -31,6 +32,7 @@ class CustomTextField extends StatelessWidget {
       this.isObscure,
       this.textInputType,
       this.height,
+      this.onChanged,
       this.color})
       : super(key: key);
 
@@ -58,6 +60,7 @@ class CustomTextField extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  onChanged: onChanged,
                   style: readOnly == true
                       ? regularStyle.copyWith(color: Colors.grey, fontSize: 16)
                       : regularStyle.copyWith(color: Colors.grey, fontSize: 16),

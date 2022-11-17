@@ -57,6 +57,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final topDoctor = Provider.of<MyDocByExperienceClass>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -88,7 +89,11 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
             MarginHeight(height: 3.h),
             _doctorCategory(context),
             _topDoctorSection(),
-            _topDoctorList()
+            topDoctor.isloading == true
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : _topDoctorList()
           ],
         ),
       )),
@@ -240,7 +245,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
                         style: titleStyle.copyWith(fontSize: 12.sp),
                       ),
                       Text(
-                        'Dentist - Bandung Hospital',
+                        '${itemExp.mydocModel?[index].specialist} - ${itemExp.mydocModel?[index].hospital}',
                         style: regularStyle.copyWith(
                             fontSize: 10.sp, color: greyTextColor),
                       ),
@@ -252,14 +257,14 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
                           ),
                           MarginWidth(width: 2.w),
                           Text(
-                            '7.00 AM - 4.30 PM',
+                            '${itemExp.mydocModel?[index].operationalHour} WIB',
                             style: regularStyle.copyWith(
                                 fontSize: 10.sp, color: greyTextColor),
                           )
                         ],
                       ),
                       Text(
-                        'Fee : \$ 100',
+                        'RP : ${itemExp.mydocModel?[index].price}',
                         style: regularStyle.copyWith(
                             fontSize: 10.sp, color: greyTextColor),
                       ),

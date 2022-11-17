@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
@@ -33,9 +35,10 @@ class _HomePageState extends State<HomePage> {
     'foodies.png',
     'sport.png',
     'mydoc.png',
+    'top-up.png'
   ];
 
-  final List<String> _categoryLabel = ['Foodies', 'Sport', 'MyDoc'];
+  final List<String> _categoryLabel = ['Foodies', 'Sport', 'MyDoc', 'Top Up'];
 
   @override
   void initState() {
@@ -148,8 +151,10 @@ class _HomePageState extends State<HomePage> {
                           Navigator.pushNamed(context, AppRoutes.foodiesScreen);
                         } else if (index == 1) {
                           Navigator.pushNamed(context, AppRoutes.sportScreen);
-                        } else {
+                        } else if (index == 2) {
                           Navigator.pushNamed(context, AppRoutes.myDocScreen);
+                        } else if (index == 3) {
+                          Navigator.pushNamed(context, AppRoutes.topUpScreen);
                         }
                       },
                       child: Container(
@@ -279,34 +284,50 @@ class _HomePageState extends State<HomePage> {
                 ))
           ],
         ),
-        SizedBox(
-          width: double.infinity,
-          child: ListView.builder(
-            shrinkWrap: true,
-            primary: false,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: item.articles?.length ?? 0,
-            itemBuilder: (context, index) {
-              return ListTile(
-                tileColor: greyColor,
-                leading: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      item.articles?[index].thumbnail ?? imgPlaceHolder,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+        item.isLoading == true
+            ?  LoadingWidget()
+            : SizedBox(
+                width: double.infinity,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: item.articles?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      tileColor: greyColor,
+                      leading: SizedBox(
+                        height: 12.h,
+                        width: 12.h,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: item.articles?[index].thumbnail ??
+                                imgPlaceHolder,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => const Center(
+                              child: Icon(Icons.error),
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(item.articles?[index].title ?? "Loading"),
+                      subtitle: Text(
+                          '${item.articles?[index].description.substring(0, 40)}...'),
+                    );
+                  },
                 ),
-                title: Text(item.articles?[index].title ?? "Loading"),
-                subtitle: Text(
-                    '${item.articles?[index].description.substring(0, 40)}...'),
-              );
-            },
-          ),
-        ),
+              ),
       ],
     );
   }

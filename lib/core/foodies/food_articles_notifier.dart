@@ -10,9 +10,7 @@ class FoodArticlesClass extends ChangeNotifier {
 
   getFoodArticleData({required BuildContext context}) async {
     isLoading = true;
-    print("test");
     foodArticle = (await getFoodArticles(context: context));
-    print("ada");
     isLoading = false;
     notifyListeners();
   }

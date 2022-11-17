@@ -16,6 +16,7 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/det
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/no_internet_found_screen.dart';
 import 'package:http/http.dart';
 
@@ -34,6 +35,7 @@ class AppRoutes {
   static const String sportStore = '/sportStore';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocDetailScreen = '/myDocDetailScreen';
+  static const String topUpScreen = '/topup';
   static const String bodyScreen = '/index';
   static const String statePageUI = '/state';
 
@@ -48,11 +50,10 @@ class AppRoutes {
     foodReceiptMenu: (context) => FoodReceiptMenuScreen(),
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
     foodStoreMenu: (context) => FoodStoreMainScreen(),
-    foodStoreDetailScreen: (context) => FoodStoreDetailScreen(),
     sportScreen: (context) => const SportScreen(),
     sportStore: (context) => SportStoreMainScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
-    // myDocDetailScreen: (context) => MyDocDetailScreen(),
+    topUpScreen: (context) => TopUpScreen(),
     statePageUI: (context) => const StatePageUI(),
   };
 
@@ -60,6 +61,26 @@ class AppRoutes {
     String route = settings.name ?? '/';
 
     switch (route) {
+      case AppRoutes.notInternetScreen:
+        return getPage(const StatePageUI());
+      case AppRoutes.loginScreen:
+        return getPage(LoginScreen());
+      case AppRoutes.registerScreen:
+        return getPage(RegisterScreen());
+      case AppRoutes.homePageScreen:
+        return getPage(HomePage());
+      case AppRoutes.bodyScreen:
+        return getPage(BodyPageScreen());
+      case AppRoutes.foodiesScreen:
+        return getPage(const FoodiesScreen());
+      case AppRoutes.foodArticleMenu:
+        return getPage(const FoodArticleScreen());
+      case AppRoutes.foodReceiptMenu:
+        return getPage(FoodReceiptMenuScreen());
+      case AppRoutes.foodReceiptDetailScreen:
+        return getPage(FoodReceiptDetailScreen());
+      case AppRoutes.foodStoreMenu:
+        return getPage(const FoodStoreMainScreen());
       case AppRoutes.foodStoreDetailScreen:
         final food = settings.arguments as FoodStoreModel;
         return getPage(
@@ -67,12 +88,19 @@ class AppRoutes {
             foodStoreModel: food,
           ),
         );
+      case AppRoutes.myDocScreen:
+        return getPage(MyDocMainScreen());
       case AppRoutes.myDocDetailScreen:
         final doctor = settings.arguments as MyDocModel;
         return getPage(MyDocDetailScreen(
           myDocModel: doctor,
         ));
-
+      case AppRoutes.sportScreen:
+        return getPage(const SportScreen());
+      case AppRoutes.sportStore:
+        return getPage(const SportStoreMainScreen());
+      case AppRoutes.topUpScreen:
+        return getPage(TopUpScreen());
       default:
         return getPage(const Scaffold(
           body: Text("Route Tidak Ada"),
