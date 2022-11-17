@@ -1,15 +1,23 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../widgets/margin_width.dart';
 
-class MyDocDetailScreen extends StatelessWidget {
-  const MyDocDetailScreen({super.key});
+class MyDocDetailScreen extends StatefulWidget {
+  MyDocModel? myDocModel;
+  MyDocDetailScreen({super.key, this.myDocModel});
 
+  @override
+  State<MyDocDetailScreen> createState() => _MyDocDetailScreenState();
+}
+
+class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
+  final List<String> _docLabel = ["Patients", "Year exp", "Rating"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +96,7 @@ class MyDocDetailScreen extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
-                height: 135,
+                height: 20.h,
                 width: double.infinity,
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
@@ -100,14 +108,15 @@ class MyDocDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Prof. Dr. Arfi Firman Pradipta',
+                      widget.myDocModel?.name ?? "Loading...",
                       style: titleStyle.copyWith(fontSize: 13.sp),
                       overflow: TextOverflow.ellipsis,
                     ),
                     MarginHeight(height: 1.h),
                     Text(
-                      'Hepatology - Rancaekek Hospital',
+                      '${widget.myDocModel?.specialist} - ${widget.myDocModel?.hospital}',
                       style: regularStyle,
+                      textAlign: TextAlign.center,
                     ),
                     MarginHeight(height: 1.h),
                     Row(
@@ -120,7 +129,7 @@ class MyDocDetailScreen extends StatelessWidget {
                         ),
                         MarginWidth(width: 2.w),
                         Text(
-                          '7.00 AM - 4.30 PM',
+                          '${widget.myDocModel?.operationalHour} WIB',
                           style: regularStyle.copyWith(fontSize: 10.sp),
                         )
                       ],
@@ -176,7 +185,7 @@ class MyDocDetailScreen extends StatelessWidget {
           style: titleStyle.copyWith(color: greenColor),
         ),
         Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          widget.myDocModel?.description ?? "Loading...",
           style: regularStyle,
           textAlign: TextAlign.justify,
         )
@@ -204,12 +213,12 @@ class MyDocDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '242',
+                      widget.myDocModel?.patients.toString() ?? "0",
                       style: titleStyle.copyWith(color: greenColor),
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      'Patients',
+                      _docLabel[index],
                       style: regularStyle,
                     )
                   ],

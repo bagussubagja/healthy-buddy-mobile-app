@@ -1,28 +1,59 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../routes/routes.dart';
 import '../../../shared/assets_directory.dart';
 import '../../widgets/margin_width.dart';
 
-class MyDocMainScreen extends StatelessWidget {
+class MyDocMainScreen extends StatefulWidget {
   MyDocMainScreen({super.key});
 
+  @override
+  State<MyDocMainScreen> createState() => _MyDocMainScreenState();
+}
+
+class _MyDocMainScreenState extends State<MyDocMainScreen> {
   final List<String> _iconImage = [
     "mydoc-pulmonology.png",
     "mydoc-cardiology.png",
     "mydoc-mentalhealth.png",
     "mydoc-hepatology.png"
   ];
+
   final List<String> _iconLabel = [
     "Pulmonology",
     "Cardiology",
     "Mental Health",
     "Hepatology"
   ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final doctorItemPulmonology =
+        Provider.of<MyDocByPulmonologyClass>(context, listen: false);
+    doctorItemPulmonology.getDoctor(
+        context: context, specialist: "Pulmonology");
+    final doctorItemCardiology =
+        Provider.of<MyDocByCardiologyClass>(context, listen: false);
+    doctorItemCardiology.getDoctor(context: context, specialist: "Cardiology");
+    final doctorItemMentalHealth =
+        Provider.of<MyDocByMentalHealthClass>(context, listen: false);
+    doctorItemMentalHealth.getDoctor(
+        context: context, specialist: "Mental Health");
+    final doctorItemHepatology =
+        Provider.of<MyDocByHepatologyClass>(context, listen: false);
+    doctorItemHepatology.getDoctor(context: context, specialist: "Hepatology");
+    final doctorItemExp =
+        Provider.of<MyDocByExperienceClass>(context, listen: false);
+    doctorItemExp.getDoctor(context: context, isExperience: "true");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +188,7 @@ class MyDocMainScreen extends StatelessWidget {
   }
 
   Widget _topDoctorList() {
+    final itemExp = Provider.of<MyDocByExperienceClass>(context);
     return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -177,9 +209,23 @@ class MyDocMainScreen extends StatelessWidget {
                   width: 110,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.asset(
-                      'assets/images/dokter1.jpg',
-                      fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      imageUrl: itemExp.mydocModel?[index].thumbnail ??
+                          imgPlaceHolder,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Center(
+                        child: Icon(Icons.error),
+                      ),
                     ),
                   ),
                 ),
@@ -190,7 +236,7 @@ class MyDocMainScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Prof. Dr. Arfi Firman Pradipta',
+                        itemExp.mydocModel?[index].name ?? "Loading",
                         style: titleStyle.copyWith(fontSize: 12.sp),
                       ),
                       Text(
@@ -223,8 +269,10 @@ class MyDocMainScreen extends StatelessWidget {
                           elevation: 0,
                         ),
                         onPressed: () {
+                          final topDoctor = itemExp.mydocModel?[index];
                           Navigator.pushNamed(
-                              context, AppRoutes.myDocDetailScreen);
+                              context, AppRoutes.myDocDetailScreen,
+                              arguments: topDoctor);
                         },
                         child: Text(
                           'Appointment',
@@ -241,6 +289,6 @@ class MyDocMainScreen extends StatelessWidget {
         separatorBuilder: (context, index) {
           return MarginHeight(height: 2.h);
         },
-        itemCount: 10);
+        itemCount: itemExp.mydocModel?.length ?? 0);
   }
 }

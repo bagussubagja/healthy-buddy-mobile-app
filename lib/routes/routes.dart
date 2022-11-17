@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
@@ -51,7 +52,7 @@ class AppRoutes {
     sportScreen: (context) => const SportScreen(),
     sportStore: (context) => SportStoreMainScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
-    myDocDetailScreen: (context) => MyDocDetailScreen(),
+    // myDocDetailScreen: (context) => MyDocDetailScreen(),
     statePageUI: (context) => const StatePageUI(),
   };
 
@@ -66,6 +67,11 @@ class AppRoutes {
             foodStoreModel: food,
           ),
         );
+      case AppRoutes.myDocDetailScreen:
+        final doctor = settings.arguments as MyDocModel;
+        return getPage(MyDocDetailScreen(
+          myDocModel: doctor,
+        ));
 
       default:
         return getPage(const Scaffold(
@@ -75,4 +81,5 @@ class AppRoutes {
   }
 }
 
-MaterialPageRoute<dynamic> getPage(Widget page) => MaterialPageRoute(builder: (context) => page);
+MaterialPageRoute<dynamic> getPage(Widget page) =>
+    MaterialPageRoute(builder: (context) => page);

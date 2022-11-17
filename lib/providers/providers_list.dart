@@ -2,6 +2,7 @@ import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,21 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => SportStoreBadmintonClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByPulmonologyClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByCardiologyClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByMentalHealthClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByHepatologyClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByExperienceClass(),
     ),
   ];
 }
