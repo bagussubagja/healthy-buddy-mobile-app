@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -17,13 +19,15 @@ class _SettingScreenState extends State<SettingScreen> {
   final List<IconData> _iconSettingMenu = [
     Icons.person_outline_outlined,
     Icons.supervised_user_circle_outlined,
-    Icons.help_center_outlined
+    Icons.help_center_outlined,
+    Icons.history
   ];
 
   final List<String> _nameSettingMenu = [
-    "Account",
-    "About Us",
-    "Help Center",
+    "Akun",
+    "Tentang Kami",
+    "Pusat Bantuan",
+    "Riwayat Pembelian"
   ];
 
   @override
@@ -89,7 +93,7 @@ class _SettingScreenState extends State<SettingScreen> {
           style: titleStyle.copyWith(color: greyTextColor),
         ),
         Text(
-          'bagussubagja99@gmail.com',
+          'Saldo Kamu : ${rupiah(100000)}',
           textAlign: TextAlign.center,
           style: regularStyle.copyWith(color: greyTextColor),
         ),
@@ -138,31 +142,41 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget _menuSetting() {
     return ListView.separated(
         shrinkWrap: true,
+        primary: false,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    height: 7.h,
-                    width: 7.h,
-                    decoration: BoxDecoration(
-                      color: greenColor.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: greenColor),
+              GestureDetector(
+                onTap: () {
+                  if (index == 0) {
+                    Navigator.pushNamed(
+                        context, AppRoutes.accountSettingScreen);
+                  }
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      height: 7.h,
+                      width: 7.h,
+                      decoration: BoxDecoration(
+                        color: greenColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: greenColor),
+                      ),
+                      child: Icon(
+                        _iconSettingMenu[index],
+                        color: greenColor,
+                      ),
                     ),
-                    child: Icon(
-                      _iconSettingMenu[index],
-                      color: greenColor,
-                    ),
-                  ),
-                  MarginWidth(width: 5.w),
-                  Text(
-                    _nameSettingMenu[index],
-                    style: regularStyle,
-                  )
-                ],
+                    MarginWidth(width: 5.w),
+                    Text(
+                      _nameSettingMenu[index],
+                      style: regularStyle,
+                    )
+                  ],
+                ),
               ),
               Icon(
                 Icons.arrow_forward_ios_rounded,

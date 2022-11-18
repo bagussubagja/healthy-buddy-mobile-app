@@ -113,6 +113,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.3"
+  count_stepper:
+    dependency: "direct main"
+    description:
+      name: count_stepper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   crypto:
     dependency: transitive
     description:

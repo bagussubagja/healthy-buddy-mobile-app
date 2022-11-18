@@ -3,6 +3,7 @@ import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.d
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/settings/account/account_settings_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
@@ -17,7 +18,7 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/myd
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/no_internet_found_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/extras/no_internet_found_screen.dart';
 import 'package:http/http.dart';
 
 class AppRoutes {
@@ -31,6 +32,7 @@ class AppRoutes {
   static const String foodReceiptDetailScreen = '/foodReceiptDetailScreen';
   static const String foodStoreMenu = '/foodStore';
   static const String foodStoreDetailScreen = '/foodStoreDetail';
+  static const String foodStoreConfirmOrder = '/foodConfirmOrder';
   static const String sportScreen = '/sport';
   static const String sportStore = '/sportStore';
   static const String myDocScreen = '/myDocScreen';
@@ -38,6 +40,7 @@ class AppRoutes {
   static const String topUpScreen = '/topup';
   static const String bodyScreen = '/index';
   static const String statePageUI = '/state';
+  static const String accountSettingScreen = '/account';
 
   static final routes = {
     notInternetScreen: (context) => const NoInternetFoundScreen(),
@@ -55,6 +58,7 @@ class AppRoutes {
     myDocScreen: (context) => MyDocMainScreen(),
     topUpScreen: (context) => TopUpScreen(),
     statePageUI: (context) => const StatePageUI(),
+    accountSettingScreen: (context) => AccountSettingScreen()
   };
 
   static Route<dynamic> handlingGenerateRoute(RouteSettings settings) {
@@ -101,6 +105,8 @@ class AppRoutes {
         return getPage(const SportStoreMainScreen());
       case AppRoutes.topUpScreen:
         return getPage(TopUpScreen());
+      case AppRoutes.accountSettingScreen:
+        return getPage(AccountSettingScreen());
       default:
         return getPage(const Scaffold(
           body: Text("Route Tidak Ada"),

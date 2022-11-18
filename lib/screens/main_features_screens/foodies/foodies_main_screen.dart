@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -39,6 +40,16 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     "Food Store"
   ];
 
+  bool _isLoading = true;
+
+  void loadingCompleted() {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +57,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     itemCarousel.getDataCarousel(context: context, section: "foodies");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
+    Timer(const Duration(seconds: 3), loadingCompleted);
   }
 
   @override
@@ -74,26 +86,26 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: defaultPadding,
-          child: ListView(
-            children: [
-              _headerSection(),
-              MarginHeight(height: 1.h),
-              _carouselSection(),
-              MarginHeight(height: 3.h),
-              _foodiesCategory(context),
-              MarginHeight(height: 2.h),
-              Visibility(
-                visible: true,
-                replacement: const Center(
-                  child: CircularProgressIndicator(),
+        child: _isLoading
+            ? LoadingWidget()
+            : Padding(
+                padding: defaultPadding,
+                child: ListView(
+                  children: [
+                    _headerSection(),
+                    MarginHeight(height: 1.h),
+                    _carouselSection(),
+                    MarginHeight(height: 3.h),
+                    _foodiesCategory(context),
+                    MarginHeight(height: 2.h),
+                    Visibility(
+                      visible: true,
+                      replacement: LoadingWidget(),
+                      child: _articleOfTheDay(),
+                    )
+                  ],
                 ),
-                child: _articleOfTheDay(),
-              )
-            ],
-          ),
-        ),
+              ),
       ),
     );
   }
@@ -119,88 +131,88 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     final itemCarousel = Provider.of<CarouselClass>(context);
     final item = itemCarousel.carousel?[0];
     return CarouselSlider.builder(
-            itemCount: 3,
-            itemBuilder: (context, index, realIndex) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  color: greyColor,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      ClipRRect(
-                        child: CachedNetworkImage(
-                          imageUrl: item?.thumbnail[index] ?? _placeHolder,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => const Center(
-                            child: Icon(Icons.error),
-                          ),
+      itemCount: 3,
+      itemBuilder: (context, index, realIndex) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            color: greyColor,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ClipRRect(
+                  child: CachedNetworkImage(
+                    imageUrl: item?.thumbnail[index] ?? _placeHolder,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            Colors.black,
-                            greyColor.withOpacity(0.1),
-                          ],
-                        )),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${item?.title[index].substring(0, 45)}..",
-                                style: regularStyle.copyWith(color: whiteColor),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  final url = Uri.parse(itemCarousel
-                                      .carousel![0].link[index]
-                                      .toString());
-                                  if (await canLaunchUrl(url)) {
-                                    await launchUrl(url);
-                                  }
-                                },
-                                child: Text(
-                                  "Read More",
-                                  style: regularStyle.copyWith(
-                                      color: greyTextColor, fontSize: 13),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(Icons.error),
+                    ),
                   ),
                 ),
-              );
-            },
-            options: CarouselOptions(
-              enlargeCenterPage: true,
-              height: 200,
-              autoPlay: true,
-              aspectRatio: 16 / 9,
+                Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black,
+                      greyColor.withOpacity(0.1),
+                    ],
+                  )),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${item?.title[index].substring(0, 45)}..",
+                          style: regularStyle.copyWith(color: whiteColor),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            final url = Uri.parse(itemCarousel
+                                .carousel![0].link[index]
+                                .toString());
+                            if (await canLaunchUrl(url)) {
+                              await launchUrl(url);
+                            }
+                          },
+                          child: Text(
+                            "Read More",
+                            style: regularStyle.copyWith(
+                                color: greyTextColor, fontSize: 13),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          );
+          ),
+        );
+      },
+      options: CarouselOptions(
+        enlargeCenterPage: true,
+        height: 200,
+        autoPlay: true,
+        aspectRatio: 16 / 9,
+      ),
+    );
   }
 
   Widget _foodiesCategory(BuildContext context) {

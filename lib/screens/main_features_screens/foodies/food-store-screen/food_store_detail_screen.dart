@@ -1,10 +1,14 @@
 import 'dart:ui';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../widgets/margin_height.dart';
@@ -19,7 +23,9 @@ class FoodStoreDetailScreen extends StatefulWidget {
 }
 
 class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
+  int _itemQuantity = 1;
   int _galleryIndex = 0;
+  int _totalPrice = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,16 +46,43 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       MarginHeight(height: 3.h),
                       _itemDesc(),
                       MarginHeight(height: 3.h),
-                      _productGallery()
+                      _productGallery(),
+                      MarginHeight(height: 3.h),
                     ],
                   ),
                 ),
               ],
             ),
           ),
+          Positioned(
+            width: 100.w,
+            top: 0,
+            child: _topSection(),
+          ),
           _buttonPayment()
         ],
       )),
+    );
+  }
+
+  Widget _topSection() {
+    return Container(
+      height: 6.h,
+      color: Colors.black12,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: whiteColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -84,15 +117,6 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             ),
           ),
         ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: blackColor,
-          ),
-        ),
       ],
     );
   }
@@ -125,10 +149,29 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             )
           ],
         ),
-        Text(
-          widget.foodStoreModel?.category ?? "Loading",
-          style: regularStyle.copyWith(color: greyTextColor),
-        )
+        MarginHeight(height: 1.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.foodStoreModel?.category ?? "Loading",
+              style: regularStyle.copyWith(color: greyTextColor),
+            ),
+            CountStepper(
+              iconColor: greenColor,
+              defaultValue: 1,
+              max: 10,
+              min: 1,
+              iconDecrementColor: greenColor,
+              splashRadius: 25,
+              onPressed: (value) {
+                setState(() {
+                  _itemQuantity = value;
+                });
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -223,7 +266,22 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                final snackBar = SnackBar(
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.transparent,
+                  content: AwesomeSnackbarContent(
+                    title: 'Berhasil!',
+                    message:
+                        'Kamu berhasil menambahkan item ${widget.foodStoreModel!.name} ke keranjang!',
+                    contentType: ContentType.success,
+                  ),
+                );
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(snackBar);
+              },
               child: Row(
                 children: [
                   Icon(
@@ -238,7 +296,12 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _totalPrice = widget.foodStoreModel!.price * _itemQuantity;
+                });
+                showModal();
+              },
               style: ElevatedButton.styleFrom(backgroundColor: greenColor),
               child: Row(
                 children: [
@@ -252,10 +315,104 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Future showModal() async {
+    return showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 0,
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: defaultPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              MarginHeight(height: 2.h),
+              Center(
+                child: Container(
+                  height: 5,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: greyTextColor,
+                      borderRadius: BorderRadius.circular(50)),
+                ),
+              ),
+              MarginHeight(height: 2.h),
+              Text(
+                'Konfirmasi Orderan Kamu : ',
+                style: titleStyle,
+              ),
+              MarginHeight(height: 1.h),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Nama Item\t: ${widget.foodStoreModel!.name}',
+                    style: regularStyle,
+                  ),
+                  Text(
+                    'Kuantitas\t: $_itemQuantity',
+                    style: regularStyle,
+                  ),
+                  Text(
+                    'Diskon : 0%',
+                    style: regularStyle,
+                  ),
+                  Text(
+                    'Total Harga : ${rupiah(_totalPrice)}',
+                    style: regularStyle,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 85.w,
+                          child: Text(
+                            'Lokasi : Rancaekek, Kab Bandung.',
+                            style: regularStyle,
+                          ))
+                    ],
+                  )
+                ],
+              ),
+              MarginHeight(height: 1.h),
+              Align(
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Batal',
+                          style: regularStyle,
+                        )),
+                    ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: greenColor),
+                        child: Text(
+                          'Konfirmasi',
+                          style: regularStyle,
+                        )),
+                  ],
+                ),
+              ),
+              MarginHeight(height: 2.h),
+            ],
+          ),
+        );
+      },
     );
   }
 }

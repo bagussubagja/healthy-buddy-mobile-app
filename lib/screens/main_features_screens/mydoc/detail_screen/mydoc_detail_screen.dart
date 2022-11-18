@@ -80,7 +80,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: blackColor,
+              color: whiteColor,
             ),
           ),
           IconButton(

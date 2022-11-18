@@ -476,13 +476,6 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
             onTap: () {
               if (_currentIndex == 0) {
                 final itemBuah = itemByBuah.foodStoreModel?[index];
-                // Navigator.push(context, MaterialPageRoute(
-                //   builder: (context) {
-                //     return FoodStoreDetailScreen(
-                //       foodStoreModel: itemBuah,
-                //     );
-                //   },
-                // ));
                 Navigator.pushNamed(context, AppRoutes.foodStoreDetailScreen,
                     arguments: itemBuah);
               } else if (_currentIndex == 1) {
