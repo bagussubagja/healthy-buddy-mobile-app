@@ -145,17 +145,20 @@ class _SettingScreenState extends State<SettingScreen> {
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  if (index == 0) {
-                    Navigator.pushNamed(
-                        context, AppRoutes.accountSettingScreen);
-                  }
-                },
-                child: Row(
+          return GestureDetector(
+            onTap: () {
+              if (index == 0) {
+                Navigator.pushNamed(context, AppRoutes.accountSettingScreen);
+              } else if (index == 1) {
+                Navigator.pushNamed(context, AppRoutes.aboutUsScreen);
+              } else if (index == 2) {
+                Navigator.pushNamed(context, AppRoutes.helpCenterScreen);
+              }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
                     Container(
                       height: 7.h,
@@ -177,12 +180,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     )
                   ],
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: greyTextColor,
-              )
-            ],
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: greyTextColor,
+                )
+              ],
+            ),
           );
         },
         separatorBuilder: (context, index) {

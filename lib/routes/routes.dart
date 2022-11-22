@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/settings/about_us/about_us_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/account/account_settings_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/settings/help_center/help_center_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
@@ -41,6 +44,8 @@ class AppRoutes {
   static const String bodyScreen = '/index';
   static const String statePageUI = '/state';
   static const String accountSettingScreen = '/account';
+  static const String aboutUsScreen = '/aboutUs';
+  static const String helpCenterScreen = '/helpCenter';
 
   static final routes = {
     notInternetScreen: (context) => const NoInternetFoundScreen(),
@@ -58,7 +63,9 @@ class AppRoutes {
     myDocScreen: (context) => MyDocMainScreen(),
     topUpScreen: (context) => TopUpScreen(),
     statePageUI: (context) => const StatePageUI(),
-    accountSettingScreen: (context) => AccountSettingScreen()
+    accountSettingScreen: (context) => AccountSettingScreen(),
+    aboutUsScreen: (context) => AboutUsScreen(),
+    helpCenterScreen: (context) => HelpCenterScreen()
   };
 
   static Route<dynamic> handlingGenerateRoute(RouteSettings settings) {
@@ -107,6 +114,10 @@ class AppRoutes {
         return getPage(TopUpScreen());
       case AppRoutes.accountSettingScreen:
         return getPage(AccountSettingScreen());
+      case AppRoutes.aboutUsScreen:
+        return getPage(AboutUsScreen());
+      case AppRoutes.helpCenterScreen:
+        return getPage(HelpCenterScreen());
       default:
         return getPage(const Scaffold(
           body: Text("Route Tidak Ada"),
