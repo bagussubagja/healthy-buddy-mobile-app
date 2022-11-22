@@ -5,36 +5,48 @@ import 'package:healthy_buddy_mobile_app/services/my_doc_service/my_doc_service.
 
 class MyDocByPulmonologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
+  bool isLoading = false;
   getDoctor({required BuildContext context, required String specialist}) async {
+    isLoading = true;
     mydocModel = (await getDoctorBySpecialist(
         context: context, specialist: 'Pulmonology'));
+    isLoading = false;
     notifyListeners();
   }
 }
 
 class MyDocByCardiologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
+  bool isLoading = false;
   getDoctor({required BuildContext context, required String specialist}) async {
+    isLoading = true;
     mydocModel = (await getDoctorBySpecialist(
         context: context, specialist: 'Cardiology'));
+    isLoading = false;
     notifyListeners();
   }
 }
 
 class MyDocByMentalHealthClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
+  bool isLoading = false;
   getDoctor({required BuildContext context, required String specialist}) async {
+    isLoading = true;
     mydocModel = (await getDoctorBySpecialist(
         context: context, specialist: 'Mental Health'));
+    isLoading = false;
     notifyListeners();
   }
 }
 
 class MyDocByHepatologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
+  bool isLoading = false;
   getDoctor({required BuildContext context, required String specialist}) async {
+    isLoading = true;
     mydocModel = (await getDoctorBySpecialist(
         context: context, specialist: 'Hepatology'));
+    isLoading = false;
     notifyListeners();
   }
 }

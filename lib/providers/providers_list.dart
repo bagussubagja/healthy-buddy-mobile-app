@@ -94,5 +94,17 @@ class ProviderList {
     ChangeNotifierProvider(
       create: (_) => MyDocByExperienceClass(),
     ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByPulmonologyClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByCardiologyClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByMentalHealthClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocByHepatologyClass(),
+    ),
   ];
 }

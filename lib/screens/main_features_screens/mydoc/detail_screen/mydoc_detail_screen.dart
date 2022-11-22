@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -80,7 +81,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: whiteColor,
+              color: blackColor,
             ),
           ),
           IconButton(
@@ -101,9 +102,22 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
         SizedBox(
           width: double.infinity,
           height: 50.h,
-          child: Image.network(
-            widget.myDocModel?.thumbnail ?? imgPlaceHolder,
-            fit: BoxFit.cover,
+          child: CachedNetworkImage(
+            imageUrl: widget.myDocModel!.thumbnail,
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            placeholder: (context, url) => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            errorWidget: (context, url, error) => const Center(
+              child: Icon(Icons.error),
+            ),
           ),
         ),
         Positioned(

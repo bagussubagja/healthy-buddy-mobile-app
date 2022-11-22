@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -118,7 +119,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
           style: titleStyle.copyWith(color: greenColor),
         ),
         CustomTextField(
-          color: greyColor,
+          color: Colors.white,
           prefixIcon: Icon(
             Icons.search_rounded,
             color: greyTextColor,
@@ -147,7 +148,11 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.myDocCategoryScreen,
+                        arguments: index);
+                   
+                  },
                   child: Container(
                     height: 7.h,
                     decoration: BoxDecoration(
@@ -202,7 +207,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
             padding: const EdgeInsets.all(8),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: greyColor,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
