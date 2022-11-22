@@ -8,9 +8,11 @@ import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -35,13 +37,14 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     }
   }
 
-  List<bool> _selectedToogle = [true, false, false, false];
+  List<bool> _selectedToogle = [true, false, false, false, false];
 
   List<String> _foodStoreCategory = [
     "General",
     "Soccer",
     "Athletic",
-    "Badminton"
+    "Badminton",
+    "Swimming"
   ];
 
   int _currentIndex = 0;
@@ -60,6 +63,9 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     final itemBadminton =
         Provider.of<SportStoreBadmintonClass>(context, listen: false);
     itemBadminton.getSport(context: context, category: "Badminton");
+    final itemSwimming =
+        Provider.of<SportStoreSwimmingClass>(context, listen: false);
+    itemSwimming.getSport(context: context, category: "Swimming");
     Timer(const Duration(seconds: 2), showContent);
   }
 
@@ -139,7 +145,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                 MarginHeight(
                   height: 2.h,
                 ),
-                _foodStoreToogleButton(),
+                _sportStoreToogleButton(),
                 MarginHeight(height: 2.h),
                 _isGridViewItemList
                     ? _gridViewItemList(_currentIndex)
@@ -230,10 +236,10 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     );
   }
 
-  Widget _foodStoreToogleButton() {
+  Widget _sportStoreToogleButton() {
     return Center(
       child: SizedBox(
-        height: 30,
+        height: 5.h,
         child: ListView.separated(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
@@ -255,8 +261,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(2),
-                  height: 30,
-                  width: 80,
+                  width: 25.w,
                   decoration: BoxDecoration(
                       color: _selectedToogle[index]
                           ? greenColor.withOpacity(0.2)
@@ -280,7 +285,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
             separatorBuilder: (context, index) {
               return MarginWidth(width: 3.w);
             },
-            itemCount: 4),
+            itemCount: 5),
       ),
     );
   }
@@ -290,6 +295,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     final itemSoccer = Provider.of<SportStoreSoccerClass>(context);
     final itemAthletic = Provider.of<SportStoreAthleticClass>(context);
     final itemBadminton = Provider.of<SportStoreBadmintonClass>(context);
+    final itemSwimming = Provider.of<SportStoreSwimmingClass>(context);
     int itemCount(int x) {
       if (x == 0) {
         return itemGeneral.sportStore?.length ?? 0;
@@ -299,6 +305,8 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
         return itemAthletic.sportStore?.length ?? 0;
       } else if (x == 3) {
         return itemBadminton.sportStore?.length ?? 0;
+      } else if (x == 4) {
+        return itemSwimming.sportStore?.length ?? 0;
       } else {
         return 0;
       }
@@ -316,7 +324,54 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
       itemCount: itemCount(_currentIndex),
       itemBuilder: (BuildContext ctx, index) {
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            if (_currentIndex == 0) {
+              final general = itemGeneral.sportStore?[index];
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return SportStoreDetailScreen(
+                    sportStoreModel: general,
+                  );
+                },
+              ));
+            } else if (_currentIndex == 1) {
+              final soccer = itemSoccer.sportStore?[index];
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return SportStoreDetailScreen(
+                    sportStoreModel: soccer,
+                  );
+                },
+              ));
+            } else if (_currentIndex == 2) {
+              final athlectic = itemAthletic.sportStore?[index];
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return SportStoreDetailScreen(
+                    sportStoreModel: athlectic,
+                  );
+                },
+              ));
+            } else if (_currentIndex == 3) {
+              final badminton = itemBadminton.sportStore?[index];
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return SportStoreDetailScreen(
+                    sportStoreModel: badminton,
+                  );
+                },
+              ));
+            } else if (_currentIndex == 4) {
+              final swimming = itemSwimming.sportStore?[index];
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return SportStoreDetailScreen(
+                    sportStoreModel: swimming,
+                  );
+                },
+              ));
+            }
+          },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: SizedBox(
@@ -386,27 +441,51 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                                     child: Icon(Icons.error),
                                   ),
                                 )
-                              : CachedNetworkImage(
-                                  imageUrl: itemBadminton
-                                          .sportStore?[index].gallery[0] ??
-                                      imgPlaceHolder,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
+                              : _currentIndex == 3
+                                  ? CachedNetworkImage(
+                                      imageUrl: itemBadminton
+                                              .sportStore?[index].gallery[0] ??
+                                          imgPlaceHolder,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Icon(Icons.error),
-                                  ),
-                                )
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Center(
+                                        child: Icon(Icons.error),
+                                      ),
+                                    )
+                                  : CachedNetworkImage(
+                                      imageUrl: itemSwimming
+                                              .sportStore?[index].gallery[0] ??
+                                          imgPlaceHolder,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Center(
+                                        child: Icon(Icons.error),
+                                      ),
+                                    )
                 ],
               ),
             ),
@@ -417,19 +496,22 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
   }
 
   Widget _listViewItemList(int currentIndex) {
-    final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
-    final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
-    final itemByInstan = Provider.of<FoodStoreByInstanClass>(context);
-    final itemByMinuman = Provider.of<FoodStoreByMinumanClass>(context);
+    final itemGeneral = Provider.of<SportStoreGeneralClass>(context);
+    final itemSoccer = Provider.of<SportStoreSoccerClass>(context);
+    final itemAthletic = Provider.of<SportStoreAthleticClass>(context);
+    final itemBadminton = Provider.of<SportStoreBadmintonClass>(context);
+    final itemSwimming = Provider.of<SportStoreSwimmingClass>(context);
     int itemCount(int x) {
       if (x == 0) {
-        return itemByBuah.foodStoreModel?.length ?? 0;
+        return itemGeneral.sportStore?.length ?? 0;
       } else if (x == 1) {
-        return itemBySayuran.foodStoreModel?.length ?? 0;
+        return itemSoccer.sportStore?.length ?? 0;
       } else if (x == 2) {
-        return itemByInstan.foodStoreModel?.length ?? 0;
+        return itemAthletic.sportStore?.length ?? 0;
       } else if (x == 3) {
-        return itemByMinuman.foodStoreModel?.length ?? 0;
+        return itemBadminton.sportStore?.length ?? 0;
+      } else if (x == 4) {
+        return itemSwimming.sportStore?.length ?? 0;
       } else {
         return 0;
       }
@@ -442,38 +524,47 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
           return GestureDetector(
             onTap: () {
               if (_currentIndex == 0) {
-                final itemBuah = itemByBuah.foodStoreModel?[index];
+                final general = itemGeneral.sportStore?[index];
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return FoodStoreDetailScreen(
-                      foodStoreModel: itemBuah,
+                    return SportStoreDetailScreen(
+                      sportStoreModel: general,
                     );
                   },
                 ));
               } else if (_currentIndex == 1) {
-                final itemSayuran = itemBySayuran.foodStoreModel?[index];
+                final soccer = itemSoccer.sportStore?[index];
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return FoodStoreDetailScreen(
-                      foodStoreModel: itemSayuran,
+                    return SportStoreDetailScreen(
+                      sportStoreModel: soccer,
                     );
                   },
                 ));
               } else if (_currentIndex == 2) {
-                final itemInstan = itemByInstan.foodStoreModel?[index];
+                final athlectic = itemAthletic.sportStore?[index];
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return FoodStoreDetailScreen(
-                      foodStoreModel: itemInstan,
+                    return SportStoreDetailScreen(
+                      sportStoreModel: athlectic,
                     );
                   },
                 ));
               } else if (_currentIndex == 3) {
-                final itemMinuman = itemByMinuman.foodStoreModel?[index];
+                final badminton = itemBadminton.sportStore?[index];
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return FoodStoreDetailScreen(
-                      foodStoreModel: itemMinuman,
+                    return SportStoreDetailScreen(
+                      sportStoreModel: badminton,
+                    );
+                  },
+                ));
+              } else if (_currentIndex == 4) {
+                final swimming = itemSwimming.sportStore?[index];
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return SportStoreDetailScreen(
+                      sportStoreModel: swimming,
                     );
                   },
                 ));
@@ -494,101 +585,124 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                     width: 30.w,
                     height: 17.h,
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: _currentIndex == 0
-                            ? CachedNetworkImage(
-                                imageUrl: itemByBuah
-                                        .foodStoreModel?[index].gallery[0] ??
-                                    imgPlaceHolder,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ),
+                      borderRadius: BorderRadius.circular(12),
+                      child: _currentIndex == 0
+                          ? CachedNetworkImage(
+                              imageUrl:
+                                  itemGeneral.sportStore?[index].gallery[0] ??
+                                      imgPlaceHolder,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Center(
-                                  child: Icon(Icons.error),
-                                ),
-                              )
-                            : _currentIndex == 1
-                                ? CachedNetworkImage(
-                                    imageUrl: itemBySayuran
-                                            .foodStoreModel?[index]
-                                            .gallery[0] ??
-                                        imgPlaceHolder,
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
+                              ),
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
+                            )
+                          : _currentIndex == 1
+                              ? CachedNetworkImage(
+                                  imageUrl: itemSoccer
+                                          .sportStore?[index].gallery[0] ??
+                                      imgPlaceHolder,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                    placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Center(
-                                      child: Icon(Icons.error),
-                                    ),
-                                  )
-                                : _currentIndex == 2
-                                    ? CachedNetworkImage(
-                                        imageUrl: itemByInstan
-                                                .foodStoreModel?[index]
-                                                .gallery[0] ??
-                                            imgPlaceHolder,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-                                            ),
+                                  ),
+                                  placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Center(
+                                    child: Icon(Icons.error),
+                                  ),
+                                )
+                              : _currentIndex == 2
+                                  ? CachedNetworkImage(
+                                      imageUrl: itemAthletic
+                                              .sportStore?[index].gallery[0] ??
+                                          imgPlaceHolder,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            const Center(
-                                          child: Icon(Icons.error),
-                                        ),
-                                      )
-                                    : CachedNetworkImage(
-                                        imageUrl: itemByMinuman
-                                                .foodStoreModel?[index]
-                                                .gallery[0] ??
-                                            imgPlaceHolder,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
+                                      ),
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Center(
+                                        child: Icon(Icons.error),
+                                      ),
+                                    )
+                                  : _currentIndex == 3
+                                      ? CachedNetworkImage(
+                                          imageUrl: itemBadminton
+                                                  .sportStore?[index]
+                                                  .gallery[0] ??
+                                              imgPlaceHolder,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Center(
+                                            child: Icon(Icons.error),
+                                          ),
+                                        )
+                                      : CachedNetworkImage(
+                                          imageUrl: itemSwimming
+                                                  .sportStore?[index]
+                                                  .gallery[0] ??
+                                              imgPlaceHolder,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Center(
+                                            child: Icon(Icons.error),
+                                          ),
                                         ),
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            const Center(
-                                          child: Icon(Icons.error),
-                                        ),
-                                      )),
+                    ),
                   ),
                   SizedBox(
                     width: 50.w,
@@ -599,56 +713,74 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                       children: [
                         _currentIndex == 0
                             ? Text(
-                                itemByBuah.foodStoreModel?[index].name ??
+                                itemGeneral.sportStore?[index].productName ??
                                     "Loading",
                                 style: titleStyle.copyWith(
                                     fontSize: 14.sp, color: blackColor),
                               )
                             : _currentIndex == 1
                                 ? Text(
-                                    itemBySayuran.foodStoreModel?[index].name ??
+                                    itemSoccer.sportStore?[index].productName ??
                                         "Loading",
                                     style: titleStyle.copyWith(
                                         fontSize: 14.sp, color: blackColor),
                                   )
                                 : _currentIndex == 2
                                     ? Text(
-                                        itemByInstan
-                                                .foodStoreModel?[index].name ??
+                                        itemAthletic.sportStore?[index]
+                                                .productName ??
                                             "Loading",
                                         style: titleStyle.copyWith(
                                             fontSize: 14.sp, color: blackColor),
                                       )
-                                    : Text(
-                                        itemByMinuman
-                                                .foodStoreModel?[index].name ??
-                                            "Loading",
-                                        style: titleStyle.copyWith(
-                                            fontSize: 14.sp, color: blackColor),
-                                      ),
+                                    : _currentIndex == 3
+                                        ? Text(
+                                            itemBadminton.sportStore?[index]
+                                                    .productName ??
+                                                "Loading",
+                                            style: titleStyle.copyWith(
+                                                fontSize: 14.sp,
+                                                color: blackColor),
+                                          )
+                                        : Text(
+                                            itemSwimming.sportStore?[index]
+                                                    .productName ??
+                                                "Loading",
+                                            style: titleStyle.copyWith(
+                                                fontSize: 14.sp,
+                                                color: blackColor),
+                                          ),
                         _currentIndex == 0
                             ? Text(
-                                '${itemByBuah.foodStoreModel?[index].description.substring(0, 100)}..',
+                                '${itemGeneral.sportStore?[index].description.substring(0, 100)}..',
                                 style: regularStyle.copyWith(
                                     fontSize: 10.sp, color: blackColor),
                               )
                             : _currentIndex == 1
                                 ? Text(
-                                    '${itemBySayuran.foodStoreModel?[index].description.substring(0, 100)}..',
+                                    '${itemSoccer.sportStore?[index].description.substring(0, 100)}..',
                                     style: regularStyle.copyWith(
                                         fontSize: 10.sp, color: blackColor),
                                   )
                                 : _currentIndex == 2
                                     ? Text(
-                                        '${itemByInstan.foodStoreModel?[index].description.substring(0, 100)}..',
+                                        '${itemAthletic.sportStore?[index].description.substring(0, 100)}..',
                                         style: regularStyle.copyWith(
                                             fontSize: 10.sp, color: blackColor),
                                       )
-                                    : Text(
-                                        '${itemByMinuman.foodStoreModel?[index].description.substring(0, 100)}..',
-                                        style: regularStyle.copyWith(
-                                            fontSize: 10.sp, color: blackColor),
-                                      ),
+                                    : _currentIndex == 3
+                                        ? Text(
+                                            '${itemBadminton.sportStore?[index].description.substring(0, 100)}..',
+                                            style: regularStyle.copyWith(
+                                                fontSize: 10.sp,
+                                                color: blackColor),
+                                          )
+                                        : Text(
+                                            '${itemSwimming.sportStore?[index].description.substring(0, 100)}..',
+                                            style: regularStyle.copyWith(
+                                                fontSize: 10.sp,
+                                                color: blackColor),
+                                          ),
                         MarginHeight(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -657,31 +789,49 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                               children: [
                                 _currentIndex == 0
                                     ? Text(
-                                        'Rp${itemByBuah.foodStoreModel?[index].price}',
+                                        rupiah(itemGeneral
+                                            .sportStore?[index].price),
                                         style: regularStyle.copyWith(
                                             fontSize: 12.sp,
                                             color: greyTextColor),
                                       )
                                     : _currentIndex == 1
                                         ? Text(
-                                            'Rp${itemBySayuran.foodStoreModel?[index].price}',
+                                            rupiah(itemSoccer
+                                                .sportStore?[index].price),
                                             style: regularStyle.copyWith(
                                                 fontSize: 12.sp,
                                                 color: greyTextColor),
                                           )
                                         : _currentIndex == 2
                                             ? Text(
-                                                'Rp${itemByInstan.foodStoreModel?[index].price}',
+                                                rupiah(itemAthletic
+                                                    .sportStore?[index].price),
                                                 style: regularStyle.copyWith(
                                                     fontSize: 12.sp,
                                                     color: greyTextColor),
                                               )
-                                            : Text(
-                                                'Rp${itemByMinuman.foodStoreModel?[index].price}',
-                                                style: regularStyle.copyWith(
-                                                    fontSize: 12.sp,
-                                                    color: greyTextColor),
-                                              )
+                                            : _currentIndex == 3
+                                                ? Text(
+                                                    rupiah(itemBadminton
+                                                        .sportStore?[index]
+                                                        .price),
+                                                    style:
+                                                        regularStyle.copyWith(
+                                                            fontSize: 12.sp,
+                                                            color:
+                                                                greyTextColor),
+                                                  )
+                                                : Text(
+                                                    rupiah(itemSwimming
+                                                        .sportStore?[index]
+                                                        .price),
+                                                    style:
+                                                        regularStyle.copyWith(
+                                                            fontSize: 12.sp,
+                                                            color:
+                                                                greyTextColor),
+                                                  )
                               ],
                             ),
                             GestureDetector(

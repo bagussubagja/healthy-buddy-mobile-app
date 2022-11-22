@@ -227,7 +227,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   Widget _foodStoreToogleButton() {
     return Center(
       child: SizedBox(
-        height: 30,
+        height: 5.h,
         child: ListView.separated(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
@@ -249,8 +249,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                 child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(2),
-                  height: 30,
-                  width: 80,
+                  width: 20.w,
                   decoration: BoxDecoration(
                       color: _selectedToogle[index]
                           ? greenColor.withOpacity(0.2)

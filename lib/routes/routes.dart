@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
@@ -18,9 +17,10 @@ import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-article-screen/sport_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup_screen/topup_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/extras/no_internet_found_screen.dart';
 import 'package:http/http.dart';
 
@@ -37,6 +37,7 @@ class AppRoutes {
   static const String foodStoreDetailScreen = '/foodStoreDetail';
   static const String foodStoreConfirmOrder = '/foodConfirmOrder';
   static const String sportScreen = '/sport';
+  static const String sportArticle = '/sportArticle';
   static const String sportStore = '/sportStore';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocDetailScreen = '/myDocDetailScreen';
@@ -59,6 +60,7 @@ class AppRoutes {
     foodReceiptDetailScreen: (context) => FoodReceiptDetailScreen(),
     foodStoreMenu: (context) => FoodStoreMainScreen(),
     sportScreen: (context) => const SportScreen(),
+    sportArticle: (context) => const SportArticleScreen(),
     sportStore: (context) => SportStoreMainScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
     topUpScreen: (context) => TopUpScreen(),
@@ -108,6 +110,8 @@ class AppRoutes {
         ));
       case AppRoutes.sportScreen:
         return getPage(const SportScreen());
+      case AppRoutes.sportArticle:
+        return getPage(SportArticleScreen());
       case AppRoutes.sportStore:
         return getPage(const SportStoreMainScreen());
       case AppRoutes.topUpScreen:

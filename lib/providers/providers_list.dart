@@ -3,6 +3,7 @@ import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dar
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +50,12 @@ class ProviderList {
       create: (_) => FoodStoreByMinumanClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => SportArticleClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportExerciseAllClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => SportExerciseEasyClass(),
     ),
     ChangeNotifierProvider(
@@ -68,6 +75,9 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => SportStoreBadmintonClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportStoreSwimmingClass(),
     ),
     ChangeNotifierProvider(
       create: (_) => MyDocByPulmonologyClass(),

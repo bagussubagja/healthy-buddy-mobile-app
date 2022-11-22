@@ -114,7 +114,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
         ),
         MarginHeight(height: 5.h),
         Text(
-          'Find your specialist',
+          'Cari dokter spesialis',
           style: titleStyle.copyWith(color: greenColor),
         ),
         CustomTextField(
@@ -123,7 +123,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
             Icons.search_rounded,
             color: greyTextColor,
           ),
-          hintText: "try find 'dentist'",
+          hintText: "coba 'dentist'",
         ),
       ],
     );

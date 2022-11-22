@@ -5,12 +5,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extras/carousel_item_notifier.dart';
 import '../../../shared/assets_directory.dart';
@@ -41,7 +43,7 @@ class _SportScreenState extends State<SportScreen> {
   ];
   final List<String> _iconLabel = [
     "Sport Article",
-    "Sport Pedia",
+    "Sport Exercise",
     "Sport Store",
   ];
   final List<String> _exerciseLevel = ["Easy", "Medium", "Hard"];
@@ -128,7 +130,7 @@ class _SportScreenState extends State<SportScreen> {
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          'Hal yang spesial untuk kamu!',
+          'Tetap Sehat Bersama Kami!',
           style: regularStyle.copyWith(color: greyTextColor),
         ),
       ],
@@ -235,12 +237,12 @@ class _SportScreenState extends State<SportScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    //Navigator.pushNamed(context, AppRoutes.sportStore, arguments: );
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return SportStoreMainScreen();
-                      },
-                    ));
+                    if (index == 0) {
+                      Navigator.pushNamed(context, AppRoutes.sportArticle);
+                    } else if (index == 1) {
+                    } else if (index == 2) {
+                      Navigator.pushNamed(context, AppRoutes.sportStore);
+                    }
                   },
                   child: Container(
                     height: 7.h,
@@ -430,7 +432,7 @@ class _SportScreenState extends State<SportScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${easyItem.sportExercise?[index].name}..',
+                                '${easyItem.sportExercise?[index].name}',
                                 style: titleStyle.copyWith(
                                     color: blackColor, fontSize: 14.sp),
                               ),
@@ -445,7 +447,13 @@ class _SportScreenState extends State<SportScreen> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: greenColor,
                                       elevation: 0),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    final url = Uri.parse(easyItem
+                                        .sportExercise![index].linkVideo);
+                                    if (await canLaunchUrl(url)) {
+                                      await launchUrl(url);
+                                    }
+                                  },
                                   child: Text(
                                     'Try it!',
                                     style: regularStyle,
@@ -475,7 +483,13 @@ class _SportScreenState extends State<SportScreen> {
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: greenColor,
                                           elevation: 0),
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        final url = Uri.parse(mediumItem
+                                            .sportExercise![index].linkVideo);
+                                        if (await canLaunchUrl(url)) {
+                                          await launchUrl(url);
+                                        }
+                                      },
                                       child: Text(
                                         'Try it!',
                                         style: regularStyle,
@@ -503,7 +517,13 @@ class _SportScreenState extends State<SportScreen> {
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: greenColor,
                                           elevation: 0),
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        final url = Uri.parse(hardItem
+                                            .sportExercise![index].linkVideo);
+                                        if (await canLaunchUrl(url)) {
+                                          await launchUrl(url);
+                                        }
+                                      },
                                       child: Text(
                                         'Try it!',
                                         style: regularStyle,

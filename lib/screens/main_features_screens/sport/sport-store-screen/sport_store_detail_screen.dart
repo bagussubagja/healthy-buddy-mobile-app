@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/models/sport_model/sport_store_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -14,15 +15,15 @@ import 'package:sizer/sizer.dart';
 import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
 
-class FoodStoreDetailScreen extends StatefulWidget {
-  FoodStoreModel? foodStoreModel;
-  FoodStoreDetailScreen({super.key, this.foodStoreModel});
+class SportStoreDetailScreen extends StatefulWidget {
+  SportStoreModel? sportStoreModel;
+  SportStoreDetailScreen({super.key, this.sportStoreModel});
 
   @override
-  State<FoodStoreDetailScreen> createState() => _FoodStoreDetailScreenState();
+  State<SportStoreDetailScreen> createState() => _SportStoreDetailScreenState();
 }
 
-class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
+class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
   int _itemQuantity = 1;
   int _galleryIndex = 0;
   int _totalPrice = 0;
@@ -44,9 +45,9 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                     children: [
                       _itemTitle(),
                       MarginHeight(height: 3.h),
-                      _itemDesc(),
-                      MarginHeight(height: 3.h),
                       _productGallery(),
+                      MarginHeight(height: 3.h),
+                      _itemDesc(),
                       MarginHeight(height: 3.h),
                     ],
                   ),
@@ -98,8 +99,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40)),
             child: CachedNetworkImage(
-              imageUrl: widget.foodStoreModel?.gallery[_galleryIndex] ??
-                  imgPlaceHolder,
+              imageUrl: widget.sportStoreModel!.gallery[_galleryIndex],
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -129,23 +129,15 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width: 65.w,
+              width: 55.w,
               child: Text(
-                widget.foodStoreModel?.name ?? "Loading",
+                widget.sportStoreModel!.productName,
                 style: titleStyle.copyWith(color: blackColor),
               ),
             ),
-            Row(
-              children: [
-                Text(
-                  'Rp',
-                  style: titleStyle.copyWith(color: greenColor),
-                ),
-                Text(
-                  widget.foodStoreModel?.price.toString() ?? "Loading...",
-                  style: titleStyle.copyWith(color: blackColor),
-                )
-              ],
+            Text(
+              rupiah(widget.sportStoreModel!.price),
+              style: titleStyle.copyWith(color: blackColor),
             )
           ],
         ),
@@ -154,7 +146,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.foodStoreModel?.category ?? "Loading",
+              widget.sportStoreModel!.category,
               style: regularStyle.copyWith(color: greyTextColor),
             ),
             CountStepper(
@@ -185,7 +177,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           style: titleStyle.copyWith(color: blackColor),
         ),
         Text(
-          widget.foodStoreModel?.description ?? "Loading",
+          widget.sportStoreModel!.description,
           style: regularStyle.copyWith(color: blackColor),
         )
       ],
@@ -218,8 +210,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: widget.foodStoreModel?.gallery[index] ??
-                            imgPlaceHolder,
+                        imageUrl: widget.sportStoreModel!.gallery[index],
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -273,8 +264,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                   backgroundColor: Colors.transparent,
                   content: AwesomeSnackbarContent(
                     title: 'Berhasil!',
-                    message:
-                        'Kamu berhasil menambahkan item ${widget.foodStoreModel!.name} ke keranjang!',
+                    message: 'Kamu berhasil menambahkan item  ke keranjang!',
                     contentType: ContentType.success,
                   ),
                 );
@@ -298,7 +288,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _totalPrice = widget.foodStoreModel!.price * _itemQuantity;
+                  _totalPrice = widget.sportStoreModel!.price * _itemQuantity;
                 });
                 showModal();
               },
@@ -356,7 +346,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nama Item\t: ${widget.foodStoreModel!.name}',
+                    'Nama Item\t: ${widget.sportStoreModel!.productName}',
                     style: regularStyle,
                   ),
                   Text(
