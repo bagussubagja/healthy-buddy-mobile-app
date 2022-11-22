@@ -62,22 +62,77 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: greenColor,
           elevation: 0,
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,
-            ),
-          ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_horiz_rounded,
-                color: Colors.white,
-              ),
-            ),
+            PopupMenuButton(
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+                color: bgColor,
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: greyTextColor,
+                            ),
+                            TextButton(
+                              onPressed: () {},
+                              style: TextButton.styleFrom(
+                                  foregroundColor: blackColor),
+                              child: Text(
+                                'Log Out',
+                                style: regularStyle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ])
           ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: greenColor,
+                ),
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Healthy Buddy',
+                      style: regularStyle.copyWith(color: whiteColor),
+                    )),
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.supervised_user_circle_outlined,
+                ),
+                title: Text(
+                  'Tentang Kami',
+                  style: regularStyle,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.aboutUsScreen);
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.help_center_outlined,
+                ),
+                title: Text(
+                  'Pusat Bantuan',
+                  style: regularStyle,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.helpCenterScreen);
+                },
+              ),
+              const Divider(),
+            ],
+          ),
         ),
         body: SafeArea(
           child: ListView(
@@ -285,7 +340,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         item.isLoading == true
-            ?  LoadingWidget()
+            ? LoadingWidget()
             : SizedBox(
                 width: double.infinity,
                 child: ListView.builder(

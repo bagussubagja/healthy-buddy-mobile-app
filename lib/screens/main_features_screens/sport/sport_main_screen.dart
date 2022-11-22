@@ -43,7 +43,7 @@ class _SportScreenState extends State<SportScreen> {
   ];
   final List<String> _iconLabel = [
     "Sport Article",
-    "Sport Exercise",
+    "Sport Website",
     "Sport Store",
   ];
   final List<String> _exerciseLevel = ["Easy", "Medium", "Hard"];
@@ -240,6 +240,7 @@ class _SportScreenState extends State<SportScreen> {
                     if (index == 0) {
                       Navigator.pushNamed(context, AppRoutes.sportArticle);
                     } else if (index == 1) {
+                      Navigator.pushNamed(context, AppRoutes.sportWebsite);
                     } else if (index == 2) {
                       Navigator.pushNamed(context, AppRoutes.sportStore);
                     }
