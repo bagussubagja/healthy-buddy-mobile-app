@@ -6,6 +6,7 @@ import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.
 import 'package:healthy_buddy_mobile_app/screens/home/settings/about_us/about_us_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/account/account_settings_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/help_center/help_center_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/settings/purchase_history/purcase_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
@@ -51,6 +52,7 @@ class AppRoutes {
   static const String accountSettingScreen = '/account';
   static const String aboutUsScreen = '/aboutUs';
   static const String helpCenterScreen = '/helpCenter';
+  static const String purchaseHistoryScreen = '/purchaseHistrory';
 
   static final routes = {
     notInternetScreen: (context) => const NoInternetFoundScreen(),
@@ -134,6 +136,8 @@ class AppRoutes {
         return getPage(AboutUsScreen());
       case AppRoutes.helpCenterScreen:
         return getPage(HelpCenterScreen());
+      case AppRoutes.purchaseHistoryScreen:
+        return getPage(PurchaseHistoryScreen());
       default:
         return getPage(const Scaffold(
           body: Text("Route Tidak Ada"),

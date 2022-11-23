@@ -6,6 +6,7 @@ import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/sport/sport_website_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -78,6 +79,21 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => SportStoreSwimmingClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteFootballClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteRacingClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteBadmintonClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteBasketClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteOtherClass(),
     ),
     ChangeNotifierProvider(
       create: (_) => MyDocByPulmonologyClass(),

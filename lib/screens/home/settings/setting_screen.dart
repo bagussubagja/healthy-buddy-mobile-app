@@ -153,6 +153,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 Navigator.pushNamed(context, AppRoutes.aboutUsScreen);
               } else if (index == 2) {
                 Navigator.pushNamed(context, AppRoutes.helpCenterScreen);
+              } else if (index == 3) {
+                Navigator.pushNamed(context, AppRoutes.purchaseHistoryScreen);
               }
             },
             child: Row(
