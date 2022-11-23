@@ -30,10 +30,10 @@ class PurchaseHistoryScreen extends StatelessWidget {
               style: titleStyle.copyWith(color: greenColor),
             ),
             Text(
-              'Kesehatan Kamu yang Paling Penting!',
+              'Kesehatan Kamu yang Paling Penting',
               style: regularStyle.copyWith(color: greyTextColor),
             ),
-            
+
           ],
         ),
       )),
