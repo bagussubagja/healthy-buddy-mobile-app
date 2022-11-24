@@ -8,6 +8,7 @@ import 'package:healthy_buddy_mobile_app/screens/home/settings/account/account_s
 import 'package:healthy_buddy_mobile_app/screens/home/settings/help_center/help_center_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/purchase_history/purcase_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/top_article/top_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
   static const String loginScreen = '/login';
   static const String registerScreen = '/register';
   static const String homePageScreen = '/home';
+  static const String topArticleScreen = '/topArticleScreen';
   static const String foodiesScreen = '/foodies';
   static const String foodReceiptMenu = '/foodReceipt';
   static const String foodArticleMenu = '/foodArticle';
@@ -89,6 +91,8 @@ class AppRoutes {
         return getPage(RegisterScreen());
       case AppRoutes.homePageScreen:
         return getPage(HomePage());
+      case AppRoutes.topArticleScreen:
+        return getPage(TopArticleScreen());
       case AppRoutes.bodyScreen:
         return getPage(BodyPageScreen());
       case AppRoutes.foodiesScreen:

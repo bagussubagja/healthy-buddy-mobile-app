@@ -10,6 +10,7 @@ import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -65,6 +66,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             PopupMenuButton(
                 elevation: 0,
+                icon: const Icon(Icons.more_horiz_rounded),
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(4))),
                 color: bgColor,
@@ -91,49 +93,7 @@ class _HomePageState extends State<HomePage> {
                     ])
           ],
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: greenColor,
-                ),
-                child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Healthy Buddy',
-                      style: regularStyle.copyWith(color: whiteColor),
-                    )),
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.supervised_user_circle_outlined,
-                ),
-                title: Text(
-                  'Tentang Kami',
-                  style: regularStyle,
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.aboutUsScreen);
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.help_center_outlined,
-                ),
-                title: Text(
-                  'Pusat Bantuan',
-                  style: regularStyle,
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.helpCenterScreen);
-                },
-              ),
-              const Divider(),
-            ],
-          ),
-        ),
+        drawer: _drawer(),
         body: SafeArea(
           child: ListView(
             shrinkWrap: true,
@@ -150,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                   prefixIcon: const Icon(
                     Icons.search,
                   ),
-                  hintText: "try find fruits...",
+                  hintText: "coba cari 'Anxiety Disorder'...",
                 ),
               ),
               Padding(
@@ -332,7 +292,9 @@ class _HomePageState extends State<HomePage> {
               style: titleStyle.copyWith(color: greenColor),
             ),
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.topArticleScreen);
+                },
                 child: Text(
                   'Lihat Semua',
                   style: regularStyle.copyWith(color: Colors.grey),
@@ -351,6 +313,12 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       tileColor: greyColor,
+                      onTap: () async {
+                        final url = Uri.parse(item.articles![index].link);
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        }
+                      },
                       leading: SizedBox(
                         height: 12.h,
                         width: 12.h,
@@ -384,6 +352,52 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
       ],
+    );
+  }
+
+  Widget _drawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: greenColor,
+            ),
+            child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Healthy Buddy',
+                  style: regularStyle.copyWith(color: whiteColor),
+                )),
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.supervised_user_circle_outlined,
+            ),
+            title: Text(
+              'Tentang Kami',
+              style: regularStyle,
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.aboutUsScreen);
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.help_center_outlined,
+            ),
+            title: Text(
+              'Pusat Bantuan',
+              style: regularStyle,
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.helpCenterScreen);
+            },
+          ),
+          const Divider(),
+        ],
+      ),
     );
   }
 }
