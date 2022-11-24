@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/search/top_article/toparticle_result.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
+import 'package:healthy_buddy_mobile_app/services/search_data_services/search_topArticle_service.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -126,10 +128,17 @@ class _HomePageState extends State<HomePage> {
                 padding: defaultPadding,
                 child: CustomTextField(
                   color: bgColor,
+                  onTap: () {
+                    // Navigator.pushNamed(
+                    //     context, AppRoutes.topArticleSearchScreen);
+                    showSearch(
+                        context: context, delegate: SearchTopArticleResult());
+                  },
+                  readOnly: true,
                   prefixIcon: const Icon(
                     Icons.search,
                   ),
-                  hintText: "coba cari 'Anxiety Disorder'...",
+                  hintText: "Cari artikel terhangat disini...",
                 ),
               ),
               Padding(

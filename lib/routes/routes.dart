@@ -100,6 +100,7 @@ class AppRoutes {
         return getPage(HomePage());
       case AppRoutes.topArticleScreen:
         return getPage(TopArticleScreen());
+      
       case AppRoutes.bodyScreen:
         return getPage(BodyPageScreen());
       case AppRoutes.foodiesScreen:
