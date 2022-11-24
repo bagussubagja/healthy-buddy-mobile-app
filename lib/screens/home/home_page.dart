@@ -1,3 +1,5 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
@@ -11,6 +13,8 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../core/authentication/auth_notifier.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -51,6 +55,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthenticationNotifier authenticationNotifier =
+        Provider.of<AuthenticationNotifier>(context, listen: false);
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -79,7 +85,16 @@ class _HomePageState extends State<HomePage> {
                               color: greyTextColor,
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                DeleteCache.deleteKey(
+                                    "cache",
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        AppRoutes.loginScreen,
+                                        (route) => false));
+
+                                await authenticationNotifier.logOut();
+                              },
                               style: TextButton.styleFrom(
                                   foregroundColor: blackColor),
                               child: Text(

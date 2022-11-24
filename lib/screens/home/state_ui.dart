@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cache_manager/cache_manager.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
@@ -16,20 +17,31 @@ class _StatePageUIState extends State<StatePageUI> {
   bool hasInternet = false;
   ConnectivityResult result = ConnectivityResult.none;
 
+  Future initiateCache() async {}
+
   @override
   void initState() {
     Timer(const Duration(seconds: 4), resultStateUI);
     super.initState();
   }
 
-  resultStateUI() async {
+  Future resultStateUI() async {
     getConnectionResult();
     if (result == ConnectivityResult.none) {
       Navigator.pushNamedAndRemoveUntil(
           context, AppRoutes.notInternetScreen, (route) => false);
     } else {
-      Navigator.pushNamedAndRemoveUntil(
-          context, AppRoutes.loginScreen, (route) => false);
+      CacheManagerUtils.conditionalCache(
+          key: 'cache',
+          valueType: ValueType.StringValue,
+          actionIfNull: () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.loginScreen, (route) => false);
+          },
+          actionIfNotNull: () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.bodyScreen, (route) => false);
+          });
     }
   }
 

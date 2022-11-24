@@ -54,7 +54,9 @@ dependencies:
   animated_image_list: ^1.0.0
   indonesia: ^2.0.0
   count_stepper: ^0.0.4
-
+  supabase: ^0.3.6
+  cache_manager: ^1.0.0+4
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter
