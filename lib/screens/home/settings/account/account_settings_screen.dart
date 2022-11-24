@@ -8,8 +8,12 @@ import '../../../widgets/margin_width.dart';
 class AccountSettingScreen extends StatelessWidget {
   AccountSettingScreen({super.key});
 
-  final List<String> _itemLabel = ["Ganti Nama", "Ganti Alamat"];
-  final List<IconData> _itemIcon = [Icons.person, Icons.location_on_rounded];
+  final List<String> _itemLabel = ["Ganti Nama", "Ganti Alamat", "Ganti Email"];
+  final List<IconData> _itemIcon = [
+    Icons.person,
+    Icons.location_on_rounded,
+    Icons.email_rounded
+  ];
 
   @override
   Widget build(BuildContext context) {

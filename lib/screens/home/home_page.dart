@@ -2,6 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
@@ -51,12 +52,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final item = Provider.of<TopArticleClass>(context, listen: false);
     item.getArticle(context: context);
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        user.getUser(context: context, idUser: value);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final AuthenticationNotifier authenticationNotifier =
         Provider.of<AuthenticationNotifier>(context, listen: false);
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -78,31 +86,27 @@ class _HomePageState extends State<HomePage> {
                 color: bgColor,
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.exit_to_app,
-                              color: greyTextColor,
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                DeleteCache.deleteKey(
-                                    "cache",
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        AppRoutes.loginScreen,
-                                        (route) => false));
+                        child: GestureDetector(
+                          onTap: () async {
+                            DeleteCache.deleteKey(
+                                "cache",
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    AppRoutes.loginScreen, (route) => false));
 
-                                await authenticationNotifier.logOut();
-                              },
-                              style: TextButton.styleFrom(
-                                  foregroundColor: blackColor),
-                              child: Text(
+                            await authenticationNotifier.logOut();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.exit_to_app,
+                                color: greyTextColor,
+                              ),
+                              Text(
                                 'Log Out',
                                 style: regularStyle,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ])
@@ -264,6 +268,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _headerIdentity() {
+    final user = Provider.of<UserClass>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -275,7 +280,7 @@ class _HomePageState extends State<HomePage> {
               style: regularStyle.copyWith(color: Colors.white),
             ),
             Text(
-              'Bagus Subagja',
+              user.users?[0].name ?? "Loading...",
               style: titleStyle.copyWith(color: Colors.white),
             )
           ],

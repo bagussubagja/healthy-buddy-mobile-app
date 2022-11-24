@@ -23,7 +23,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final _passwordController = TextEditingController();
 
+  final _nameController = TextEditingController();
+
   bool _isVisible = true;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +66,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: SvgPicture.asset('$svgDirectory/register.svg'),
                 ),
                 MarginHeight(height: 15),
+               
+                MarginHeight(height: 10),
                 CustomTextField(
-                  titleText: "Email Address",
-                  hintText: "your email here...",
+                  titleText: "Alamat Email",
+                  hintText: "ex. bagus@gmail.com",
                   color: greyColor,
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,
                 ),
                 MarginHeight(height: 10),
                 CustomTextField(
-                  titleText: "Password",
-                  hintText: "your password here...",
+                  titleText: "Kata Sandi",
+                  hintText: "minimal 6 karakter",
                   color: greyColor,
+                  textInputType: TextInputType.visiblePassword,
                   controller: _passwordController,
                   isObscure: _isVisible,
                   obscureText: _isVisible,
@@ -88,6 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: greyTextColor,
                       )),
                 ),
+               
                 MarginHeight(height: 20),
                 SizedBox(
                   height: 7.h,
@@ -102,6 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (_emailController.text.isNotEmpty &&
                           _passwordController.text.isNotEmpty) {
                         authenticationNotifier.registerUser(
+                            context: context,
                             email: _emailController.text,
                             password: _passwordController.text);
                       } else {
@@ -121,8 +130,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ..hideCurrentSnackBar()
                           ..showSnackBar(snackBar);
                       }
-                      // Navigator.pushNamedAndRemoveUntil(
-                      //     context, AppRoutes.homePageScreen, (route) => false);
                     },
                   ),
                 ),

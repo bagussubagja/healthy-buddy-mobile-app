@@ -63,20 +63,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 MarginHeight(height: 15),
                 CustomTextField(
-                  titleText: "Email Address",
-                  hintText: "your email here...",
+                  titleText: "Alamat Email",
+                  hintText: "ex. suci@gmail.com",
                   color: greyColor,
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,
                 ),
                 MarginHeight(height: 10),
                 CustomTextField(
-                  titleText: "Password",
-                  hintText: "your password here...",
+                  titleText: "Kata Sandi",
+                  hintText: "minimal 6 karakter",
                   color: greyColor,
                   controller: _passwordController,
                   isObscure: _isVisible,
                   obscureText: _isVisible,
+                  textInputType: TextInputType.visiblePassword,
                   suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (_emailController.text.isNotEmpty &&
                           _passwordController.text.isNotEmpty) {
                         authenticationNotifier.loginUser(
-                          context: context,
+                            context: context,
                             email: _emailController.text,
                             password: _passwordController.text);
                       } else {
@@ -122,8 +123,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ..hideCurrentSnackBar()
                           ..showSnackBar(snackBar);
                       }
-                      // Navigator.pushNamedAndRemoveUntil(
-                      //     context, AppRoutes.bodyScreen, (route) => false);
                     },
                   ),
                 ),

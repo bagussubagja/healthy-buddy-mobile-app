@@ -1,9 +1,12 @@
+import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -29,6 +32,18 @@ class _SettingScreenState extends State<SettingScreen> {
     "Pusat Bantuan",
     "Riwayat Pembelian"
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        user.getUser(context: context, idUser: value);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +86,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget _userInformation() {
+    final user = Provider.of<UserClass>(context);
     return Column(
       children: [
         UnconstrainedBox(
@@ -88,12 +104,12 @@ class _SettingScreenState extends State<SettingScreen> {
         ),
         MarginHeight(height: 3.h),
         Text(
-          'Bagus Subagja',
+          user.users?[0].name ?? "Loading...",
           textAlign: TextAlign.center,
           style: titleStyle.copyWith(color: greyTextColor),
         ),
         Text(
-          'Saldo Kamu : ${rupiah(100000)}',
+          'Saldo Kamu : ${rupiah(user.users?[0].balance)}',
           textAlign: TextAlign.center,
           style: regularStyle.copyWith(color: greyTextColor),
         ),

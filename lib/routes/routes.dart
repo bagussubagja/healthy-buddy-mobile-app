@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
+import 'package:healthy_buddy_mobile_app/screens/authentication/biodata_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/about_us/about_us_screen.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
   static const String notInternetScreen = '/nointernet';
   static const String loginScreen = '/login';
   static const String registerScreen = '/register';
+  static const String biodataScreen = '/biodata';
   static const String homePageScreen = '/home';
   static const String topArticleScreen = '/topArticleScreen';
   static const String foodiesScreen = '/foodies';
@@ -89,6 +91,11 @@ class AppRoutes {
         return getPage(LoginScreen());
       case AppRoutes.registerScreen:
         return getPage(RegisterScreen());
+      case AppRoutes.biodataScreen:
+        final email = settings.arguments as String;
+        return getPage(BiodataScreen(
+          email: email,
+        ));
       case AppRoutes.homePageScreen:
         return getPage(HomePage());
       case AppRoutes.topArticleScreen:

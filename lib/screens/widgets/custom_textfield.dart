@@ -8,8 +8,7 @@ class CustomTextField extends StatelessWidget {
   String? hintText;
   Color? color;
   TextEditingController? controller;
-  int? minLines;
-  int? maxLines;
+
   Widget? widget;
   Widget? suffixIcon;
   Widget? prefixIcon;
@@ -25,8 +24,6 @@ class CustomTextField extends StatelessWidget {
       this.titleText,
       this.hintText,
       this.controller,
-      this.minLines,
-      this.maxLines,
       this.widget,
       this.onTap,
       this.prefixIcon,
@@ -65,8 +62,6 @@ class CustomTextField extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   onChanged: onChanged,
-                  minLines: minLines,
-                  maxLines: maxLines,
                   style: readOnly == true
                       ? regularStyle.copyWith(color: Colors.grey, fontSize: 16)
                       : regularStyle.copyWith(color: Colors.grey, fontSize: 16),

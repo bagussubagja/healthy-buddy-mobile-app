@@ -1,4 +1,5 @@
 import 'package:healthy_buddy_mobile_app/core/authentication/auth_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
@@ -125,6 +126,12 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => AuthenticationNotifier(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => RegisterDataClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserClass(),
     ),
   ];
 }
