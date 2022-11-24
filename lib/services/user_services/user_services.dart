@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
@@ -29,3 +32,35 @@ Future<List<UserModel>?> getUserData(
   }
   return [];
 }
+
+Future<http.Response?> updateUserNameData(
+    UserModel data, String idUser, BuildContext context) async {
+  http.Response? respone;
+  try {
+    respone = await http.patch(
+        Uri.parse('https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode(data.updateName()));
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+  }
+  return respone;
+}
+
+Future<http.Response?> updateUserAddressData(
+    UserModel data, String idUser, BuildContext context) async {
+  http.Response? respone;
+  try {
+    respone = await http.patch(
+        Uri.parse('https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode(data.updateAddress()));
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+  }
+  return respone;
+}
+
+

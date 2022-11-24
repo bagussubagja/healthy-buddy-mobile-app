@@ -10,6 +10,12 @@ import '../../models/user_model/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationService {
+  Future<String?> updateEmailUser({required String email}) async {
+    GotrueUserResponse response = await SupabaseCredentials.supabaseClient.auth
+        .update(UserAttributes(email: email));
+    print(response.error);
+  }
+
   Future<String?> registerUser(
       {required String email, required String password}) async {
     GotrueSessionResponse response =
@@ -56,7 +62,6 @@ Future<http.Response?> registerUserData(UserModel data) async {
             'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?apikey=$apiKey'),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(data.toJson()));
-        
   } catch (e) {
     debugPrint(e.toString());
   }

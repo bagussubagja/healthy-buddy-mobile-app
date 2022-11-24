@@ -56,6 +56,7 @@ dependencies:
   count_stepper: ^0.0.4
   supabase: ^0.3.6
   cache_manager: ^1.0.0+4
+  awesome_dialog: ^3.0.2
  
 dev_dependencies:
   flutter_test:

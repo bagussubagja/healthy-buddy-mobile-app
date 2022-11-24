@@ -133,5 +133,12 @@ class ProviderList {
     ChangeNotifierProvider(
       create: (_) => UserClass(),
     ),
+    ChangeNotifierProvider(
+      create: (_) => UserUpdateNameClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserUpdateAddressClass(),
+    ),
+
   ];
 }

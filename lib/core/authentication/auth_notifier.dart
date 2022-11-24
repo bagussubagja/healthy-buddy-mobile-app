@@ -7,11 +7,12 @@ import 'package:http/http.dart' as http;
 import '../../models/user_model/user_model.dart';
 
 class RegisterDataClass extends ChangeNotifier {
-  Future<void> postData(UserModel body, ) async {
+  Future<void> postData(
+    UserModel body,
+  ) async {
     http.Response response = (await registerUserData(body))!;
-    
+
     if (response.statusCode == 201) {
-      
       debugPrint('Register User Data Success!');
     }
     notifyListeners();
@@ -57,6 +58,16 @@ class AuthenticationNotifier extends ChangeNotifier {
   Future<void> logOut() async {
     try {
       await _authenticationService.logOut();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> changeEmail(String email) async {
+    try {
+      dynamic updateEmail =
+          await _authenticationService.updateEmailUser(email: email);
+      print(updateEmail);
     } catch (e) {
       print(e);
     }
