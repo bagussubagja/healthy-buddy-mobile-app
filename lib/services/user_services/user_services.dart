@@ -63,4 +63,19 @@ Future<http.Response?> updateUserAddressData(
   return respone;
 }
 
+Future<http.Response?> updateTopUpBalanceData(
+    UserModel data, String idUser, BuildContext context) async {
+  http.Response? respone;
+  try {
+    respone = await http.patch(
+        Uri.parse('https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode(data.topUpBalance()));
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+  }
+  return respone;
+}
+
 

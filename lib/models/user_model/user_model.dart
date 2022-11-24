@@ -3,6 +3,7 @@
 //     final userModel = userModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:ffi';
 
 List<UserModel> userModelFromJson(String str) =>
     List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJson(x)));
@@ -35,7 +36,7 @@ class UserModel {
         name: json["name"],
         gender: json["gender"],
         hasDiscount: json["hasDiscount"],
-        balance: json["balance"],
+        balance: json["balance"] as int,
         address: json["address"],
       );
 
@@ -55,7 +56,7 @@ class UserModel {
         "address": address,
       };
 
-      Map<String, dynamic> updateEmail() => {
-        "email": email,
+      Map<String, dynamic> topUpBalance() => {
+        "balance": balance,
       };
 }

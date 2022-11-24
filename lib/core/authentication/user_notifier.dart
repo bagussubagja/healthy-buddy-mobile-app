@@ -31,7 +31,8 @@ class UserUpdateAddressClass extends ChangeNotifier {
   Future<void> updateAddress(
       UserModel body, String idUser, BuildContext context) async {
     notifyListeners();
-    http.Response response = (await updateUserAddressData(body, idUser, context))!;
+    http.Response response =
+        (await updateUserAddressData(body, idUser, context))!;
     if (response.statusCode == 200) {
       debugPrint('Update Berhasil');
     }
@@ -39,3 +40,15 @@ class UserUpdateAddressClass extends ChangeNotifier {
   }
 }
 
+class UserTopUpClass extends ChangeNotifier {
+  Future<void> updateTopUp(
+      UserModel body, String idUser, BuildContext context) async {
+    notifyListeners();
+    http.Response response =
+        (await updateTopUpBalanceData(body, idUser, context))!;
+    if (response.statusCode == 200) {
+      debugPrint('Top Up Berhasil');
+    }
+    notifyListeners();
+  }
+}

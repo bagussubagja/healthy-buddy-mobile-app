@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   bool? autofocus;
   Widget? widget;
   Widget? suffixIcon;
+  int? maxLength;
   Widget? prefixIcon;
   Function()? onTap;
   Function(String)? onChanged;
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
       this.controller,
       this.autofocus,
       this.widget,
+      this.maxLength,
       this.onTap,
       this.prefixIcon,
       this.suffixIcon,
@@ -63,6 +65,7 @@ class CustomTextField extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   autofocus: autofocus ?? false,
+                  maxLength: maxLength,
                   onChanged: onChanged,
                   style: readOnly == true
                       ? regularStyle.copyWith(
@@ -77,6 +80,7 @@ class CustomTextField extends StatelessWidget {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     suffixIcon: suffixIcon,
+                    counterText: "",
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 1, color: greenColor)),
                     prefixIcon: prefixIcon,
