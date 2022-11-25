@@ -1,22 +1,27 @@
 import 'dart:ui';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../models/foodies_model/wishlist_foodies_model.dart';
 import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
 
 class FoodStoreDetailScreen extends StatefulWidget {
   FoodStoreModel? foodStoreModel;
-  FoodStoreDetailScreen({super.key, this.foodStoreModel});
+  FoodStore? foodStore;
+  FoodStoreDetailScreen({super.key, this.foodStoreModel, this.foodStore});
 
   @override
   State<FoodStoreDetailScreen> createState() => _FoodStoreDetailScreenState();
@@ -26,6 +31,20 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
   int _itemQuantity = 1;
   int _galleryIndex = 0;
   int _totalPrice = 0;
+  String? idUser;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        user.getUser(context: context, idUser: value);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +118,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                 bottomRight: Radius.circular(40)),
             child: CachedNetworkImage(
               imageUrl: widget.foodStoreModel?.gallery[_galleryIndex] ??
-                  imgPlaceHolder,
+                  widget.foodStore?.gallery?[_galleryIndex],
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -131,7 +150,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             SizedBox(
               width: 65.w,
               child: Text(
-                widget.foodStoreModel?.name ?? "Loading",
+                widget.foodStoreModel?.name ?? widget.foodStore!.name!,
                 style: titleStyle.copyWith(color: blackColor),
               ),
             ),
@@ -142,7 +161,8 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                   style: titleStyle.copyWith(color: greenColor),
                 ),
                 Text(
-                  widget.foodStoreModel?.price.toString() ?? "Loading...",
+                  widget.foodStoreModel?.price.toString() ??
+                      widget.foodStore!.price.toString(),
                   style: titleStyle.copyWith(color: blackColor),
                 )
               ],
@@ -154,7 +174,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.foodStoreModel?.category ?? "Loading",
+              widget.foodStoreModel?.category ?? widget.foodStore!.category!,
               style: regularStyle.copyWith(color: greyTextColor),
             ),
             CountStepper(
@@ -185,7 +205,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           style: titleStyle.copyWith(color: blackColor),
         ),
         Text(
-          widget.foodStoreModel?.description ?? "Loading",
+          widget.foodStoreModel?.description ?? widget.foodStore!.description!,
           style: regularStyle.copyWith(color: blackColor),
         )
       ],
@@ -219,7 +239,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
                         imageUrl: widget.foodStoreModel?.gallery[index] ??
-                            imgPlaceHolder,
+                            widget.foodStore!.gallery![index],
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -267,20 +287,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           children: [
             OutlinedButton(
               onPressed: () {
-                final snackBar = SnackBar(
-                  elevation: 0,
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.transparent,
-                  content: AwesomeSnackbarContent(
-                    title: 'Berhasil!',
-                    message:
-                        'Kamu berhasil menambahkan item ${widget.foodStoreModel!.name} ke keranjang!',
-                    contentType: ContentType.success,
-                  ),
-                );
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(snackBar);
+                showCustomSnackBar();
               },
               child: Row(
                 children: [
@@ -298,7 +305,11 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _totalPrice = widget.foodStoreModel!.price * _itemQuantity;
+                  if (widget.foodStoreModel?.price == null) {
+                    _totalPrice = widget.foodStore!.price! * _itemQuantity;
+                  } else {
+                    _totalPrice = widget.foodStoreModel!.price * _itemQuantity;
+                  }
                 });
                 showModal();
               },
@@ -322,7 +333,25 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
     );
   }
 
+  void showCustomSnackBar() {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Berhasil!',
+        message:
+            'Kamu berhasil menambahkan item ${widget.foodStoreModel!.name} ke keranjang!',
+        contentType: ContentType.success,
+      ),
+    );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
   Future showModal() async {
+    final user = Provider.of<UserClass>(context, listen: false);
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -356,7 +385,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nama Item\t: ${widget.foodStoreModel!.name}',
+                    'Nama Item\t: ${widget.foodStoreModel?.name ?? widget.foodStore?.name}',
                     style: regularStyle,
                   ),
                   Text(
@@ -364,11 +393,15 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                     style: regularStyle,
                   ),
                   Text(
-                    'Diskon : 0%',
+                    user.users?[0].hasDiscount == true
+                        ? 'Diskon : 15%'
+                        : 'Diskon : 0%',
                     style: regularStyle,
                   ),
                   Text(
-                    'Total Harga : ${rupiah(_totalPrice)}',
+                    user.users?[0].hasDiscount == true
+                        ? 'Total Harga : ${rupiah((_totalPrice - (_totalPrice * 0.15)))}'
+                        : 'Total Harga : ${rupiah(_totalPrice)}',
                     style: regularStyle,
                   ),
                   Row(

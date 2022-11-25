@@ -48,15 +48,19 @@ class UserModel {
         "address": address,
       };
 
-      Map<String, dynamic> updateName() => {
+  Map<String, dynamic> updateName() => {
         "name": name,
       };
 
-      Map<String, dynamic> updateAddress() => {
+  Map<String, dynamic> updateAddress() => {
         "address": address,
       };
 
-      Map<String, dynamic> topUpBalance() => {
+  Map<String, dynamic> updateBalanceData() => {
         "balance": balance,
+      };
+
+  Map<String, dynamic> updateDiscountStatus() => {
+        "hasDiscount": hasDiscount,
       };
 }

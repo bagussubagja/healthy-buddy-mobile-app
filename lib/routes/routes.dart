@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/biodata_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
@@ -100,7 +101,7 @@ class AppRoutes {
         return getPage(HomePage());
       case AppRoutes.topArticleScreen:
         return getPage(TopArticleScreen());
-      
+
       case AppRoutes.bodyScreen:
         return getPage(BodyPageScreen());
       case AppRoutes.foodiesScreen:
@@ -115,9 +116,11 @@ class AppRoutes {
         return getPage(const FoodStoreMainScreen());
       case AppRoutes.foodStoreDetailScreen:
         final food = settings.arguments as FoodStoreModel;
+        final wishlistFood = settings.arguments as FoodStore;
         return getPage(
           FoodStoreDetailScreen(
             foodStoreModel: food,
+            foodStore: wishlistFood,
           ),
         );
       case AppRoutes.myDocScreen:

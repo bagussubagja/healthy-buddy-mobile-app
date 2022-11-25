@@ -52,3 +52,16 @@ class UserTopUpClass extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class UserDiscountClass extends ChangeNotifier {
+  Future<void> updateStatus(
+      UserModel body, String idUser, BuildContext context) async {
+    notifyListeners();
+    http.Response response =
+        (await updateDiscountStatusData(body, idUser, context))!;
+    if (response.statusCode == 200) {
+      debugPrint('Berhasil dapatkan potongan harga');
+    }
+    notifyListeners();
+  }
+}

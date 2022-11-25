@@ -9,10 +9,12 @@ import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart'
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_website_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../core/extras/carousel_item_notifier.dart';
+import '../core/wishlist/sport_wishlist_notifier.dart';
 
 class ProviderList {
   static List<SingleChildWidget> providers = [
@@ -141,6 +143,15 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => UserTopUpClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserDiscountClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => FoodiesWishlistClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWishlistClass(),
     ),
   ];
 }

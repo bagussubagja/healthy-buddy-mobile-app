@@ -10,26 +10,26 @@ String sportStoreModelToJson(List<SportStoreModel> data) => json.encode(List<dyn
 
 class SportStoreModel {
     SportStoreModel({
-        required this.id,
-        required this.productName,
-        required this.description,
-        required this.gallery,
-        required this.price,
-        required this.review,
-        required this.reviewerName,
-        required this.merk,
-        required this.category,
+        this.id,
+        this.productName,
+        this.description,
+        this.gallery,
+        this.price,
+        this.review,
+        this.reviewerName,
+        this.merk,
+        this.category,
     });
 
-    int id;
-    String productName;
-    String description;
-    List<String> gallery;
-    int price;
-    List<String> review;
-    List<String> reviewerName;
-    String merk;
-    String category;
+    int? id;
+    String? productName;
+    String? description;
+    List<String>? gallery;
+    int? price;
+    List<String>? review;
+    List<String>? reviewerName;
+    String? merk;
+    String? category;
 
     factory SportStoreModel.fromJson(Map<String, dynamic> json) => SportStoreModel(
         id: json["id"],
@@ -47,10 +47,10 @@ class SportStoreModel {
         "id": id,
         "product_name": productName,
         "description": description,
-        "gallery": List<dynamic>.from(gallery.map((x) => x)),
+        "gallery": gallery,
         "price": price,
-        "review": List<dynamic>.from(review.map((x) => x)),
-        "reviewer_name": List<dynamic>.from(reviewerName.map((x) => x)),
+        "review": review,
+        "reviewer_name": reviewerName,
         "merk": merk,
         "category": category,
     };

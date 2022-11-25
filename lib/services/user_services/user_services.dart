@@ -38,7 +38,8 @@ Future<http.Response?> updateUserNameData(
   http.Response? respone;
   try {
     respone = await http.patch(
-        Uri.parse('https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(data.updateName()));
   } catch (e) {
@@ -53,7 +54,8 @@ Future<http.Response?> updateUserAddressData(
   http.Response? respone;
   try {
     respone = await http.patch(
-        Uri.parse('https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(data.updateAddress()));
   } catch (e) {
@@ -68,9 +70,26 @@ Future<http.Response?> updateTopUpBalanceData(
   http.Response? respone;
   try {
     respone = await http.patch(
-        Uri.parse('https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
-        body: jsonEncode(data.topUpBalance()));
+        body: jsonEncode(data.updateBalanceData()));
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+  }
+  return respone;
+}
+
+Future<http.Response?> updateDiscountStatusData(
+    UserModel data, String idUser, BuildContext context) async {
+  http.Response? respone;
+  try {
+    respone = await http.patch(
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode(data.updateDiscountStatus()));
   } catch (e) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(e.toString())));

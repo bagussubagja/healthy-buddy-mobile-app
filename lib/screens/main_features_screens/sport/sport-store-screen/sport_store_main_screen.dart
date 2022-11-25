@@ -380,8 +380,9 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                 children: [
                   _currentIndex == 0
                       ? CachedNetworkImage(
-                          imageUrl: itemGeneral.sportStore?[index].gallery[0] ??
-                              imgPlaceHolder,
+                          imageUrl:
+                              itemGeneral.sportStore?[index].gallery?[0] ??
+                                  imgPlaceHolder,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -400,7 +401,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                       : _currentIndex == 1
                           ? CachedNetworkImage(
                               imageUrl:
-                                  itemSoccer.sportStore?[index].gallery[0] ??
+                                  itemSoccer.sportStore?[index].gallery?[0] ??
                                       imgPlaceHolder,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
@@ -422,7 +423,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                           : _currentIndex == 2
                               ? CachedNetworkImage(
                                   imageUrl: itemAthletic
-                                          .sportStore?[index].gallery[0] ??
+                                          .sportStore?[index].gallery?[0] ??
                                       imgPlaceHolder,
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
@@ -444,7 +445,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                               : _currentIndex == 3
                                   ? CachedNetworkImage(
                                       imageUrl: itemBadminton
-                                              .sportStore?[index].gallery[0] ??
+                                              .sportStore?[index].gallery?[0] ??
                                           imgPlaceHolder,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
@@ -466,7 +467,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                                     )
                                   : CachedNetworkImage(
                                       imageUrl: itemSwimming
-                                              .sportStore?[index].gallery[0] ??
+                                              .sportStore?[index].gallery?[0] ??
                                           imgPlaceHolder,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
@@ -589,7 +590,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                       child: _currentIndex == 0
                           ? CachedNetworkImage(
                               imageUrl:
-                                  itemGeneral.sportStore?[index].gallery[0] ??
+                                  itemGeneral.sportStore?[index].gallery?[0] ??
                                       imgPlaceHolder,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
@@ -611,7 +612,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                           : _currentIndex == 1
                               ? CachedNetworkImage(
                                   imageUrl: itemSoccer
-                                          .sportStore?[index].gallery[0] ??
+                                          .sportStore?[index].gallery?[0] ??
                                       imgPlaceHolder,
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
@@ -633,7 +634,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                               : _currentIndex == 2
                                   ? CachedNetworkImage(
                                       imageUrl: itemAthletic
-                                              .sportStore?[index].gallery[0] ??
+                                              .sportStore?[index].gallery?[0] ??
                                           imgPlaceHolder,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
@@ -657,7 +658,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                                       ? CachedNetworkImage(
                                           imageUrl: itemBadminton
                                                   .sportStore?[index]
-                                                  .gallery[0] ??
+                                                  .gallery?[0] ??
                                               imgPlaceHolder,
                                           imageBuilder:
                                               (context, imageProvider) =>
@@ -681,7 +682,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                                       : CachedNetworkImage(
                                           imageUrl: itemSwimming
                                                   .sportStore?[index]
-                                                  .gallery[0] ??
+                                                  .gallery?[0] ??
                                               imgPlaceHolder,
                                           imageBuilder:
                                               (context, imageProvider) =>
@@ -752,31 +753,31 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                                           ),
                         _currentIndex == 0
                             ? Text(
-                                '${itemGeneral.sportStore?[index].description.substring(0, 100)}..',
+                                '${itemGeneral.sportStore?[index].description?.substring(0, 100)}..',
                                 style: regularStyle.copyWith(
                                     fontSize: 10.sp, color: blackColor),
                               )
                             : _currentIndex == 1
                                 ? Text(
-                                    '${itemSoccer.sportStore?[index].description.substring(0, 100)}..',
+                                    '${itemSoccer.sportStore?[index].description?.substring(0, 100)}..',
                                     style: regularStyle.copyWith(
                                         fontSize: 10.sp, color: blackColor),
                                   )
                                 : _currentIndex == 2
                                     ? Text(
-                                        '${itemAthletic.sportStore?[index].description.substring(0, 100)}..',
+                                        '${itemAthletic.sportStore?[index].description?.substring(0, 100)}..',
                                         style: regularStyle.copyWith(
                                             fontSize: 10.sp, color: blackColor),
                                       )
                                     : _currentIndex == 3
                                         ? Text(
-                                            '${itemBadminton.sportStore?[index].description.substring(0, 100)}..',
+                                            '${itemBadminton.sportStore?[index].description?.substring(0, 100)}..',
                                             style: regularStyle.copyWith(
                                                 fontSize: 10.sp,
                                                 color: blackColor),
                                           )
                                         : Text(
-                                            '${itemSwimming.sportStore?[index].description.substring(0, 100)}..',
+                                            '${itemSwimming.sportStore?[index].description?.substring(0, 100)}..',
                                             style: regularStyle.copyWith(
                                                 fontSize: 10.sp,
                                                 color: blackColor),

@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:badges/badges.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -35,14 +38,23 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     }
   }
 
+  String? idUser;
+
   List<bool> _selectedToogle = [true, false, false, false];
 
   List<String> _foodStoreCategory = ["Buah", "Sayuran", "Instan", "Minuman"];
 
   int _currentIndex = 0;
+
+  int _cartLength = 0;
   @override
   void initState() {
     super.initState();
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+      });
+    });
     final itemBuah = Provider.of<FoodStoreByBuahClass>(context, listen: false);
     itemBuah.getBuah(context: context, category: 'Buah');
     final itemSayuran =
@@ -62,7 +74,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     return Scaffold(
       floatingActionButton: Badge(
         badgeContent: Text(
-          _currentIndex.toString(),
+          _cartLength.toString(),
           style: regularStyle.copyWith(color: whiteColor),
         ),
         child: FloatingActionButton(
@@ -196,7 +208,11 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                       backgroundColor: whiteColor,
                       elevation: 0,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      UserModel getDiscount = UserModel(hasDiscount: true);
+                      var provider = Provider.of<UserDiscountClass>(context,
+                          listen: false);
+                      provider.updateStatus(getDiscount, idUser!, context);
                       final snackBar = SnackBar(
                         elevation: 0,
                         behavior: SnackBarBehavior.floating,
@@ -730,156 +746,6 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
         },
         separatorBuilder: (context, index) {
           return MarginHeight(height: 2.5.h);
-        },
-        itemCount: itemCount(_currentIndex));
-  }
-
-  Widget _itemList(int currentIndex) {
-    final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
-    final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
-    final itemByInstan = Provider.of<FoodStoreByInstanClass>(context);
-    final itemByMinuman = Provider.of<FoodStoreByMinumanClass>(context);
-    int itemCount(int x) {
-      if (x == 0) {
-        return itemByBuah.foodStoreModel?.length ?? 0;
-      } else if (x == 1) {
-        return itemBySayuran.foodStoreModel?.length ?? 0;
-      } else if (x == 2) {
-        return itemByInstan.foodStoreModel?.length ?? 0;
-      } else if (x == 3) {
-        return itemByMinuman.foodStoreModel?.length ?? 0;
-      } else {
-        return 0;
-      }
-    }
-
-    return GridView.builder(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 50.h,
-            childAspectRatio: 1.1 / 1,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20),
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.foodStoreDetailScreen);
-            },
-            child: Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _currentIndex == 0
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            itemByBuah.foodStoreModel?[index].gallery[0] ??
-                                imgPlaceHolder,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : _currentIndex == 1
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                itemBySayuran
-                                        .foodStoreModel?[index].gallery[0] ??
-                                    imgPlaceHolder,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : _currentIndex == 2
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    itemByInstan.foodStoreModel?[index]
-                                            .gallery[0] ??
-                                        imgPlaceHolder,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    itemByMinuman.foodStoreModel?[index]
-                                            .gallery[0] ??
-                                        imgPlaceHolder,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                  MarginHeight(height: 0.5.h),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _currentIndex == 0
-                            ? Text(
-                                '${itemByBuah.foodStoreModel?[index].name}...',
-                                style: regularStyle.copyWith(color: blackColor),
-                              )
-                            : _currentIndex == 1
-                                ? Text(
-                                    '${itemBySayuran.foodStoreModel?[index].name}...',
-                                    style: regularStyle.copyWith(
-                                        color: blackColor),
-                                  )
-                                : _currentIndex == 2
-                                    ? Text(
-                                        '${itemByInstan.foodStoreModel?[index].name}...',
-                                        style: regularStyle.copyWith(
-                                            color: blackColor),
-                                      )
-                                    : Text(
-                                        '${itemByMinuman.foodStoreModel?[index].name}...',
-                                        style: regularStyle.copyWith(
-                                            color: blackColor),
-                                      ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _currentIndex == 0
-                                ? Text(
-                                    'Rp ${itemByBuah.foodStoreModel?[index].price}',
-                                    style: regularStyle,
-                                  )
-                                : _currentIndex == 1
-                                    ? Text(
-                                        'Rp ${itemBySayuran.foodStoreModel?[index].price}',
-                                        style: regularStyle,
-                                      )
-                                    : _currentIndex == 2
-                                        ? Text(
-                                            'Rp ${itemByInstan.foodStoreModel?[index].price}',
-                                            style: regularStyle,
-                                          )
-                                        : Text(
-                                            'Rp ${itemByMinuman.foodStoreModel?[index].price}',
-                                            style: regularStyle,
-                                          ),
-                            Icon(
-                              Icons.shopping_cart_outlined,
-                              color: blackColor,
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
         },
         itemCount: itemCount(_currentIndex));
   }
