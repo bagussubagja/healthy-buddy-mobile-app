@@ -5,10 +5,19 @@ import 'package:healthy_buddy_mobile_app/services/wishlist_services/foodies_wish
 import 'package:healthy_buddy_mobile_app/services/wishlist_services/sport_wishlist_services.dart';
 
 class SportWishlistClass extends ChangeNotifier {
+  bool isLoading = false;
   List<WishlistSportModel>? wishlistSport;
   getWishlist({required BuildContext context, required String idUser}) async {
+    isLoading = true;
     wishlistSport =
         (await getWishlistSportByUserID(context: context, idUser: idUser));
+    isLoading = false;
+    notifyListeners();
+  }
+
+  deleteSportWishlistData(
+      {required int id, required BuildContext context}) async {
+    wishlistSport = (await deleteSportWishlist(id: id, context: context));
     notifyListeners();
   }
 }

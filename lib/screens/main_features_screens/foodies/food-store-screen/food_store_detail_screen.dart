@@ -1,13 +1,19 @@
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/purchase_history/purchase_history_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/models/purchase_history_model/purchase_history_model.dart';
+import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_status_order_screen.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
@@ -30,8 +36,11 @@ class FoodStoreDetailScreen extends StatefulWidget {
 class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
   int _itemQuantity = 1;
   int _galleryIndex = 0;
-  int _totalPrice = 0;
+  int _price = 0;
+  double _totalPrice = 0;
   String? idUser;
+  String? uniqueKey;
+  int _expectedBalance = 0;
 
   @override
   void initState() {
@@ -40,7 +49,10 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
+        idUser = value;
         user.getUser(context: context, idUser: value);
+        uniqueKey =
+            "${value}_${widget.foodStoreModel?.id ?? widget.foodStore?.id}";
       });
     });
   }
@@ -269,6 +281,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
   }
 
   Widget _buttonPayment() {
+    final itemFoodies = Provider.of<FoodiesWishlistClass>(context);
     return Positioned(
       bottom: 0,
       child: Container(
@@ -286,8 +299,14 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             OutlinedButton(
-              onPressed: () {
-                showCustomSnackBar();
+              onPressed: () async {
+                WishlistFoodiesModel body = WishlistFoodiesModel(
+                    idFoodiesStoreItem:
+                        widget.foodStoreModel?.id ?? widget.foodStore?.id,
+                    idUser: idUser,
+                    itemUniqueKey: uniqueKey);
+                await itemFoodies.addData(body, context);
+                // showCustomSnackBar();
               },
               child: Row(
                 children: [
@@ -306,12 +325,12 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
               onPressed: () {
                 setState(() {
                   if (widget.foodStoreModel?.price == null) {
-                    _totalPrice = widget.foodStore!.price! * _itemQuantity;
+                    _price = widget.foodStore!.price! * _itemQuantity;
                   } else {
-                    _totalPrice = widget.foodStoreModel!.price * _itemQuantity;
+                    _price = widget.foodStoreModel!.price * _itemQuantity;
                   }
                 });
-                showModal();
+                showModalConfirmationOrder();
               },
               style: ElevatedButton.styleFrom(backgroundColor: greenColor),
               child: Row(
@@ -333,25 +352,16 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
     );
   }
 
-  void showCustomSnackBar() {
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Berhasil!',
-        message:
-            'Kamu berhasil menambahkan item ${widget.foodStoreModel!.name} ke keranjang!',
-        contentType: ContentType.success,
-      ),
-    );
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
-
-  Future showModal() async {
+  Future showModalConfirmationOrder() async {
     final user = Provider.of<UserClass>(context, listen: false);
+    final userBalance = user.users?[0].balance;
+    setState(() {
+      _totalPrice = (_price - (_price * 0.15));
+      _expectedBalance = userBalance! - _totalPrice.round();
+    });
+    print(_totalPrice);
+    print(_expectedBalance);
+
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -400,8 +410,8 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                   ),
                   Text(
                     user.users?[0].hasDiscount == true
-                        ? 'Total Harga : ${rupiah((_totalPrice - (_totalPrice * 0.15)))}'
-                        : 'Total Harga : ${rupiah(_totalPrice)}',
+                        ? 'Total Harga : ${rupiah(_totalPrice.round())}'
+                        : 'Total Harga : ${rupiah(_price)}',
                     style: regularStyle,
                   ),
                   Row(
@@ -437,7 +447,59 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                           style: regularStyle,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_expectedBalance < 0) {
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.error,
+                              headerAnimationLoop: true,
+                              animType: AnimType.bottomSlide,
+                              title: 'Gagal',
+                              desc:
+                                  'Pembayaran kamu gagal karena saldo tidak cukup, kamu harus top up saldo terlebih dahulu!',
+                              buttonsTextStyle: regularStyle,
+                              btnCancelText: "Kembali",
+                              btnOkText: "Top Up",
+                              showCloseIcon: false,
+                              btnOkOnPress: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.topUpScreen);
+                              },
+                              btnCancelOnPress: () {},
+                            ).show();
+                          } else {
+                            PurchaseHistoryModel transactionItem =
+                                PurchaseHistoryModel(
+                              idUser: idUser,
+                              productName: widget.foodStore?.name ??
+                                  widget.foodStoreModel?.name,
+                              category: "Food Store",
+                              createdAt: DateTime.now().toString(),
+                              price: user.users?[0].hasDiscount == true
+                                  ? _totalPrice.round()
+                                  : _price,
+                              quantity: _itemQuantity,
+                              thumbnail: widget.foodStore?.gallery?[0] ??
+                                  widget.foodStoreModel?.gallery[0],
+                            );
+                            UserModel balance =
+                                UserModel(balance: _expectedBalance);
+                            var purchaseTransaction =
+                                Provider.of<PurchaseHistoryClass>(context,
+                                    listen: false);
+                            var updateBalance = Provider.of<UserTopUpClass>(
+                                context,
+                                listen: false);
+                            await purchaseTransaction.addFoodiesTransactionData(
+                                transactionItem, context);
+
+                            await updateBalance.updateTopUp(
+                                balance, idUser!, context);
+                            Navigator.pushNamed(
+                                context, AppRoutes.foodStoreStatusOrder);
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: greenColor),
                         child: Text(

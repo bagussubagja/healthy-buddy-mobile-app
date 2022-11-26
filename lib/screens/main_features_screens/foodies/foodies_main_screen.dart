@@ -76,14 +76,6 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
             color: blackColor,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_horiz_rounded,
-                color: blackColor,
-              ))
-        ],
       ),
       body: SafeArea(
         child: _isLoading

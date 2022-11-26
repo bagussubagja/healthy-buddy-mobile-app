@@ -11,11 +11,13 @@ import 'package:healthy_buddy_mobile_app/screens/home/settings/help_center/help_
 import 'package:healthy_buddy_mobile_app/screens/home/settings/purchase_history/purcase_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/top_article/top_article_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/whislist_item/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_status_order_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/foodies_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
@@ -36,6 +38,7 @@ class AppRoutes {
   static const String registerScreen = '/register';
   static const String biodataScreen = '/biodata';
   static const String homePageScreen = '/home';
+  static const String wishlistScreen = '/wishlist';
   static const String topArticleScreen = '/topArticleScreen';
   static const String foodiesScreen = '/foodies';
   static const String foodReceiptMenu = '/foodReceipt';
@@ -43,7 +46,7 @@ class AppRoutes {
   static const String foodReceiptDetailScreen = '/foodReceiptDetailScreen';
   static const String foodStoreMenu = '/foodStore';
   static const String foodStoreDetailScreen = '/foodStoreDetail';
-  static const String foodStoreConfirmOrder = '/foodConfirmOrder';
+  static const String foodStoreStatusOrder = '/foodConfirmOrder';
   static const String sportScreen = '/sport';
   static const String sportArticle = '/sportArticle';
   static const String sportWebsite = '/sportWebsite';
@@ -101,7 +104,8 @@ class AppRoutes {
         return getPage(HomePage());
       case AppRoutes.topArticleScreen:
         return getPage(TopArticleScreen());
-
+      case AppRoutes.wishlistScreen:
+        return getPage(WishlistScreen());
       case AppRoutes.bodyScreen:
         return getPage(BodyPageScreen());
       case AppRoutes.foodiesScreen:
@@ -123,6 +127,8 @@ class AppRoutes {
             foodStore: wishlistFood,
           ),
         );
+      case AppRoutes.foodStoreStatusOrder:
+        return getPage(FoodStoreStatusOrderScreen());
       case AppRoutes.myDocScreen:
         return getPage(MyDocMainScreen());
       case AppRoutes.myDocCategoryScreen:

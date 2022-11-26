@@ -33,9 +33,11 @@ class _TopUpScreenState extends State<TopUpScreen> {
     Timer(
       const Duration(seconds: 3),
       () {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       },
     );
   }
@@ -235,35 +237,13 @@ class _TopUpScreenState extends State<TopUpScreen> {
               _newBalanceValue = _topUpValue! + value!;
               UserModel topUpBalance = UserModel(balance: _newBalanceValue);
               if (_topUpValue! < 50000) {
-                AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.error,
-                        headerAnimationLoop: true,
-                        animType: AnimType.bottomSlide,
-                        title: 'Gagal!',
-                        desc: 'Transaksi pengisian saldo kamu tidak berhasil!',
-                        buttonsTextStyle: regularStyle,
-                        showCloseIcon: false,
-                        btnCancelOnPress: () {},
-                        btnCancelText: 'Kembali')
-                    .show();
-                await _stopLoading();
+                _showFailedDialogue();
               } else {
                 var provider =
                     Provider.of<UserTopUpClass>(context, listen: false);
                 await provider.updateTopUp(topUpBalance, iduser, context);
                 await _stopLoading();
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.success,
-                  headerAnimationLoop: true,
-                  animType: AnimType.bottomSlide,
-                  title: 'Sukses!',
-                  desc: 'Transaksi pengisian saldo kamu berhasil!',
-                  buttonsTextStyle: regularStyle,
-                  showCloseIcon: false,
-                  btnOkOnPress: () {},
-                ).show();
+                _showSuccessDialogue();
               }
             },
             child: _isLoading
@@ -287,5 +267,35 @@ class _TopUpScreenState extends State<TopUpScreen> {
         ],
       ),
     );
+  }
+
+  Future _showFailedDialogue() async {
+    AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            headerAnimationLoop: true,
+            animType: AnimType.bottomSlide,
+            title: 'Gagal!',
+            desc: 'Transaksi pengisian saldo kamu tidak berhasil!',
+            buttonsTextStyle: regularStyle,
+            showCloseIcon: false,
+            btnCancelOnPress: () {},
+            btnCancelText: 'Kembali')
+        .show();
+    await _stopLoading();
+  }
+
+  Future _showSuccessDialogue() async {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: true,
+      animType: AnimType.bottomSlide,
+      title: 'Sukses!',
+      desc: 'Transaksi pengisian saldo kamu berhasil!',
+      buttonsTextStyle: regularStyle,
+      showCloseIcon: false,
+      btnOkOnPress: () {},
+    ).show();
   }
 }

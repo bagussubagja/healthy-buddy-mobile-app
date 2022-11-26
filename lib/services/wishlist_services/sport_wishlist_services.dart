@@ -29,3 +29,23 @@ Future<List<WishlistSportModel>?> getWishlistSportByUserID(
   }
   return [];
 }
+
+Future<List<WishlistSportModel>?> deleteSportWishlist(
+    {required int id, required BuildContext context}) async {
+  var client = http.Client();
+  var uri = Uri.parse(
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/wishlist_sport_item?id=eq.$id&apikey=$apiKey');
+  try {
+    var respone =
+        await client.delete(uri, headers: {'Authorization': 'Bearer $bearer'});
+    if (respone.statusCode == 204) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(respone.body)));
+    }
+    print(respone.statusCode);
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+  }
+  return [];
+}

@@ -5,6 +5,7 @@ import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dar
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/purchase_history/purchase_history_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
@@ -152,6 +153,9 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => SportWishlistClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => PurchaseHistoryClass(),
     ),
   ];
 }

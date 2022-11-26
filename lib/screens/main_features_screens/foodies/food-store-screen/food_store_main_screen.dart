@@ -7,8 +7,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/whislist_item/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
@@ -50,11 +53,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   @override
   void initState() {
     super.initState();
-    ReadCache.getString(key: 'cache').then((value) {
-      setState(() {
-        idUser = value;
-      });
-    });
+
     final itemBuah = Provider.of<FoodStoreByBuahClass>(context, listen: false);
     itemBuah.getBuah(context: context, category: 'Buah');
     final itemSayuran =
@@ -66,19 +65,35 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     final itemMinuman =
         Provider.of<FoodStoreByMinumanClass>(context, listen: false);
     itemMinuman.getMinuman(context: context, category: 'Minuman');
+
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+      });
+    });
+
     Timer(const Duration(seconds: 2), showContent);
   }
 
   @override
   Widget build(BuildContext context) {
+    final itemFoodies =
+        Provider.of<FoodiesWishlistClass>(context, listen: false);
+    itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
     return Scaffold(
       floatingActionButton: Badge(
         badgeContent: Text(
-          _cartLength.toString(),
+          itemFoodies.wishlistFoodies?.length.toString() ?? "0",
           style: regularStyle.copyWith(color: whiteColor),
         ),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return WishlistScreen();
+              },
+            ));
+          },
           backgroundColor: greenColor,
           child: Icon(
             Icons.shopping_cart_outlined,
@@ -491,8 +506,13 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
             onTap: () {
               if (_currentIndex == 0) {
                 final itemBuah = itemByBuah.foodStoreModel?[index];
-                Navigator.pushNamed(context, AppRoutes.foodStoreDetailScreen,
-                    arguments: itemBuah);
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodStoreDetailScreen(
+                      foodStoreModel: itemBuah,
+                    );
+                  },
+                ));
               } else if (_currentIndex == 1) {
                 final itemSayuran = itemBySayuran.foodStoreModel?[index];
                 Navigator.push(context, MaterialPageRoute(
@@ -727,13 +747,10 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                                               )
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Icon(
-                                Icons.shopping_cart_outlined,
-                                color: greyTextColor,
-                              ),
-                            ),
+                            Icon(
+                              Icons.arrow_right_alt_rounded,
+                              color: greyTextColor,
+                            )
                           ],
                         )
                       ],

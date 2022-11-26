@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,10 @@ import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier
 import 'package:healthy_buddy_mobile_app/core/wishlist/sport_wishlist_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -28,11 +34,21 @@ class _WishlistScreenState extends State<WishlistScreen> {
   List<bool> _selectedToogle = [true, false];
 
   List<String> _foodStoreCategory = ["Foodies Store", "Sport Store"];
+  bool _isVisible = false;
+  void _showContent() {
+    if (mounted) {
+      setState(() {
+        _isVisible = !_isVisible;
+      });
+    }
+  }
+
   String? idUser;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Timer(const Duration(seconds: 3), _showContent);
     final itemFoodies =
         Provider.of<FoodiesWishlistClass>(context, listen: false);
     final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
@@ -92,7 +108,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
               MarginHeight(height: 2.5.h),
               _categoryToogleButton(),
               MarginHeight(height: 2.5.h),
-              _itemList(_currentIndex),
+              Visibility(
+                visible: _isVisible,
+                replacement: LoadingWidget(),
+                child: _itemList(_currentIndex),
+              )
             ],
           ),
         ),
@@ -175,7 +195,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         itemBuilder: (context, index) {
           return Container(
             width: double.infinity,
-            height: 18.h,
+            height: 20.h,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(12)),
             child: Row(
@@ -183,30 +203,59 @@ class _WishlistScreenState extends State<WishlistScreen> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(left: 15),
-                  height: 12.h,
-                  width: 12.h,
+                  height: 14.h,
+                  width: 14.h,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: _currentIndex == 0
-                        ? Image.network(
-                            itemFoodies.wishlistFoodies?[index].foodStore
-                                    ?.gallery?[0] ??
-                                imgPlaceHolder,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.network(
-                            itemSport.wishlistSport?[index].sportStore
-                                    ?.gallery?[0] ??
-                                imgPlaceHolder,
-                            fit: BoxFit.cover,
-                          ),
-                  ),
+                      borderRadius: BorderRadius.circular(12),
+                      child: _currentIndex == 0
+                          ? CachedNetworkImage(
+                              imageUrl: itemFoodies.wishlistFoodies?[index]
+                                      .foodStore?.gallery?[0] ??
+                                  imgPlaceHolder,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: itemSport.wishlistSport?[index]
+                                      .sportStore?.gallery?[0] ??
+                                  imgPlaceHolder,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
+                            )),
                 ),
                 MarginWidth(width: 2.h),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MarginHeight(height: 1.h),
+                    MarginHeight(height: 2.h),
                     SizedBox(
                       width: 26.h,
                       child: _currentIndex == 0
@@ -273,10 +322,44 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             onPressed: () async {
                               try {
                                 if (_currentIndex == 0) {
-                                  await itemFoodies.deleteFoodiesWishlistData(
-                                      id: itemFoodies
-                                          .wishlistFoodies![index].id!,
-                                      context: context);
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    headerAnimationLoop: true,
+                                    animType: AnimType.bottomSlide,
+                                    title: 'Konfirmasi',
+                                    desc:
+                                        'Apakah kamu yakin akan menghapus barang ini pada keranjangmu?',
+                                    buttonsTextStyle: regularStyle,
+                                    showCloseIcon: false,
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () async {
+                                      await itemFoodies
+                                          .deleteFoodiesWishlistData(
+                                              id: itemFoodies
+                                                  .wishlistFoodies![index].id!,
+                                              context: context);
+                                    },
+                                  ).show();
+                                } else if (_currentIndex == 1) {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    headerAnimationLoop: true,
+                                    animType: AnimType.bottomSlide,
+                                    title: 'Konfirmasi',
+                                    desc:
+                                        'Apakah kamu yakin akan menghapus barang ini pada keranjangmu?',
+                                    buttonsTextStyle: regularStyle,
+                                    showCloseIcon: false,
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () async {
+                                      await itemSport.deleteSportWishlistData(
+                                          id: itemSport
+                                              .wishlistSport![index].id!,
+                                          context: context);
+                                    },
+                                  ).show();
                                 }
                               } catch (e) {
                                 print(e);
