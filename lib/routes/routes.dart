@@ -24,6 +24,7 @@ import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/top_doctor_screen/top_doctor_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-article-screen/sport_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-website-screen/sport_website_screen.dart';
@@ -54,6 +55,7 @@ class AppRoutes {
   static const String myDocScreen = '/myDocScreen';
   static const String myDocCategoryScreen = '/myDocCategory';
   static const String myDocDetailScreen = '/myDocDetailScreen';
+  static const String myDocTopDocScreen = '/myDocTopDocScreen';
   static const String topUpScreen = '/topup';
   static const String bodyScreen = '/index';
   static const String statePageUI = '/state';
@@ -141,6 +143,8 @@ class AppRoutes {
         return getPage(MyDocDetailScreen(
           myDocModel: doctor,
         ));
+      case AppRoutes.myDocTopDocScreen:
+        return getPage(TopDoctorScreen());
       case AppRoutes.sportScreen:
         return getPage(const SportScreen());
       case AppRoutes.sportArticle:

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_search_result_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -59,45 +60,45 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
   @override
   Widget build(BuildContext context) {
     final topDoctor = Provider.of<MyDocByExperienceClass>(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: blackColor,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: blackColor,
+            ),
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_horiz_rounded,
-                color: blackColor,
-              ))
-        ],
+        body: SafeArea(
+            child: Padding(
+          padding: defaultPadding,
+          child: ListView(
+            children: [
+              _headerSection(),
+              MarginHeight(height: 3.h),
+              _doctorCategory(context),
+              _topDoctorSection(),
+              topDoctor.isloading == true
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _topDoctorList()
+            ],
+          ),
+        )),
       ),
-      body: SafeArea(
-          child: Padding(
-        padding: defaultPadding,
-        child: ListView(
-          children: [
-            _headerSection(),
-            MarginHeight(height: 3.h),
-            _doctorCategory(context),
-            _topDoctorSection(),
-            topDoctor.isloading == true
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : _topDoctorList()
-          ],
-        ),
-      )),
     );
   }
 
@@ -120,11 +121,15 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
         ),
         CustomTextField(
           color: Colors.white,
+          readOnly: true,
           prefixIcon: Icon(
             Icons.search_rounded,
             color: greyTextColor,
           ),
-          hintText: "coba 'dentist'",
+          onTap: () {
+            showSearch(context: context, delegate: MyDocSearchResultScreen());
+          },
+          hintText: "cari dokter spesialist kamu disini..",
         ),
       ],
     );
@@ -151,7 +156,6 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.myDocCategoryScreen,
                         arguments: index);
-                   
                   },
                   child: Container(
                     height: 7.h,
@@ -187,7 +191,9 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
           style: titleStyle.copyWith(color: greenColor),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.myDocTopDocScreen);
+          },
           child: Text(
             'Lihat Semua',
             style: regularStyle.copyWith(color: greyTextColor),

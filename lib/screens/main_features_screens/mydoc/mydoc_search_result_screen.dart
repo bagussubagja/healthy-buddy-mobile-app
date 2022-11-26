@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
+import 'package:healthy_buddy_mobile_app/services/search_data_services/search_toparticle_service.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../models/top_article_model.dart';
-import '../../../../services/search_data_services/search_topArticle_service.dart';
-import '../../../../shared/assets_directory.dart';
-import '../../../widgets/loading_widget.dart';
-import '../../../widgets/margin_width.dart';
+import '../../../shared/assets_directory.dart';
+import '../../../shared/theme.dart';
+import '../../widgets/loading_widget.dart';
+import '../../widgets/margin_width.dart';
 
-class SearchTopArticleResult extends SearchDelegate {
+class MyDocSearchResultScreen extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return super.appBarTheme(context).copyWith(
@@ -19,11 +19,10 @@ class SearchTopArticleResult extends SearchDelegate {
         );
   }
 
-  SearchTopArticle _searchTopArticle = SearchTopArticle();
+  SearchMyDoc _searchMyDoc = SearchMyDoc();
   @override
   List<Widget>? buildActions(BuildContext context) {
     // TODO: implement buildActions
-
     return [
       IconButton(
           onPressed: () {
@@ -38,6 +37,7 @@ class SearchTopArticleResult extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
     return IconButton(
         onPressed: () {
           Navigator.pop(context);
@@ -50,10 +50,11 @@ class SearchTopArticleResult extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
     return Padding(
       padding: defaultPadding,
-      child: FutureBuilder<List<TopArticleModel>>(
-        future: _searchTopArticle.getTopArticle(query: query),
+      child: FutureBuilder<List<MyDocModel>>(
+        future: _searchMyDoc.getMyDocSearchData(query: query),
         builder: (context, snapshot) {
           var data = snapshot.data;
           if (!snapshot.hasData) {
@@ -85,13 +86,17 @@ class SearchTopArticleResult extends SearchDelegate {
                           SizedBox(
                             width: 30.h,
                             child: Text(
-                              '${data?[index].title}',
+                              '${data?[index].name}',
                               style: regularStyle,
                             ),
                           ),
-                          Text(
-                            '${data?[index].description.substring(0, 25)}...',
-                            style: regularStyle.copyWith(color: greyTextColor),
+                          SizedBox(
+                            width: 30.h,
+                            child: Text(
+                              '${data?[index].description.substring(0, 25)}...',
+                              style:
+                                  regularStyle.copyWith(color: greyTextColor),
+                            ),
                           )
                         ],
                       )
@@ -108,9 +113,10 @@ class SearchTopArticleResult extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
     return Center(
       child: Text(
-        "Coba cari 'Anxiety'...",
+        "Coba cari 'Mental Health'...",
         style: regularStyle,
       ),
     );

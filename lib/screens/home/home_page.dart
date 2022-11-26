@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
-import 'package:healthy_buddy_mobile_app/screens/home/search/top_article/toparticle_result.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/top_article/toparticle_result.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -129,8 +129,6 @@ class _HomePageState extends State<HomePage> {
                 child: CustomTextField(
                   color: bgColor,
                   onTap: () {
-                    // Navigator.pushNamed(
-                    //     context, AppRoutes.topArticleSearchScreen);
                     showSearch(
                         context: context, delegate: SearchTopArticleResult());
                   },
