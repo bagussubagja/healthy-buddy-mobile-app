@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:healthy_buddy_mobile_app/providers/providers_list.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:provider/provider.dart';
@@ -27,11 +28,31 @@ class HealthyBuddyApp extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
+          supportedLocales: const [
+            Locale('id', 'ID'),
+            Locale('en', 'US'),
+          ],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocaleLanguage in supportedLocales) {
+              if (supportedLocaleLanguage.languageCode ==
+                      locale?.languageCode &&
+                  supportedLocaleLanguage.countryCode == locale?.countryCode) {
+                return supportedLocaleLanguage;
+              }
+            }
+            return supportedLocales.first;
+          },
+          locale: const Locale('id'),
           title: 'Flutter Demo',
           theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Poppins"),
           initialRoute: AppRoutes.statePageUI,
           routes: AppRoutes.routes,
-          onGenerateRoute:AppRoutes.handlingGenerateRoute,
+          onGenerateRoute: AppRoutes.handlingGenerateRoute,
         );
       },
     );

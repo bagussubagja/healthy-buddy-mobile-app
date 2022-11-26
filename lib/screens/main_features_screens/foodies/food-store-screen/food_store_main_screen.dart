@@ -88,7 +88,8 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     itemSport.getWishlist(context: context, idUser: idUser ?? "");
     _foodQuantity = itemFoodies.wishlistFoodies?.length;
     _sportQuantity = itemSport.wishlistSport?.length;
-    if (itemFoodies.wishlistFoodies?.length != null) {
+    if (itemFoodies.wishlistFoodies?.length != null &&
+        itemSport.wishlistSport?.length != null) {
       setState(() {
         _cartItemQuantity = _foodQuantity! + _sportQuantity!;
       });

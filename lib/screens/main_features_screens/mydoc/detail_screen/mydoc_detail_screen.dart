@@ -1,13 +1,21 @@
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cache_manager/core/read_cache_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_confirmation_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:intl/intl.dart';
 
 import '../../../widgets/margin_width.dart';
 
@@ -21,13 +29,24 @@ class MyDocDetailScreen extends StatefulWidget {
 
 class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   final List<String> _docLabel = ["Patients", "Year exp", "Rating"];
+  DateTime? _date;
+  String? _selectedDate;
+
+
   List<String> _numLabel = [];
+
   @override
   void initState() {
     super.initState();
     _numLabel.add(widget.myDocModel!.patients.toString());
     _numLabel.add(widget.myDocModel!.yearExp.toString());
     _numLabel.add(widget.myDocModel!.rating.toString());
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        user.getUser(context: context, idUser: value);
+      });
+    });
   }
 
   @override
@@ -46,11 +65,12 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        MarginHeight(height: 2.h),
                         _appointmentSection(),
                         _docdescription(),
                         MarginHeight(height: 2.h),
                         _detailDocData(),
-                        MarginHeight(height: 4.h),
+                        MarginHeight(height: 3.h),
                       ],
                     ),
                   ),
@@ -70,27 +90,17 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
 
   Widget _topSection() {
     return Container(
+      alignment: Alignment.centerLeft,
       height: 6.h,
       color: Colors.black12,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: blackColor,
-            ),
-          ),
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.favorite,
-                color: blackColor,
-              ))
-        ],
+      child: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(
+          Icons.arrow_back_ios,
+          color: blackColor,
+        ),
       ),
     );
   }
@@ -178,6 +188,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   }
 
   Widget _appointmentSection() {
+    final localizations = MaterialLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -191,16 +202,34 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Wednesday, 4th August 2022',
+              _selectedDate == null
+                  ? "Silahkan atur jadwal temu-janji"
+                  : localizations.formatFullDate(_date!),
               style: regularStyle,
             ),
             OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   foregroundColor: greenColor,
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  _date = await showDatePicker(
+                    context: context,
+                    locale: const Locale('id'),
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2100),
+                  );
+                  if (_date == null) {
+                    return;
+                  } else {
+                    setState(() {
+                      _selectedDate = _date.toString();
+                      print(_date);
+                    });
+                  }
+                },
                 child: Text(
-                  'Change',
+                  'Ubah',
                   style: regularStyle,
                 ))
           ],
@@ -214,7 +243,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'About',
+          'Tentang Dokter',
           style: titleStyle.copyWith(color: greenColor),
         ),
         Text(
@@ -267,6 +296,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   }
 
   Widget _appointmentButton() {
+    final user = Provider.of<UserClass>(context);
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10),
       height: 8.h,
@@ -282,24 +312,76 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            rupiah(widget.myDocModel?.price),
+            'Biaya : ${rupiah(widget.myDocModel?.price)}',
             style: regularStyle.copyWith(color: whiteColor),
           ),
-          Container(
-            height: 5.h,
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: greenDarkerColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              'Appointment',
-              style: regularStyle.copyWith(color: whiteColor),
+          GestureDetector(
+            onTap: () {
+              if (_selectedDate != null) {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return AppointmentConfirmationScreen(
+                      name: user.users?[0].name,
+                      doctorName: widget.myDocModel?.name,
+                      dateAppointment: _selectedDate,
+                      hospital: widget.myDocModel?.hospital,
+                      specialist: widget.myDocModel?.specialist,
+                      thumbnail: widget.myDocModel?.thumbnail,
+                      price: widget.myDocModel?.price,
+                    );
+                  },
+                ));
+              } else if (_selectedDate == null) {
+                _showSnackBar();
+              }
+            },
+            child: Container(
+              height: 5.h,
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: greenDarkerColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'Konfirmasi',
+                style: regularStyle.copyWith(color: whiteColor),
+              ),
             ),
           )
         ],
       ),
     );
+  }
+
+  _showSnackBar() {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Gagal!',
+        message: 'Jadwal Temu-Janji Tidak Boleh Kosong',
+        contentType: ContentType.failure,
+      ),
+    );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
+  _showFailedAppointment() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: true,
+      animType: AnimType.bottomSlide,
+      title: 'Gagal',
+      desc: 'Kamu tidak melakukan temu-janji dengan dokter karena...',
+      buttonsTextStyle: regularStyle,
+      btnOkText: "Kembali",
+      showCloseIcon: false,
+      btnOkOnPress: () {},
+    ).show();
   }
 }

@@ -21,6 +21,8 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/f
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/foodies_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/body_page_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_confirmation_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
@@ -56,6 +58,9 @@ class AppRoutes {
   static const String myDocCategoryScreen = '/myDocCategory';
   static const String myDocDetailScreen = '/myDocDetailScreen';
   static const String myDocTopDocScreen = '/myDocTopDocScreen';
+  static const String myDocAppointmentScreen = '/myDocAppointmentScreen';
+  static const String myDocAppointmentHistoryScreen =
+      '/myDocAppointmentHistoryScreen';
   static const String topUpScreen = '/topup';
   static const String bodyScreen = '/index';
   static const String statePageUI = '/state';
@@ -79,7 +84,6 @@ class AppRoutes {
     sportArticle: (context) => const SportArticleScreen(),
     sportStore: (context) => SportStoreMainScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
-    //myDocCategoryScreen: (context) => MyDocCategoryScreen(),
     topUpScreen: (context) => TopUpScreen(),
     statePageUI: (context) => const StatePageUI(),
     accountSettingScreen: (context) => AccountSettingScreen(),
@@ -143,6 +147,10 @@ class AppRoutes {
         return getPage(MyDocDetailScreen(
           myDocModel: doctor,
         ));
+      case AppRoutes.myDocAppointmentScreen:
+        return getPage(AppointmentConfirmationScreen());
+      case AppRoutes.myDocAppointmentHistoryScreen:
+        return getPage(MyDocAppointmentHistoryScreen());
       case AppRoutes.myDocTopDocScreen:
         return getPage(TopDoctorScreen());
       case AppRoutes.sportScreen:

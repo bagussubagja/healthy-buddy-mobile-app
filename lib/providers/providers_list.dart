@@ -128,6 +128,9 @@ class ProviderList {
       create: (_) => MyDocByHepatologyClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => MyDocScheduleAppointmentClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => AuthenticationNotifier(),
     ),
     ChangeNotifierProvider(

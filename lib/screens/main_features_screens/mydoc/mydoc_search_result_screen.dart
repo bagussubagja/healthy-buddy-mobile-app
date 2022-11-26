@@ -12,6 +12,7 @@ class MyDocSearchResultScreen extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return super.appBarTheme(context).copyWith(
+          backgroundColor: bgColor,
           appBarTheme: super
               .appBarTheme(context)
               .appBarTheme

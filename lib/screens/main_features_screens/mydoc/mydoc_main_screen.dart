@@ -68,9 +68,44 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
         }
       },
       child: Scaffold(
+        backgroundColor: bgColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          actions: [
+            PopupMenuButton(
+                elevation: 0,
+                icon: Icon(
+                  Icons.more_horiz_rounded,
+                  color: blackColor,
+                ),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+                color: Colors.white,
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context,
+                                AppRoutes.myDocAppointmentHistoryScreen);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(
+                                Icons.people,
+                                color: blackColor,
+                              ),
+                              Text(
+                                'Riwayat Janji Temu',
+                                style: regularStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ])
+          ],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
