@@ -1,18 +1,24 @@
-import 'dart:ui';
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/sport_wishlist_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/models/purchase_history_model/purchase_history_model.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/sport_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/wishlist_sport_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../core/purchase_history/purchase_history_notifier.dart';
+import '../../../../models/user_model/user_model.dart';
 import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
 
@@ -28,7 +34,26 @@ class SportStoreDetailScreen extends StatefulWidget {
 class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
   int _itemQuantity = 1;
   int _galleryIndex = 0;
-  int _totalPrice = 0;
+  int _price = 0;
+  double _totalPrice = 0;
+  int _expectedBalance = 0;
+  String? idUser;
+  String? uniqueKey;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+        user.getUser(context: context, idUser: value);
+        uniqueKey =
+            "${value}_${widget.sportStore?.id ?? widget.sportStoreModel?.id}";
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -247,6 +272,7 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
   }
 
   Widget _buttonPayment() {
+    final itemSport = Provider.of<SportWishlistClass>(context);
     return Positioned(
       bottom: 0,
       child: Container(
@@ -264,8 +290,15 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             OutlinedButton(
-              onPressed: () {
-                showCustomSnackBar();
+              onPressed: () async {
+                WishlistSportModel body = WishlistSportModel(
+                  idUser: idUser,
+                  idSportStoreItem:
+                      widget.sportStore?.id ?? widget.sportStoreModel?.id,
+                  itemUniqueKey: uniqueKey,
+                );
+
+                await itemSport.addData(body, context);
               },
               child: Row(
                 children: [
@@ -284,9 +317,9 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
               onPressed: () {
                 setState(() {
                   if (widget.sportStore?.price == null) {
-                    _totalPrice = widget.sportStoreModel!.price! * _itemQuantity;
+                    _price = widget.sportStoreModel!.price! * _itemQuantity;
                   } else {
-                    _totalPrice = widget.sportStore!.price! * _itemQuantity;
+                    _price = widget.sportStore!.price! * _itemQuantity;
                   }
                 });
                 showModal();
@@ -328,6 +361,14 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
   }
 
   Future showModal() async {
+    final user = Provider.of<UserClass>(context, listen: false);
+    final userBalance = user.users?[0].balance;
+    setState(() {
+      _totalPrice = (_price - (_price * 0.15));
+      _expectedBalance = userBalance! - _totalPrice.round();
+    });
+    print(_totalPrice);
+    print(_expectedBalance);
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -369,7 +410,9 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
                     style: regularStyle,
                   ),
                   Text(
-                    'Diskon : 0%',
+                    user.users?[0].hasDiscount == true
+                        ? 'Diskon 15%'
+                        : 'Diskon : 0%',
                     style: regularStyle,
                   ),
                   Text(
@@ -381,7 +424,7 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
                       SizedBox(
                           width: 70.w,
                           child: Text(
-                            'Lokasi : Rancaekek, Kab Bandung.',
+                            '${user.users?[0].address}',
                             style: regularStyle,
                           )),
                       OutlinedButton(
@@ -409,7 +452,42 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
                           style: regularStyle,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_expectedBalance < 0) {
+                            _showFailedTransaction();
+                          } else {
+                            PurchaseHistoryModel transactionItem =
+                                PurchaseHistoryModel(
+                              idUser: idUser,
+                              category: "Sport Store",
+                              price: user.users?[0].hasDiscount == true
+                                  ? _totalPrice.round()
+                                  : _price,
+                              productName:
+                                  widget.sportStoreModel?.productName ??
+                                      widget.sportStore?.productName,
+                              quantity: _itemQuantity,
+                              createdAt: DateTime.now().toString(),
+                              thumbnail: widget.sportStore?.gallery?[0] ??
+                                  widget.sportStoreModel?.gallery?[0],
+                            );
+                            UserModel balance =
+                                UserModel(balance: _expectedBalance);
+                            var purchaseTransaction =
+                                Provider.of<PurchaseHistoryClass>(context,
+                                    listen: false);
+                            var updateBalance = Provider.of<UserTopUpClass>(
+                                context,
+                                listen: false);
+                            await purchaseTransaction.addFoodiesTransactionData(
+                                transactionItem, context);
+
+                            await updateBalance.updateTopUp(
+                                balance, idUser!, context);
+                            Navigator.pushNamed(
+                                context, AppRoutes.foodStoreStatusOrder);
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: greenColor),
                         child: Text(
@@ -425,5 +503,26 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
         );
       },
     );
+  }
+
+  _showFailedTransaction() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: true,
+      animType: AnimType.bottomSlide,
+      title: 'Gagal',
+      desc:
+          'Pembayaran kamu gagal karena saldo tidak cukup, kamu harus top up saldo terlebih dahulu!',
+      buttonsTextStyle: regularStyle,
+      btnCancelText: "Kembali",
+      btnOkText: "Top Up",
+      showCloseIcon: false,
+      btnOkOnPress: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, AppRoutes.topUpScreen);
+      },
+      btnCancelOnPress: () {},
+    ).show();
   }
 }

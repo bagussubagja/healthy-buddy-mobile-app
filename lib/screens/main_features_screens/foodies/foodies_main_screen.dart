@@ -184,7 +184,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                             }
                           },
                           child: Text(
-                            "Read More",
+                            "Baca Selengkapnya",
                             style: regularStyle.copyWith(
                                 color: greyTextColor, fontSize: 13),
                           ),

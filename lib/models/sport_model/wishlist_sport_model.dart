@@ -36,11 +36,9 @@ class WishlistSportModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "id_user": idUser,
         "id_sport_store_item": idSportStoreItem,
         "item_unique_key": itemUniqueKey,
-        "sport_store": sportStore?.toJson(),
       };
 }
 

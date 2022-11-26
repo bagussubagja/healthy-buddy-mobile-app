@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:badges/badges.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/sport_wishlist_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/sport_model/wishlist_sport_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_detail_screen.dart';
@@ -16,7 +19,11 @@ import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../core/authentication/user_notifier.dart';
 import '../../../../core/foodies/food_receipt_notifier.dart';
+import '../../../../core/wishlist/foodies_wishlist_notifier.dart';
+import '../../../../models/user_model/user_model.dart';
+import '../../../home/whislist_item/wishslist_screen.dart';
 import '../../../widgets/margin_width.dart';
 
 class SportStoreMainScreen extends StatefulWidget {
@@ -47,7 +54,13 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     "Swimming"
   ];
 
+  String? idUser;
+
   int _currentIndex = 0;
+
+  int _cartItemQuantity = 0;
+  int? _foodQuantity;
+  int? _sportQuantity;
   @override
   void initState() {
     super.initState();
@@ -66,19 +79,44 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     final itemSwimming =
         Provider.of<SportStoreSwimmingClass>(context, listen: false);
     itemSwimming.getSport(context: context, category: "Swimming");
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+        user.getUser(context: context, idUser: value);
+      });
+    });
     Timer(const Duration(seconds: 2), showContent);
   }
 
   @override
   Widget build(BuildContext context) {
+    final itemFoodies =
+        Provider.of<FoodiesWishlistClass>(context, listen: false);
+    itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
+    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
+    itemSport.getWishlist(context: context, idUser: idUser ?? "");
+    _foodQuantity = itemFoodies.wishlistFoodies?.length;
+    _sportQuantity = itemSport.wishlistSport?.length;
+    if (itemFoodies.wishlistFoodies?.length != null) {
+      setState(() {
+        _cartItemQuantity = _foodQuantity! + _sportQuantity!;
+      });
+    }
     return Scaffold(
       floatingActionButton: Badge(
         badgeContent: Text(
-          _currentIndex.toString(),
+          _cartItemQuantity.toString(),
           style: regularStyle.copyWith(color: whiteColor),
         ),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return WishlistScreen();
+              },
+            ));
+          },
           backgroundColor: greenColor,
           child: Icon(
             Icons.shopping_cart_outlined,
@@ -208,7 +246,12 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                       backgroundColor: whiteColor,
                       elevation: 0,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      UserModel getDiscount = UserModel(hasDiscount: true);
+                      var provider = Provider.of<UserDiscountClass>(context,
+                          listen: false);
+                      await provider.updateStatus(
+                          getDiscount, idUser!, context);
                       final snackBar = SnackBar(
                         elevation: 0,
                         behavior: SnackBarBehavior.floating,

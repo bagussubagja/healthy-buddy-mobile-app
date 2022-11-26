@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/foodies/food_receipt_notifier.dart';
+import '../../../../core/wishlist/sport_wishlist_notifier.dart';
 import '../../../widgets/margin_width.dart';
 import '../food-receipt-screen/food_receipt_detail_screen.dart';
 
@@ -50,6 +51,9 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   int _currentIndex = 0;
 
   int _cartLength = 0;
+  int _cartItemQuantity = 0;
+  int? _foodQuantity;
+  int? _sportQuantity;
   @override
   void initState() {
     super.initState();
@@ -80,10 +84,19 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     final itemFoodies =
         Provider.of<FoodiesWishlistClass>(context, listen: false);
     itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
+    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
+    itemSport.getWishlist(context: context, idUser: idUser ?? "");
+    _foodQuantity = itemFoodies.wishlistFoodies?.length;
+    _sportQuantity = itemSport.wishlistSport?.length;
+    if (itemFoodies.wishlistFoodies?.length != null) {
+      setState(() {
+        _cartItemQuantity = _foodQuantity! + _sportQuantity!;
+      });
+    }
     return Scaffold(
       floatingActionButton: Badge(
         badgeContent: Text(
-          itemFoodies.wishlistFoodies?.length.toString() ?? "0",
+          _cartItemQuantity.toString(),
           style: regularStyle.copyWith(color: whiteColor),
         ),
         child: FloatingActionButton(
@@ -227,7 +240,8 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                       UserModel getDiscount = UserModel(hasDiscount: true);
                       var provider = Provider.of<UserDiscountClass>(context,
                           listen: false);
-                      provider.updateStatus(getDiscount, idUser!, context);
+                      await provider.updateStatus(
+                          getDiscount, idUser!, context);
                       final snackBar = SnackBar(
                         elevation: 0,
                         behavior: SnackBarBehavior.floating,

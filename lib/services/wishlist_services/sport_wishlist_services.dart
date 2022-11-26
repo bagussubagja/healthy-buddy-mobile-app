@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
@@ -48,4 +51,25 @@ Future<List<WishlistSportModel>?> deleteSportWishlist(
         .showSnackBar(SnackBar(content: Text(e.toString())));
   }
   return [];
+}
+
+Future<http.Response?> addSportWishlist(
+    WishlistSportModel data, BuildContext context) async {
+  http.Response? respone;
+  try {
+    respone = await http.post(
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/wishlist_sport_item?apikey=$apiKey&on_conflict=item_unique_key'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          'Authorization': 'Bearer $bearer',
+          // 'Prefer': 'resolution=merge-duplicates'
+        },
+        body: jsonEncode(data.toJson()));
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+  }
+  debugPrint(respone.toString());
+  return respone;
 }

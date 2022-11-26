@@ -419,11 +419,14 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       SizedBox(
                           width: 70.w,
                           child: Text(
-                            'Lokasi : Rancaekek, Kab Bandung.',
+                            '${user.users?[0].address}',
                             style: regularStyle,
                           )),
                       OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.accountSettingScreen);
+                          },
                           child: Text(
                             'Ubah',
                             style: regularStyle,
@@ -449,25 +452,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                     ElevatedButton(
                         onPressed: () async {
                           if (_expectedBalance < 0) {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.error,
-                              headerAnimationLoop: true,
-                              animType: AnimType.bottomSlide,
-                              title: 'Gagal',
-                              desc:
-                                  'Pembayaran kamu gagal karena saldo tidak cukup, kamu harus top up saldo terlebih dahulu!',
-                              buttonsTextStyle: regularStyle,
-                              btnCancelText: "Kembali",
-                              btnOkText: "Top Up",
-                              showCloseIcon: false,
-                              btnOkOnPress: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamed(
-                                    context, AppRoutes.topUpScreen);
-                              },
-                              btnCancelOnPress: () {},
-                            ).show();
+                            _showFailedTransaction();
                           } else {
                             PurchaseHistoryModel transactionItem =
                                 PurchaseHistoryModel(
@@ -515,5 +500,26 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
         );
       },
     );
+  }
+
+  _showFailedTransaction() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: true,
+      animType: AnimType.bottomSlide,
+      title: 'Gagal',
+      desc:
+          'Pembayaran kamu gagal karena saldo tidak cukup, kamu harus top up saldo terlebih dahulu!',
+      buttonsTextStyle: regularStyle,
+      btnCancelText: "Kembali",
+      btnOkText: "Top Up",
+      showCloseIcon: false,
+      btnOkOnPress: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, AppRoutes.topUpScreen);
+      },
+      btnCancelOnPress: () {},
+    ).show();
   }
 }
