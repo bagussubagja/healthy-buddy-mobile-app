@@ -219,6 +219,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
         Text(
           widget.foodStoreModel?.description ?? widget.foodStore!.description!,
           style: regularStyle.copyWith(color: blackColor),
+          textAlign: TextAlign.justify,
         )
       ],
     );
@@ -359,8 +360,6 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
       _totalPrice = (_price - (_price * 0.15));
       _expectedBalance = userBalance! - _totalPrice.round();
     });
-    print(_totalPrice);
-    print(_expectedBalance);
 
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(

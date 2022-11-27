@@ -11,7 +11,7 @@ import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier
 import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
-import 'package:healthy_buddy_mobile_app/screens/home/whislist_item/wishslist_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/whislist/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';

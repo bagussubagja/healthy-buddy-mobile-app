@@ -6,6 +6,8 @@ import 'package:cache_manager/core/read_cache_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/favorites/favorites_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/favorite_model/fav_mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_confirmation_screen.dart';
@@ -21,7 +23,8 @@ import '../../../widgets/margin_width.dart';
 
 class MyDocDetailScreen extends StatefulWidget {
   MyDocModel? myDocModel;
-  MyDocDetailScreen({super.key, this.myDocModel});
+  MyDoc? myDoc;
+  MyDocDetailScreen({super.key, this.myDocModel, this.myDoc});
 
   @override
   State<MyDocDetailScreen> createState() => _MyDocDetailScreenState();
@@ -32,19 +35,27 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   DateTime? _date;
   String? _selectedDate;
 
-
   List<String> _numLabel = [];
+
+  String? idUser;
 
   @override
   void initState() {
     super.initState();
-    _numLabel.add(widget.myDocModel!.patients.toString());
-    _numLabel.add(widget.myDocModel!.yearExp.toString());
-    _numLabel.add(widget.myDocModel!.rating.toString());
+    if (widget.myDoc?.name != null) {
+      _numLabel.add(widget.myDoc!.patients.toString());
+      _numLabel.add(widget.myDoc!.yearExp.toString());
+      _numLabel.add(widget.myDoc!.rating.toString());
+    } else if (widget.myDocModel?.name != null) {
+      _numLabel.add(widget.myDocModel!.patients.toString());
+      _numLabel.add(widget.myDocModel!.yearExp.toString());
+      _numLabel.add(widget.myDocModel!.rating.toString());
+    }
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         user.getUser(context: context, idUser: value);
+        idUser = value;
       });
     });
   }
@@ -93,14 +104,34 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
       alignment: Alignment.centerLeft,
       height: 6.h,
       color: Colors.black12,
-      child: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: blackColor,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: blackColor,
+            ),
+          ),
+          IconButton(
+            onPressed: () async {
+              final fav = Provider.of<FavoriteClass>(context, listen: false);
+              FavMyDocModel body = FavMyDocModel(
+                  idDoc: widget.myDocModel?.id ?? widget.myDoc?.id,
+                  idUser: idUser,
+                  uniqueKey:
+                      '${idUser}_${widget.myDocModel?.id ?? widget.myDoc?.id}');
+              await fav.addFavDocData(body, context);
+            },
+            icon: const Icon(
+              Icons.favorite,
+              color: Colors.pink,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -113,7 +144,8 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
           width: double.infinity,
           height: 50.h,
           child: CachedNetworkImage(
-            imageUrl: widget.myDocModel!.thumbnail,
+            imageUrl:
+                '${widget.myDocModel?.thumbnail ?? widget.myDoc?.thumbnail}',
             imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -151,13 +183,13 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.myDocModel?.name ?? "Loading...",
+                      widget.myDocModel?.name ?? widget.myDoc!.name!,
                       style: titleStyle.copyWith(fontSize: 13.sp),
                       overflow: TextOverflow.ellipsis,
                     ),
                     MarginHeight(height: 1.h),
                     Text(
-                      '${widget.myDocModel?.specialist} - ${widget.myDocModel?.hospital}',
+                      '${widget.myDocModel?.specialist ?? widget.myDoc?.specialist} - ${widget.myDocModel?.hospital ?? widget.myDoc?.hospital}',
                       style: regularStyle,
                       textAlign: TextAlign.center,
                     ),
@@ -172,7 +204,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                         ),
                         MarginWidth(width: 2.w),
                         Text(
-                          '${widget.myDocModel?.operationalHour} WIB',
+                          '${widget.myDocModel?.operationalHour ?? widget.myDoc?.operationalHour} WIB',
                           style: regularStyle.copyWith(fontSize: 10.sp),
                         )
                       ],
@@ -224,7 +256,6 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                   } else {
                     setState(() {
                       _selectedDate = _date.toString();
-                      print(_date);
                     });
                   }
                 },
@@ -247,7 +278,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
           style: titleStyle.copyWith(color: greenColor),
         ),
         Text(
-          widget.myDocModel?.description ?? "Loading...",
+          widget.myDocModel?.description ?? widget.myDoc!.description!,
           style: regularStyle,
           textAlign: TextAlign.justify,
         )
@@ -312,7 +343,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Biaya : ${rupiah(widget.myDocModel?.price)}',
+            'Biaya : ${rupiah(widget.myDocModel?.price ?? widget.myDoc?.price)}',
             style: regularStyle.copyWith(color: whiteColor),
           ),
           GestureDetector(
@@ -322,12 +353,15 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                   builder: (context) {
                     return AppointmentConfirmationScreen(
                       name: user.users?[0].name,
-                      doctorName: widget.myDocModel?.name,
+                      doctorName: widget.myDocModel?.name ?? widget.myDoc?.name,
                       dateAppointment: _selectedDate,
-                      hospital: widget.myDocModel?.hospital,
-                      specialist: widget.myDocModel?.specialist,
-                      thumbnail: widget.myDocModel?.thumbnail,
-                      price: widget.myDocModel?.price,
+                      hospital:
+                          widget.myDocModel?.hospital ?? widget.myDoc?.hospital,
+                      specialist: widget.myDocModel?.specialist ??
+                          widget.myDoc?.specialist,
+                      thumbnail: widget.myDocModel?.thumbnail ??
+                          widget.myDoc?.thumbnail,
+                      price: widget.myDocModel?.price ?? widget.myDoc?.price,
                     );
                   },
                 ));
@@ -368,20 +402,5 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
-  }
-
-  _showFailedAppointment() {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.error,
-      headerAnimationLoop: true,
-      animType: AnimType.bottomSlide,
-      title: 'Gagal',
-      desc: 'Kamu tidak melakukan temu-janji dengan dokter karena...',
-      buttonsTextStyle: regularStyle,
-      btnOkText: "Kembali",
-      showCloseIcon: false,
-      btnOkOnPress: () {},
-    ).show();
   }
 }

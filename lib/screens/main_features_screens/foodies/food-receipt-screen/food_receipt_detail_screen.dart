@@ -1,10 +1,15 @@
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/favorites/favorites_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/favorite_model/fav_food_receipt_model.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -12,7 +17,8 @@ import '../../../widgets/margin_width.dart';
 
 class FoodReceiptDetailScreen extends StatefulWidget {
   FoodReceiptModel? foodReceiptModel;
-  FoodReceiptDetailScreen({super.key, this.foodReceiptModel});
+  FoodReceipt? foodReceipt;
+  FoodReceiptDetailScreen({super.key, this.foodReceiptModel, this.foodReceipt});
 
   @override
   State<FoodReceiptDetailScreen> createState() =>
@@ -22,10 +28,21 @@ class FoodReceiptDetailScreen extends StatefulWidget {
 class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
   late YoutubePlayerController controller;
 
+  String? idUser;
+
   @override
   void initState() {
     super.initState();
-    String url = widget.foodReceiptModel?.linkVideo ?? vidPlaceHolder;
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        user.getUser(context: context, idUser: value);
+        idUser = value;
+      });
+    });
+    String url = widget.foodReceiptModel?.linkVideo ??
+        widget.foodReceipt?.linkVideo ??
+        vidPlaceHolder;
     controller = YoutubePlayerController(
         initialVideoId: YoutubePlayer.convertUrlToId(url)!,
         flags: const YoutubePlayerFlags(
@@ -112,6 +129,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
   }
 
   Widget _videoTitle() {
+    final fav = Provider.of<FavoriteClass>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.min,
@@ -119,15 +137,24 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
         SizedBox(
           width: 75.w,
           child: Text(
-            widget.foodReceiptModel?.name ?? "Loading",
+            widget.foodReceiptModel?.name ?? widget.foodReceipt!.name!,
             style: titleStyle.copyWith(color: blackColor),
           ),
         ),
         IconButton(
-            onPressed: () {},
-            icon: Icon(
+            onPressed: () async {
+              FavFoodReceiptModel body = FavFoodReceiptModel(
+                  idReceipt:
+                      widget.foodReceiptModel?.id ?? widget.foodReceipt!.id!,
+                  uniqueKey:
+                      '${idUser}_${widget.foodReceiptModel?.id ?? widget.foodReceipt?.id}',
+                  idUser: idUser);
+
+              await fav.addFavFoodData(body, context);
+            },
+            icon: const Icon(
               Icons.favorite_rounded,
-              color: greyTextColor,
+              color: Colors.pink,
             ))
       ],
     );
@@ -135,7 +162,8 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
 
   Widget _ratingSection() {
     return RatingBarIndicator(
-      rating: widget.foodReceiptModel?.rating ?? 0,
+      rating: widget.foodReceiptModel?.rating ??
+          widget.foodReceipt!.rating!.toDouble(),
       itemBuilder: (context, index) => Icon(
         Icons.star,
         color: greenColor,
@@ -158,7 +186,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
             ),
             MarginWidth(width: 3.w),
             Text(
-              '${widget.foodReceiptModel?.duration ?? 0} Min',
+              '${widget.foodReceiptModel?.duration ?? widget.foodReceipt?.duration} Min',
               style: regularStyle.copyWith(fontSize: 12, color: greyTextColor),
             )
           ],
@@ -171,7 +199,8 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
             ),
             MarginWidth(width: 3.w),
             Text(
-              widget.foodReceiptModel?.levelOfMaking ?? 'Easy',
+              widget.foodReceiptModel?.levelOfMaking ??
+                  widget.foodReceipt!.levelOfMaking!,
               style: regularStyle.copyWith(fontSize: 12, color: greyTextColor),
             )
           ],
@@ -205,16 +234,18 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                   borderRadius: BorderRadius.circular(10),
                   color: greenColor.withOpacity(0.3),
                 ),
-                height: 100,
+                height: 10.h,
                 width: double.infinity,
                 child: Text(
-                  widget.foodReceiptModel?.ingredients[index] ?? 'Loading',
+                  widget.foodReceiptModel?.ingredients[index] ??
+                      widget.foodReceipt!.ingredients![index],
                   style: regularStyle.copyWith(color: blackColor),
                   textAlign: TextAlign.center,
                 ),
               );
             },
-            itemCount: widget.foodReceiptModel?.ingredients.length ?? 0),
+            itemCount: widget.foodReceiptModel?.ingredients.length ??
+                widget.foodReceipt!.ingredients!.length),
       ],
     );
   }
@@ -245,7 +276,7 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                   child: ClipRRect(
                     child: CachedNetworkImage(
                       imageUrl: widget.foodReceiptModel?.galleryPhoto[index] ??
-                          imgPlaceHolder,
+                          widget.foodReceipt!.galleryPhoto![index],
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(

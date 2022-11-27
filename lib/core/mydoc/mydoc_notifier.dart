@@ -83,6 +83,13 @@ class MyDocScheduleAppointmentClass extends ChangeNotifier {
     notifyListeners();
   }
 
+    deleteAppointmentData(
+      {required int id, required BuildContext context}) async {
+    schedule = (await deleteAppointmentScheduleById(id: id, context: context));
+    notifyListeners();
+  }
+
+
   Future<void> addData(
       AppointmentScheduleModel body, BuildContext context) async {
     notifyListeners();
@@ -107,4 +114,5 @@ class MyDocScheduleAppointmentClass extends ChangeNotifier {
 
     notifyListeners();
   }
+  
 }

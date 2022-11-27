@@ -20,8 +20,7 @@ Future<List<CarouselModel>?> getCarouselItem(
       return carouselModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
+    debugPrint(e.toString());
   }
   return [];
 }

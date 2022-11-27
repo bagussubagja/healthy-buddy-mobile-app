@@ -17,11 +17,7 @@ Future<List<FoodArticleModel>?> getFoodArticles(
       return foodArticleModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      "There's Something Error",
-      style: regularStyle,
-    )));
+    debugPrint(e.toString());
   }
   return [];
 }

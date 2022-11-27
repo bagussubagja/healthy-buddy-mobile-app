@@ -23,7 +23,7 @@ import '../../../../core/authentication/user_notifier.dart';
 import '../../../../core/foodies/food_receipt_notifier.dart';
 import '../../../../core/wishlist/foodies_wishlist_notifier.dart';
 import '../../../../models/user_model/user_model.dart';
-import '../../../home/whislist_item/wishslist_screen.dart';
+import '../../../home/whislist/wishslist_screen.dart';
 import '../../../widgets/margin_width.dart';
 
 class SportStoreMainScreen extends StatefulWidget {

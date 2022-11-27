@@ -19,11 +19,7 @@ Future<List<FoodStoreModel>?> getFoodStoreByCategory(
       return foodStoreModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+   debugPrint(e.toString());
   }
   return [];
 }

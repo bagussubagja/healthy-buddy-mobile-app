@@ -24,11 +24,7 @@ Future<List<UserModel>?> getUserData(
       return userModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+    debugPrint(e.toString());
   }
   return [];
 }
@@ -91,10 +87,7 @@ Future<http.Response?> updateDiscountStatusData(
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(data.updateDiscountStatus()));
   } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
+    debugPrint(e.toString());
   }
   return respone;
 }
-
-

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
@@ -24,11 +25,37 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
       return appointmentScheduleModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+    debugPrint(e.toString());
+  }
+  return [];
+}
+
+Future<List<AppointmentScheduleModel>?> deleteAppointmentScheduleById(
+    {required int id, required BuildContext context}) async {
+  var client = http.Client();
+  var uri = Uri.parse(
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?id=eq.$id&apikey=$apiKey');
+  try {
+    var respone =
+        await client.delete(uri, headers: {'Authorization': 'Bearer $bearer'});
+    if (respone.statusCode == 204) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Berhasil!',
+          message: 'Jadwal Janji-Temu kamu berhasil dihapus!',
+          contentType: ContentType.success,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+  } catch (e) {
+    debugPrint(e.toString());
   }
   return [];
 }
@@ -47,9 +74,8 @@ Future<http.Response?> addAppointmentScheduleData(
         },
         body: jsonEncode(data.toJson()));
   } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
+    debugPrint(e.toString());
   }
-  debugPrint(respone.toString());
+
   return respone;
 }

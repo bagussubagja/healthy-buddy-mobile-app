@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../core/extras/carousel_item_notifier.dart';
+import '../core/favorites/favorites_notifier.dart';
 import '../core/wishlist/sport_wishlist_notifier.dart';
 
 class ProviderList {
@@ -159,6 +160,15 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => PurchaseHistoryClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => PurchaseHistoryClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => PurchaseHistoryClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => FavoriteClass(),
     ),
   ];
 }

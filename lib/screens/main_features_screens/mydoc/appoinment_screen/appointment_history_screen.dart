@@ -19,21 +19,24 @@ class MyDocAppointmentHistoryScreen extends StatefulWidget {
 
 class _MyDocAppointmentHistoryScreenState
     extends State<MyDocAppointmentHistoryScreen> {
+  String? idUser;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    final item =
-        Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
+
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
-        item.getSchedule(context: context, idUser: value);
+        idUser = value;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final item =
+        Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
+    item.getSchedule(context: context, idUser: idUser ?? "");
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -140,7 +143,10 @@ class _MyDocAppointmentHistoryScreenState
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await item.deleteAppointmentData(
+                            id: item.schedule![index].id!, context: context);
+                      },
                       child: Text(
                         'Hapus',
                         style: regularStyle,

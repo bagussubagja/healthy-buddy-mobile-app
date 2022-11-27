@@ -16,7 +16,7 @@ class _ContentEmptyWidgetState extends State<ContentEmptyWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50.h,
+      height: 60.h,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,7 +24,8 @@ class _ContentEmptyWidgetState extends State<ContentEmptyWidget> {
           LottieBuilder.asset('assets/lotties/not-found-content.json'),
           Text(
             widget.content!,
-            style: regularStyle.copyWith(color: blackColor),
+            style: regularStyle.copyWith(color: greyTextColor),
+            textAlign: TextAlign.center,
           )
         ],
       ),

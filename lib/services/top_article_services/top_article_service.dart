@@ -18,11 +18,7 @@ Future<List<TopArticleModel>?> getTopArticles(
       return topArticleModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      "There's Something Error",
-      style: regularStyle,
-    )));
+   debugPrint(e.toString());
   }
   return [];
 }

@@ -21,11 +21,7 @@ Future<List<PurchaseHistoryModel>?> getPurchaseHistoryData(
       return purchaseHistoryModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+   debugPrint(e.toString());
   }
   return [];
 }
@@ -43,9 +39,8 @@ Future<http.Response?> addFoodiesTransaction(
         },
         body: jsonEncode(data.toJson()));
   } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
+    debugPrint(e.toString());
   }
-  debugPrint(respone?.statusCode.toString());
+ 
   return respone;
 }

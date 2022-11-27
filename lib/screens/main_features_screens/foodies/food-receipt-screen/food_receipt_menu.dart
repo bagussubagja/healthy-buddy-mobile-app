@@ -50,14 +50,6 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_horiz_rounded,
-                color: blackColor,
-              ))
-        ],
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/models/top_article_model.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
@@ -27,11 +28,9 @@ class SearchTopArticle {
                   element.title.toLowerCase().contains(query.toLowerCase()))
               .toList();
         }
-      } else {
-        print('Something Error');
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     return results;
   }
@@ -48,20 +47,17 @@ class SearchMyDoc {
     try {
       if (response.statusCode == 200) {
         listResultMyDoc = json.decode(response.body);
-        results = listResultMyDoc
-            .map((e) => MyDocModel.fromJson(e))
-            .toList();
+        results = listResultMyDoc.map((e) => MyDocModel.fromJson(e)).toList();
         if (query != null) {
           results = results
-              .where((element) =>
-                  element.specialist.toLowerCase().contains(query.toLowerCase()))
+              .where((element) => element.specialist
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
               .toList();
         }
-      } else {
-        print('Something Error');
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     return results;
   }

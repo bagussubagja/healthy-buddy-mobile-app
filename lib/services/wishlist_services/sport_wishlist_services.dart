@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
@@ -24,11 +25,7 @@ Future<List<WishlistSportModel>?> getWishlistSportByUserID(
       return wishlistSportModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+    debugPrint(e.toString());
   }
   return [];
 }
@@ -42,13 +39,23 @@ Future<List<WishlistSportModel>?> deleteSportWishlist(
     var respone =
         await client.delete(uri, headers: {'Authorization': 'Bearer $bearer'});
     if (respone.statusCode == 204) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Berhasil!',
+          message: 'Item berhasil dihapus pada wishlist kamu!',
+          contentType: ContentType.success,
+        ),
+      );
+
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(respone.body)));
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
-    print(respone.statusCode);
   } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
+    debugPrint(e.toString());
   }
   return [];
 }

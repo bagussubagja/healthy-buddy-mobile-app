@@ -31,6 +31,8 @@ class WishlistScreen extends StatefulWidget {
 
 class _WishlistScreenState extends State<WishlistScreen> {
   int _currentIndex = 0;
+
+  bool _isLoading = false;
   List<bool> _selectedToogle = [true, false];
 
   List<String> _foodStoreCategory = ["Foodies Store", "Sport Store"];
@@ -49,16 +51,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
     // TODO: implement initState
     super.initState();
     Timer(const Duration(seconds: 3), _showContent);
-    final itemFoodies =
-        Provider.of<FoodiesWishlistClass>(context, listen: false);
-    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         idUser = value;
         user.getUser(context: context, idUser: value);
-        itemFoodies.getWishlist(context: context, idUser: value);
-        itemSport.getWishlist(context: context, idUser: value);
       });
     });
   }
@@ -70,6 +67,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
     final itemSport = Provider.of<SportWishlistClass>(context);
     itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
     itemSport.getWishlist(context: context, idUser: idUser ?? "");
+
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(
@@ -187,6 +185,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
       }
     }
 
+    if (itemCount(_currentIndex) == 0) {
+      return ContentEmptyWidget(
+        content: "Tidak ada Barang yang kamu masukkan ke dalam keranjang!",
+      );
+    }
     return ListView.separated(
         shrinkWrap: true,
         primary: false,
@@ -322,47 +325,17 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             onPressed: () async {
                               try {
                                 if (_currentIndex == 0) {
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.warning,
-                                    headerAnimationLoop: true,
-                                    animType: AnimType.bottomSlide,
-                                    title: 'Konfirmasi',
-                                    desc:
-                                        'Apakah kamu yakin akan menghapus barang ini pada keranjangmu?',
-                                    buttonsTextStyle: regularStyle,
-                                    showCloseIcon: false,
-                                    btnCancelOnPress: () {},
-                                    btnOkOnPress: () async {
-                                      await itemFoodies
-                                          .deleteFoodiesWishlistData(
-                                              id: itemFoodies
-                                                  .wishlistFoodies![index].id!,
-                                              context: context);
-                                    },
-                                  ).show();
+                                  await itemFoodies.deleteFoodiesWishlistData(
+                                      id: itemFoodies
+                                          .wishlistFoodies![index].id!,
+                                      context: context);
                                 } else if (_currentIndex == 1) {
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.warning,
-                                    headerAnimationLoop: true,
-                                    animType: AnimType.bottomSlide,
-                                    title: 'Konfirmasi',
-                                    desc:
-                                        'Apakah kamu yakin akan menghapus barang ini pada keranjangmu?',
-                                    buttonsTextStyle: regularStyle,
-                                    showCloseIcon: false,
-                                    btnCancelOnPress: () {},
-                                    btnOkOnPress: () async {
-                                      await itemSport.deleteSportWishlistData(
-                                          id: itemSport
-                                              .wishlistSport![index].id!,
-                                          context: context);
-                                    },
-                                  ).show();
+                                  await itemSport.deleteSportWishlistData(
+                                      id: itemSport.wishlistSport![index].id!,
+                                      context: context);
                                 }
                               } catch (e) {
-                                print(e);
+                                debugPrint(e.toString());
                               }
                             },
                             icon: const Icon(

@@ -3,6 +3,7 @@ import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_appointment_model.dart';
+import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -228,7 +229,11 @@ class _AppointmentConfirmationScreenState
                 );
                 final item = Provider.of<MyDocScheduleAppointmentClass>(context,
                     listen: false);
+                final balance =
+                    Provider.of<UserTopUpClass>(context, listen: false);
+                UserModel body = UserModel(balance: _expectedBalance);
                 await item.addData(scheduleModel, context);
+                await balance.updateTopUp(body, idUser!, context);
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: greenColor),

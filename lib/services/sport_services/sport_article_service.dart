@@ -22,11 +22,7 @@ Future<List<SportArticleModel>?> getSportArticle(
       return sportArticleModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+    debugPrint(e.toString());
   }
   return [];
 }
