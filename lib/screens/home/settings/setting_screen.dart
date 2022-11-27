@@ -9,6 +9,8 @@ import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../shared/assets_directory.dart';
+
 class SettingScreen extends StatefulWidget {
   SettingScreen({super.key});
 
@@ -95,10 +97,15 @@ class _SettingScreenState extends State<SettingScreen> {
             width: 60.w,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(1000),
-              child: Image.asset(
-                'assets/images/avatar-demo.jpg',
-                fit: BoxFit.cover,
-              ),
+              child: user.users?[0].gender == "Laki-laki"
+                  ? Image.asset(
+                      '$imageDirectory/ava1.png',
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      '$imageDirectory/ava2.png',
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
         ),

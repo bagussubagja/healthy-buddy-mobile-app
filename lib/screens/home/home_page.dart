@@ -297,10 +297,15 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             height: 50,
             width: 50,
-            child: Image.asset(
-              '$imageDirectory/avatar-demo.jpg',
-              fit: BoxFit.cover,
-            ),
+            child: user.users?[0].gender == "Laki-laki"
+                ? Image.asset(
+                    '$imageDirectory/ava1.png',
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    '$imageDirectory/ava2.png',
+                    fit: BoxFit.cover,
+                  ),
           ),
         )
       ],
