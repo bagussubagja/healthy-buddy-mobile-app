@@ -355,8 +355,10 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                       name: user.users?[0].name,
                       doctorName: widget.myDocModel?.name ?? widget.myDoc?.name,
                       dateAppointment: _selectedDate,
+                      idUser: idUser,
                       hospital:
                           widget.myDocModel?.hospital ?? widget.myDoc?.hospital,
+                      idDoctor: widget.myDocModel?.id ?? widget.myDoc?.id,
                       specialist: widget.myDocModel?.specialist ??
                           widget.myDoc?.specialist,
                       thumbnail: widget.myDocModel?.thumbnail ??
@@ -394,9 +396,9 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
-        title: 'Gagal!',
+        title: 'Peringatan!',
         message: 'Jadwal Temu-Janji Tidak Boleh Kosong',
-        contentType: ContentType.failure,
+        contentType: ContentType.warning,
       ),
     );
     ScaffoldMessenger.of(context)

@@ -16,7 +16,7 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
     {required BuildContext context, required String idUser}) async {
   var client = http.Client();
   var uri = Uri.parse(
-      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?select=*&apikey=$apiKey&id_user=eq.$idUser');
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?select=*,users(*),my_doc(*)&apikey=$apiKey&id_user=eq.$idUser');
   try {
     var respone =
         await client.get(uri, headers: {'Authorization': 'Bearer $bearer'});
@@ -25,7 +25,7 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
       return appointmentScheduleModelFromJson(json);
     }
   } catch (e) {
-    debugPrint(e.toString());
+    throw e;
   }
   return [];
 }
@@ -34,7 +34,7 @@ Future<List<AppointmentScheduleModel>?> deleteAppointmentScheduleById(
     {required int id, required BuildContext context}) async {
   var client = http.Client();
   var uri = Uri.parse(
-      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?id=eq.$id&apikey=$apiKey');
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?id=eq.$id&apikey=$apiKey');
   try {
     var respone =
         await client.delete(uri, headers: {'Authorization': 'Bearer $bearer'});
@@ -66,7 +66,7 @@ Future<http.Response?> addAppointmentScheduleData(
   try {
     respone = await http.post(
         Uri.parse(
-            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?apikey=$apiKey'),
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?apikey=$apiKey'),
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
           'Authorization': 'Bearer $bearer',

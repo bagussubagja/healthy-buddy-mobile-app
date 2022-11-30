@@ -11,6 +11,7 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:math';
 
 import '../../../../core/authentication/user_notifier.dart';
 import '../../../../routes/routes.dart';
@@ -24,16 +25,21 @@ class AppointmentConfirmationScreen extends StatefulWidget {
   String? specialist;
   String? thumbnail;
   int? price;
-  AppointmentConfirmationScreen({
-    super.key,
-    this.name,
-    this.doctorName,
-    this.dateAppointment,
-    this.hospital,
-    this.specialist,
-    this.thumbnail,
-    this.price,
-  });
+  int? idDoctor;
+  String? idUser;
+  String? dateTimeNow;
+  AppointmentConfirmationScreen(
+      {super.key,
+      this.name,
+      this.doctorName,
+      this.dateAppointment,
+      this.hospital,
+      this.specialist,
+      this.thumbnail,
+      this.price,
+      this.dateTimeNow,
+      this.idDoctor,
+      this.idUser});
 
   @override
   State<AppointmentConfirmationScreen> createState() =>
@@ -42,7 +48,10 @@ class AppointmentConfirmationScreen extends StatefulWidget {
 
 class _AppointmentConfirmationScreenState
     extends State<AppointmentConfirmationScreen> {
-  final List<String> _mediaLabel = ["Ditempat", "Chat", "Video Call"];
+  final List<String> _mediaLabel = [
+    "Ditempat",
+    "Video Call",
+  ];
   int? _expectedBalance;
   int? _userBalance;
   final List<IconData> _mediaIcon = [
@@ -50,10 +59,16 @@ class _AppointmentConfirmationScreenState
     Icons.chat,
     Icons.video_call
   ];
-  List<bool> _selectedToogle = [true, false, false];
+  List<bool> _selectedToogle = [true, false];
   int _currentIndex = 0;
   String? _formattedDateAppointment;
   String? idUser;
+
+  var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   @override
   void initState() {
@@ -64,6 +79,7 @@ class _AppointmentConfirmationScreenState
       setState(() {
         user.getUser(context: context, idUser: value);
         idUser = value;
+        widget.dateTimeNow = DateTime.now().toString();
       });
     });
   }
@@ -215,17 +231,10 @@ class _AppointmentConfirmationScreenState
                 AppointmentScheduleModel scheduleModel =
                     AppointmentScheduleModel(
                   dateAppointment: _formattedDateAppointment,
-                  doctorName: widget.doctorName,
-                  hospital: widget.hospital,
+                  idDoctor: widget.idDoctor,
+                  idSchedule: getRandomString(6),
                   idUser: idUser,
-                  mediaType: _currentIndex == 0
-                      ? "Ditempat"
-                      : _currentIndex == 1
-                          ? "Chat"
-                          : "Video Call",
-                  specialist: widget.specialist,
-                  name: widget.name,
-                  thumbnail: widget.thumbnail,
+                  media: _currentIndex == 0 ? "Ditempat" : "Video Call",
                 );
                 final item = Provider.of<MyDocScheduleAppointmentClass>(context,
                     listen: false);
@@ -251,8 +260,8 @@ class _AppointmentConfirmationScreenState
   Widget _mediaToogleButton(int currentIndex) {
     return Center(
       child: SizedBox(
-        height: 5.h,
-        child: ListView.separated(
+          height: 5.h,
+          child: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
@@ -308,8 +317,8 @@ class _AppointmentConfirmationScreenState
             separatorBuilder: (context, index) {
               return MarginWidth(width: 5.w);
             },
-            itemCount: 3),
-      ),
+            itemCount: _mediaLabel.length,
+          )),
     );
   }
 
