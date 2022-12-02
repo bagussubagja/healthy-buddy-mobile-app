@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_search_result_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -24,16 +21,6 @@ class MyDocMainScreen extends StatefulWidget {
 }
 
 class _MyDocMainScreenState extends State<MyDocMainScreen> {
-  bool _isLoading = true;
-
-  void showContent() {
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   final List<String> _iconImage = [
     "mydoc-pulmonology.png",
     "mydoc-cardiology.png",
@@ -68,13 +55,6 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
     final doctorItemExp =
         Provider.of<MyDocByExperienceClass>(context, listen: false);
     doctorItemExp.getDoctor(context: context, isExperience: "true");
-    Timer(const Duration(seconds: 1), showContent);
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   @override
@@ -137,26 +117,22 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
           ),
         ),
         body: SafeArea(
-            child: _isLoading
-                ? LoadingWidget(
-                    color: greenColor,
-                  )
-                : Padding(
-                    padding: defaultPadding,
-                    child: ListView(
-                      children: [
-                        _headerSection(),
-                        MarginHeight(height: 3.h),
-                        _doctorCategory(context),
-                        _topDoctorSection(),
-                        topDoctor.isloading == true
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : _topDoctorList()
-                      ],
-                    ),
-                  )),
+            child: Padding(
+          padding: defaultPadding,
+          child: ListView(
+            children: [
+              _headerSection(),
+              MarginHeight(height: 3.h),
+              _doctorCategory(context),
+              _topDoctorSection(),
+              topDoctor.isloading == true
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _topDoctorList()
+            ],
+          ),
+        )),
       ),
     );
   }

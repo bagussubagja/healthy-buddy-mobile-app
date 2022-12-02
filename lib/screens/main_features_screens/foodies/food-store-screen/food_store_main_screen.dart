@@ -80,12 +80,6 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final itemFoodies =
         Provider.of<FoodiesWishlistClass>(context, listen: false);
@@ -182,10 +176,9 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                 ),
                 _foodStoreToogleButton(),
                 MarginHeight(height: 2.h),
-                _listViewItemList(_currentIndex)
-                // _isGridViewItemList
-                //     ? _gridViewItemList(_currentIndex)
-                //     : _listViewItemList(_currentIndex)
+                _isGridViewItemList
+                    ? _gridViewItemList(_currentIndex)
+                    : _listViewItemList(_currentIndex)
                 // _gridViewItemList()
               ],
             ),

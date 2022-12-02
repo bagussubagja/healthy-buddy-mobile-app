@@ -70,7 +70,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
               child: Column(
                 children: [
                   _imageSection(context),
-                  MarginHeight(height: 5.h),
+                  MarginHeight(height: 9.h),
                   Padding(
                     padding: defaultPadding.copyWith(bottom: 8.h),
                     child: Column(

@@ -149,10 +149,6 @@ class _MyDocAppointmentHistoryScreenState
                   'Tipe Temu-Janji : ${item.schedule?[index].media}',
                   style: regularStyle,
                 ),
-                Text(
-                  'Status Pertemuan : ${item.schedule?[index].isCompleted == true ? "Selesai Janji-Temu" : "Belum Janji-Temu"}',
-                  style: regularStyle,
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
