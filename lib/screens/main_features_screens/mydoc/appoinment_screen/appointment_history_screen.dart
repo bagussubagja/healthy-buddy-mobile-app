@@ -1,10 +1,7 @@
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/video_call_appointment/video_call_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -27,11 +24,10 @@ class _MyDocAppointmentHistoryScreenState
   void initState() {
     // TODO: implement initState
     super.initState();
-    final user = Provider.of<UserClass>(context, listen: false);
+
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         idUser = value;
-        user.getUser(context: context, idUser: value);
       });
     });
   }
@@ -87,12 +83,6 @@ class _MyDocAppointmentHistoryScreenState
 
   Widget _itemList() {
     final item = Provider.of<MyDocScheduleAppointmentClass>(context);
-    final user = Provider.of<UserClass>(context);
-    if (item.schedule?.length == 0) {
-      return ContentEmptyWidget(
-        content: "Tidak terdapat jadwal janji-temu",
-      );
-    }
     return ListView.separated(
         shrinkWrap: true,
         primary: false,
@@ -102,7 +92,7 @@ class _MyDocAppointmentHistoryScreenState
             elevation: 0,
             child: ExpansionTile(
               title: Text(
-                '${item.schedule?[index].myDoc?.name}',
+                '${item.schedule?[index].doctorName}',
                 style: regularStyle,
               ),
               subtitle: Text(
@@ -118,8 +108,8 @@ class _MyDocAppointmentHistoryScreenState
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
-                      imageUrl: item.schedule?[index].myDoc?.thumbnail ??
-                          imgPlaceHolder,
+                      imageUrl:
+                          item.schedule?[index].thumbnail ?? imgPlaceHolder,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
@@ -138,15 +128,15 @@ class _MyDocAppointmentHistoryScreenState
               ),
               children: [
                 Text(
-                  'Rumah Sakit : ${item.schedule?[index].myDoc?.hospital}',
+                  'Rumah Sakit : ${item.schedule?[index].hospital}',
                   style: regularStyle,
                 ),
                 Text(
-                  'Spesialis : ${item.schedule?[index].myDoc?.specialist}',
+                  'Spesialis : ${item.schedule?[index].specialist}',
                   style: regularStyle,
                 ),
                 Text(
-                  'Tipe Temu-Janji : ${item.schedule?[index].media}',
+                  'Tipe Temu-Janji : ${item.schedule?[index].mediaType}',
                   style: regularStyle,
                 ),
                 Row(
@@ -163,23 +153,15 @@ class _MyDocAppointmentHistoryScreenState
                       ),
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          if (index == 1) {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return VideoCallScreen(
-                                    conferenceID:
-                                        item.schedule![index].idSchedule!,
-                                    name: user.users![0].name!);
-                              },
-                            ));
-                          }
-                        },
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                             backgroundColor: greenColor),
-                        child: Text(item.schedule?[index].media == "Video Call"
-                            ? "Video Call"
-                            : "Temui di Lokasi"))
+                        child:
+                            Text(item.schedule?[index].mediaType == "Video Call"
+                                ? "Video Call"
+                                : item.schedule?[index].mediaType == "Chat"
+                                    ? "Chat Sekarang"
+                                    : "Temui di Lokasi"))
                   ],
                 )
               ],

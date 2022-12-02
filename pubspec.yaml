@@ -60,8 +60,6 @@ dependencies:
   cache_manager: ^1.0.0+4
   awesome_dialog: ^3.0.2
   intl: ^0.17.0
-  zego_uikit_prebuilt_video_conference: ^1.1.6
-  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_lints: ^2.0.1
