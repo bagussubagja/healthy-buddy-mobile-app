@@ -21,11 +21,16 @@ class AccountSettingScreen extends StatefulWidget {
 }
 
 class _AccountSettingScreenState extends State<AccountSettingScreen> {
-  final List<String> _itemLabel = ["Ganti Nama", "Ganti Alamat"];
+  final List<String> _itemLabel = [
+    "Ganti Nama",
+    "Ganti Alamat",
+    "Ganti Data Diri"
+  ];
 
   final List<IconData> _itemIcon = [
     Icons.person,
     Icons.location_on_rounded,
+    Icons.lock_person_rounded
   ];
 
   final _nameController = TextEditingController();

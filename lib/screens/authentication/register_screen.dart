@@ -27,7 +27,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _isVisible = true;
 
-
+  @override
+  void dispose() {
+    _emailController.clear();
+    _passwordController.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       },
       child: Scaffold(
+        backgroundColor: bgColor,
         body: SafeArea(
             child: Padding(
           padding: defaultPadding,
@@ -55,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: titleStyle.copyWith(color: greenColor),
                 ),
                 Text(
-                  'Makes your life better',
+                  'Buat hidupmu lebih baik!',
                   style: regularStyle.copyWith(color: Colors.grey),
                 ),
                 MarginHeight(height: 15),
@@ -66,12 +72,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: SvgPicture.asset('$svgDirectory/register.svg'),
                 ),
                 MarginHeight(height: 15),
-               
                 MarginHeight(height: 10),
                 CustomTextField(
                   titleText: "Alamat Email",
                   hintText: "ex. bagus@gmail.com",
-                  color: greyColor,
+                  color: Colors.white,
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,
                 ),
@@ -79,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   titleText: "Kata Sandi",
                   hintText: "minimal 6 karakter",
-                  color: greyColor,
+                  color: Colors.white,
                   textInputType: TextInputType.visiblePassword,
                   controller: _passwordController,
                   isObscure: _isVisible,
@@ -95,7 +100,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: greyTextColor,
                       )),
                 ),
-               
                 MarginHeight(height: 20),
                 SizedBox(
                   height: 7.h,
@@ -138,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Already have an account?",
+                      "Sudah memiliki akun?",
                       style: regularStyle,
                     ),
                     GestureDetector(
@@ -147,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context, AppRoutes.loginScreen, (route) => false);
                       },
                       child: Text(
-                        'Login Now!',
+                        'Login Sekarang!',
                         style: regularStyle.copyWith(
                             decoration: TextDecoration.underline),
                       ),

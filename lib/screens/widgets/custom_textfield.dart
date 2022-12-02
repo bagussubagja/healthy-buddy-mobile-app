@@ -68,9 +68,9 @@ class CustomTextField extends StatelessWidget {
                   maxLength: maxLength,
                   onChanged: onChanged,
                   style: readOnly == true
-                      ? regularStyle.copyWith(
-                          color: greyTextColor, fontSize: 16)
-                      : regularStyle.copyWith(color: Colors.grey, fontSize: 16),
+                      ? regularStyle.copyWith(color: greenColor, fontSize: 16)
+                      : regularStyle.copyWith(
+                          color: greyTextColor, fontSize: 16),
                   cursorColor: greenColor,
                   keyboardType: textInputType,
                   obscureText: obscureText ?? false,

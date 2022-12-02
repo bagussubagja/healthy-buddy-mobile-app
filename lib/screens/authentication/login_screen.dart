@@ -26,6 +26,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isVisible = true;
 
   @override
+  void dispose() {
+    _emailController.clear();
+    _passwordController.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AuthenticationNotifier authenticationNotifier =
         Provider.of<AuthenticationNotifier>(context, listen: false);
@@ -37,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
+        backgroundColor: bgColor,
         body: SafeArea(
             child: Padding(
           padding: defaultPadding,
@@ -51,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: titleStyle.copyWith(color: greenColor),
                 ),
                 Text(
-                  'Makes your life better',
+                  'Buat hidupmu lebih baik!',
                   style: regularStyle.copyWith(color: Colors.grey),
                 ),
                 MarginHeight(height: 15),
@@ -65,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(
                   titleText: "Alamat Email",
                   hintText: "ex. suci@gmail.com",
-                  color: greyColor,
+                  color: Colors.white,
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,
                 ),
@@ -73,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(
                   titleText: "Kata Sandi",
                   hintText: "minimal 6 karakter",
-                  color: greyColor,
+                  color: Colors.white,
                   controller: _passwordController,
                   isObscure: _isVisible,
                   obscureText: _isVisible,
@@ -131,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Didn't have any account?",
+                      "Belum Memiliki Akun?",
                       style: regularStyle,
                     ),
                     GestureDetector(
@@ -140,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             AppRoutes.registerScreen, (route) => false);
                       },
                       child: Text(
-                        'Register Now!',
+                        'Register Sekarang!',
                         style: regularStyle.copyWith(
                             decoration: TextDecoration.underline),
                       ),

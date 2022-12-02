@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,7 +19,9 @@ class AuthenticationService {
   }
 
   Future<String?> registerUser(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     GotrueSessionResponse response =
         await SupabaseCredentials.supabaseClient.auth.signUp(email, password);
 
@@ -26,13 +30,19 @@ class AuthenticationService {
       String? id = response.data!.user!.id;
       return id;
     } else {
-      print("Register Gagal");
-      print(response.error!.message);
+      // print("${response.error!.message} mantye");
+      if (response.error?.message == "User already registered") {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "Tidak bisa melakukan registrasi : Email sudah terdaftar!")));
+      }
     }
   }
 
   Future<String?> loginUser(
-      {required String email, required String password}) async {
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     GotrueSessionResponse response =
         await SupabaseCredentials.supabaseClient.auth.signIn(
             email: email,
@@ -44,8 +54,11 @@ class AuthenticationService {
       String? id = response.data!.user!.id;
       return id;
     } else {
-      print("Login Gagal");
-      print(response.error!.message);
+      if (response.error?.message == "Invalid login credentials") {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "Periksa kembali email atau password yang kamu masukkan!")));
+      }
     }
   }
 

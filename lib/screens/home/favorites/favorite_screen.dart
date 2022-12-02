@@ -80,7 +80,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           style: titleStyle.copyWith(color: greenColor),
         ),
         Text(
-          'Healthy Buddy - Always by your side!',
+          'Healthy Buddy - Item kesukaanmu ada disini!',
           style: regularStyle.copyWith(color: greyTextColor),
         ),
         Container(

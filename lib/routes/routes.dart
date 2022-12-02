@@ -5,13 +5,14 @@ import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/biodata_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/login_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/authentication/register_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/profile_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/about_us/about_us_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/account/account_settings_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/help_center/help_center_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/purchase_history/purcase_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/state_ui.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/top_article/top_article_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/home/whislist/wishslist_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/wishslist/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
@@ -31,7 +32,7 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/spo
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-website-screen/sport_website_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup_screen/topup_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/extras/no_internet_found_screen.dart';
 import 'package:http/http.dart';
 
@@ -41,6 +42,7 @@ class AppRoutes {
   static const String registerScreen = '/register';
   static const String biodataScreen = '/biodata';
   static const String homePageScreen = '/home';
+  static const String profileScreen = '/profile';
   static const String wishlistScreen = '/wishlist';
   static const String topArticleScreen = '/topArticleScreen';
   static const String foodiesScreen = '/foodies';
@@ -108,6 +110,8 @@ class AppRoutes {
         ));
       case AppRoutes.homePageScreen:
         return getPage(HomePage());
+      case AppRoutes.profileScreen:
+        return getPage(ProfileScreen());
       case AppRoutes.topArticleScreen:
         return getPage(TopArticleScreen());
       case AppRoutes.wishlistScreen:

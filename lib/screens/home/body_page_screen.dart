@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/favorites/favorite_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/settings/setting_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/home/whislist/wishslist_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/wishslist/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 

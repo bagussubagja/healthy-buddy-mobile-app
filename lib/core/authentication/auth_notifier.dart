@@ -27,7 +27,7 @@ class AuthenticationNotifier extends ChangeNotifier {
       required BuildContext context}) async {
     try {
       dynamic userId = await _authenticationService.registerUser(
-          email: email, password: password);
+          email: email, password: password, context: context);
       WriteCache.setString(key: 'cache', value: userId!).whenComplete(() {
         Navigator.pushNamedAndRemoveUntil(
             context, AppRoutes.biodataScreen, (route) => false,
@@ -44,7 +44,7 @@ class AuthenticationNotifier extends ChangeNotifier {
       required BuildContext context}) async {
     try {
       dynamic userId = await _authenticationService.loginUser(
-          email: email, password: password);
+          email: email, password: password, context: context);
       print('userId : $userId');
       WriteCache.setString(key: 'cache', value: userId!).whenComplete(() {
         Navigator.pushNamedAndRemoveUntil(

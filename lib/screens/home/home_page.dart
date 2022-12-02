@@ -292,20 +292,25 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: SizedBox(
-            height: 50,
-            width: 50,
-            child: user.users?[0].gender == "Laki-laki"
-                ? Image.asset(
-                    '$imageDirectory/ava1.png',
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    '$imageDirectory/ava2.png',
-                    fit: BoxFit.cover,
-                  ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.profileScreen);
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: user.users?[0].gender == "Laki-laki"
+                  ? Image.asset(
+                      '$imageDirectory/ava1.png',
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      '$imageDirectory/ava2.png',
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
         )
       ],
@@ -341,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                   shrinkWrap: true,
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: item.articles?.length ?? 0,
+                  itemCount: 3,
                   itemBuilder: (context, index) {
                     return ListTile(
                       tileColor: greyColor,
@@ -389,20 +394,15 @@ class _HomePageState extends State<HomePage> {
 
   Widget _drawer() {
     return Drawer(
+      backgroundColor: bgColor,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: greenColor,
-            ),
-            child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Healthy Buddy',
-                  style: regularStyle.copyWith(color: whiteColor),
-                )),
-          ),
+              decoration: BoxDecoration(
+                color: bgColor,
+              ),
+              child: Image.asset('assets/images/logos/full_logo.png')),
           ListTile(
             leading: const Icon(
               Icons.supervised_user_circle_outlined,
