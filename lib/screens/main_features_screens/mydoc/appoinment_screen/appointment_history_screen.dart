@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/video_call_appointment/video_call_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -87,6 +88,11 @@ class _MyDocAppointmentHistoryScreenState
   Widget _itemList() {
     final item = Provider.of<MyDocScheduleAppointmentClass>(context);
     final user = Provider.of<UserClass>(context);
+    if (item.schedule?.length == 0) {
+      return ContentEmptyWidget(
+        content: "Tidak terdapat jadwal janji-temu",
+      );
+    }
     return ListView.separated(
         shrinkWrap: true,
         primary: false,

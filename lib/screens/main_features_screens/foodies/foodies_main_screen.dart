@@ -40,16 +40,6 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     "Food Store"
   ];
 
-  bool _isLoading = true;
-
-  void loadingCompleted() {
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -57,7 +47,6 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     itemCarousel.getDataCarousel(context: context, section: "foodies");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
-    Timer(const Duration(seconds: 3), loadingCompleted);
   }
 
   @override
@@ -78,26 +67,24 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
         ),
       ),
       body: SafeArea(
-        child: _isLoading
-            ? LoadingWidget()
-            : Padding(
-                padding: defaultPadding,
-                child: ListView(
-                  children: [
-                    _headerSection(),
-                    MarginHeight(height: 1.h),
-                    _carouselSection(),
-                    MarginHeight(height: 3.h),
-                    _foodiesCategory(context),
-                    MarginHeight(height: 2.h),
-                    Visibility(
-                      visible: true,
-                      replacement: LoadingWidget(),
-                      child: _articleOfTheDay(),
-                    )
-                  ],
-                ),
-              ),
+        child: Padding(
+          padding: defaultPadding,
+          child: ListView(
+            children: [
+              _headerSection(),
+              MarginHeight(height: 1.h),
+              _carouselSection(),
+              MarginHeight(height: 3.h),
+              _foodiesCategory(context),
+              MarginHeight(height: 2.h),
+              Visibility(
+                visible: true,
+                replacement: LoadingWidget(),
+                child: _articleOfTheDay(),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

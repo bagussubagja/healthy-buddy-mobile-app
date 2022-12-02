@@ -77,7 +77,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             shrinkWrap: true,
             children: [
               Text(
-                'Wishtlist',
+                'Keranjang Belanja',
                 style: titleStyle.copyWith(color: greenColor),
               ),
               Text(

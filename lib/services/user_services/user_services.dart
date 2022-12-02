@@ -91,3 +91,21 @@ Future<http.Response?> updateDiscountStatusData(
   }
   return respone;
 }
+
+Future<http.Response?> updateSelfDataUser(
+    UserModel data, String idUser, BuildContext context) async {
+  http.Response? respone;
+  try {
+    respone = await http.patch(
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/users?id_user=eq.$idUser&apikey=$apiKey'),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: jsonEncode(data.selfData()));
+    print(respone.request);
+  } catch (e) {
+    debugPrint(e.toString());
+  }
+  return respone;
+}

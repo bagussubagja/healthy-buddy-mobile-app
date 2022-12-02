@@ -147,6 +147,9 @@ class ProviderList {
       create: (_) => UserUpdateAddressClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => UserUpdateSelfDataClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => UserTopUpClass(),
     ),
     ChangeNotifierProvider(

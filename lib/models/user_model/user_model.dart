@@ -157,7 +157,7 @@ class UserModel {
         "age": age,
         "weight": weight,
         "height": height,
-        "dailyActivity": dailyActivity,
-        "dailyCalories": dailyCalories
+        "daily_activity": dailyActivity,
+        "daily_calories": dailyCalories
       };
 }

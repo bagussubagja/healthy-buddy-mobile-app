@@ -65,3 +65,17 @@ class UserDiscountClass extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class UserUpdateSelfDataClass extends ChangeNotifier {
+  Future<void> updateSelfData(
+      UserModel body, String idUser, BuildContext context) async {
+    notifyListeners();
+    http.Response response = (await updateSelfDataUser(body, idUser, context))!;
+    if (response.statusCode == 204) {
+      debugPrint('Update Berhasil');
+    } else {
+      debugPrint(response.statusCode.toString());
+    }
+    notifyListeners();
+  }
+}

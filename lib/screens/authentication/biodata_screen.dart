@@ -62,7 +62,6 @@ class _BiodataScreenState extends State<BiodataScreen> {
     "Cukup Padat",
     "Sangat Padat"
   ];
-  List<double> _activityValues = [1.2, 1.35, 1.5, 1.7, 1.9];
 
   String? _selectedActivityValue = 'Normal';
 

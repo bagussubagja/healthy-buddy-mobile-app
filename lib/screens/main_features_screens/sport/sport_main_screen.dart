@@ -25,16 +25,8 @@ class SportScreen extends StatefulWidget {
 }
 
 class _SportScreenState extends State<SportScreen> {
-  bool _isLoading = true;
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
-  void loadingCompleted() {
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   final List<String> _iconImage = [
     "sport-article.png",
@@ -67,7 +59,6 @@ class _SportScreenState extends State<SportScreen> {
     final hardExercise =
         Provider.of<SportExerciseHardClass>(context, listen: false);
     hardExercise.getSport(context: context, category: 'Hard');
-    Timer(const Duration(seconds: 5), loadingCompleted);
   }
 
   @override
@@ -95,28 +86,24 @@ class _SportScreenState extends State<SportScreen> {
               ))
         ],
       ),
-      body: _isLoading == true
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: Padding(
-                padding: defaultPadding,
-                child: ListView(
-                  children: [
-                    _headerSection(),
-                    MarginHeight(height: 2.h),
-                    _carouselSection(),
-                    MarginHeight(height: 2.h),
-                    _sportCategory(),
-                    MarginHeight(height: 2.h),
-                    _sportLevelToogleButton(_currentIndex),
-                    MarginHeight(height: 2.h),
-                    _exerciseSection(_currentIndex)
-                  ],
-                ),
-              ),
-            ),
+      body: SafeArea(
+        child: Padding(
+          padding: defaultPadding,
+          child: ListView(
+            children: [
+              _headerSection(),
+              MarginHeight(height: 2.h),
+              _carouselSection(),
+              MarginHeight(height: 2.h),
+              _sportCategory(),
+              MarginHeight(height: 2.h),
+              _sportLevelToogleButton(_currentIndex),
+              MarginHeight(height: 2.h),
+              _exerciseSection(_currentIndex)
+            ],
+          ),
+        ),
+      ),
     );
   }
 

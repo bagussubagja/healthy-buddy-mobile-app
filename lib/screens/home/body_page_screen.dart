@@ -35,28 +35,28 @@ class _BodyPageScreenState extends State<BodyPageScreen> {
               icon: _currentIndex == 0
                   ? const Icon(Icons.home)
                   : const Icon(Icons.home_outlined),
-              title: const Text("Home"),
+              title: const Text("Laman Utama"),
               selectedColor: greenColor,
               unselectedColor: blackColor),
           SalomonBottomBarItem(
               icon: _currentIndex == 1
                   ? const Icon(Icons.favorite)
                   : const Icon(Icons.favorite_border),
-              title: const Text("Favorites"),
+              title: const Text("Favorite"),
               selectedColor: greenColor,
               unselectedColor: blackColor),
           SalomonBottomBarItem(
               icon: _currentIndex == 2
                   ? const Icon(Icons.shopping_cart)
                   : const Icon(Icons.shopping_cart_outlined),
-              title: const Text("Wishlist"),
+              title: const Text("Keranjang"),
               selectedColor: greenColor,
               unselectedColor: blackColor),
           SalomonBottomBarItem(
               icon: _currentIndex == 3
                   ? const Icon(Icons.settings)
                   : const Icon(Icons.settings_outlined),
-              title: const Text("Settings"),
+              title: const Text("Pengaturan"),
               selectedColor: greenColor,
               unselectedColor: blackColor),
         ],

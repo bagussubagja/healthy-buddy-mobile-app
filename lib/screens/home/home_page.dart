@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(10),
+                      top: Radius.circular(25),
                     ),
                     color: bgColor),
                 child: Padding(

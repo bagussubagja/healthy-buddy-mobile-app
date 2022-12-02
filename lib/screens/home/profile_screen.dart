@@ -5,6 +5,7 @@ import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,19 +20,13 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  Widget build(BuildContext context) {
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         user.getUser(context: context, idUser: value);
       });
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: greenColor,
       appBar: AppBar(
@@ -98,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          '${user.users?[0].email}',
+          "Saldo : ${rupiah(user.users?[0].balance)}",
           style: regularStyle.copyWith(
             color: whiteColor,
             fontSize: 13.sp,
@@ -131,10 +126,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         CustomTextField(
           readOnly: true,
           prefixIcon: Icon(
-            Icons.person_outline_rounded,
+            Icons.email_outlined,
             color: greenColor,
           ),
-          hintText: '${user.users?[0].name}',
+          hintText: '${user.users?[0].email}',
         ),
         MarginHeight(height: 2.h),
         CustomTextField(
