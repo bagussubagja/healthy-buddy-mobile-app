@@ -22,7 +22,7 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
         await client.get(uri, headers: {'Authorization': 'Bearer $bearer'});
     if (respone.statusCode == 200) {
       var json = respone.body;
-      return appointmentScheduleModelFromJson(json);
+      return scheduleAppointmentModelFromJson(json);
     }
   } catch (e) {
     throw e;

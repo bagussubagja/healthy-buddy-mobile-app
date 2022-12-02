@@ -24,6 +24,16 @@ class FoodiesScreen extends StatefulWidget {
 }
 
 class _FoodiesScreenState extends State<FoodiesScreen> {
+  bool _isLoading = true;
+
+  void showContent() {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
 
@@ -47,6 +57,13 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     itemCarousel.getDataCarousel(context: context, section: "foodies");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
+    Timer(const Duration(seconds: 1), showContent);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -67,24 +84,28 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: defaultPadding,
-          child: ListView(
-            children: [
-              _headerSection(),
-              MarginHeight(height: 1.h),
-              _carouselSection(),
-              MarginHeight(height: 3.h),
-              _foodiesCategory(context),
-              MarginHeight(height: 2.h),
-              Visibility(
-                visible: true,
-                replacement: LoadingWidget(),
-                child: _articleOfTheDay(),
+        child: _isLoading
+            ? LoadingWidget(
+                color: greenColor,
               )
-            ],
-          ),
-        ),
+            : Padding(
+                padding: defaultPadding,
+                child: ListView(
+                  children: [
+                    _headerSection(),
+                    MarginHeight(height: 1.h),
+                    _carouselSection(),
+                    MarginHeight(height: 3.h),
+                    _foodiesCategory(context),
+                    MarginHeight(height: 2.h),
+                    Visibility(
+                      visible: true,
+                      replacement: LoadingWidget(),
+                      child: _articleOfTheDay(),
+                    )
+                  ],
+                ),
+              ),
       ),
     );
   }

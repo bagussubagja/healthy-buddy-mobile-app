@@ -185,9 +185,10 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                 ),
                 _sportStoreToogleButton(),
                 MarginHeight(height: 2.h),
-                _isGridViewItemList
-                    ? _gridViewItemList(_currentIndex)
-                    : _listViewItemList(_currentIndex)
+                _listViewItemList(_currentIndex)
+                // _isGridViewItemList
+                //     ? _gridViewItemList(_currentIndex)
+                //     : _listViewItemList(_currentIndex)
                 // _gridViewItemList()
               ],
             ),

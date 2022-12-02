@@ -7,6 +7,7 @@ import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dar
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -25,6 +26,16 @@ class SportScreen extends StatefulWidget {
 }
 
 class _SportScreenState extends State<SportScreen> {
+  bool _isLoading = true;
+
+  void showContent() {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
 
@@ -59,6 +70,13 @@ class _SportScreenState extends State<SportScreen> {
     final hardExercise =
         Provider.of<SportExerciseHardClass>(context, listen: false);
     hardExercise.getSport(context: context, category: 'Hard');
+    Timer(const Duration(seconds: 1), showContent);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -87,22 +105,26 @@ class _SportScreenState extends State<SportScreen> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: defaultPadding,
-          child: ListView(
-            children: [
-              _headerSection(),
-              MarginHeight(height: 2.h),
-              _carouselSection(),
-              MarginHeight(height: 2.h),
-              _sportCategory(),
-              MarginHeight(height: 2.h),
-              _sportLevelToogleButton(_currentIndex),
-              MarginHeight(height: 2.h),
-              _exerciseSection(_currentIndex)
-            ],
-          ),
-        ),
+        child: _isLoading
+            ? LoadingWidget(
+                color: greenColor,
+              )
+            : Padding(
+                padding: defaultPadding,
+                child: ListView(
+                  children: [
+                    _headerSection(),
+                    MarginHeight(height: 2.h),
+                    _carouselSection(),
+                    MarginHeight(height: 2.h),
+                    _sportCategory(),
+                    MarginHeight(height: 2.h),
+                    _sportLevelToogleButton(_currentIndex),
+                    MarginHeight(height: 2.h),
+                    _exerciseSection(_currentIndex)
+                  ],
+                ),
+              ),
       ),
     );
   }

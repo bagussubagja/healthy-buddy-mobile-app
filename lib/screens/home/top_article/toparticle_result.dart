@@ -90,7 +90,7 @@ class SearchTopArticleResult extends SearchDelegate {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 30.h,
+                            width: 55.w,
                             child: Text(
                               '${data?[index].title}',
                               style: regularStyle,
