@@ -32,6 +32,7 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/top
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-article-screen/sport_article_screen.dart';
 
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-website-screen/sport_website_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_exercise_screen/sport_exercise_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/extras/no_internet_found_screen.dart';
@@ -57,6 +58,7 @@ class AppRoutes {
   static const String sportScreen = '/sport';
   static const String sportArticle = '/sportArticle';
   static const String sportWebsite = '/sportWebsite';
+  static const String sportExercise = '/sportExercise';
   // static const String sportStore = '/sportStore';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocCategoryScreen = '/myDocCategory';
@@ -166,6 +168,8 @@ class AppRoutes {
         return getPage(const SportScreen());
       case AppRoutes.sportArticle:
         return getPage(SportArticleScreen());
+      case AppRoutes.sportExercise:
+        return getPage(SportExerciseScreen());
       case AppRoutes.sportWebsite:
         return getPage(SportWebsiteScreen());
       // case AppRoutes.sportStore:

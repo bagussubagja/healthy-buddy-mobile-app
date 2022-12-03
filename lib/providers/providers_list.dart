@@ -135,6 +135,9 @@ class ProviderList {
       create: (_) => MyDocScheduleAppointmentClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => UpdateStatusAppointmentClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => AuthenticationNotifier(),
     ),
     ChangeNotifierProvider(

@@ -68,10 +68,11 @@ class _BiodataScreenState extends State<BiodataScreen> {
   double? _dailyCaloriesValue = 0;
 
   List<String> _genderItem = ['Laki-laki', 'Perempuan'];
+  String? _selectedGender = 'Laki-laki';
 
   String? _idUser;
 
-  String? _selectedGender = 'Laki-laki';
+
 
   @override
   void initState() {

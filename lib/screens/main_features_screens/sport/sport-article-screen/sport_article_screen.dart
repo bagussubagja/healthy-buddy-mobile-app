@@ -1,4 +1,4 @@
-import 'package:animated_image_list/AnimatedImageList.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart';

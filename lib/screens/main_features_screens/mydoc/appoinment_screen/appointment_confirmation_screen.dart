@@ -51,14 +51,10 @@ class _AppointmentConfirmationScreenState
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  final List<String> _mediaLabel = ["Ditempat", "Chat", "Video Call"];
+  final List<String> _mediaLabel = ["Ditempat", "Video Call"];
   int? _expectedBalance;
   int? _userBalance;
-  final List<IconData> _mediaIcon = [
-    Icons.place_rounded,
-    Icons.chat,
-    Icons.video_call
-  ];
+  final List<IconData> _mediaIcon = [Icons.place_rounded, Icons.video_call];
   List<bool> _selectedToogle = [true, false, false];
   int _currentIndex = 0;
   String? _formattedDateAppointment;
@@ -309,7 +305,7 @@ class _AppointmentConfirmationScreenState
             separatorBuilder: (context, index) {
               return MarginWidth(width: 5.w);
             },
-            itemCount: 3),
+            itemCount: _mediaLabel.length),
       ),
     );
   }

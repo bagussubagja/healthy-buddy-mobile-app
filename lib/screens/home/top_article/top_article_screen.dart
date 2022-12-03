@@ -81,7 +81,10 @@ class _TopArticleScreenState extends State<TopArticleScreen> {
             ? LoadingWidget()
             : SizedBox(
                 width: double.infinity,
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return MarginHeight(height: 2.h);
+                  },
                   shrinkWrap: true,
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),

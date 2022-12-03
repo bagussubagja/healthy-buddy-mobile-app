@@ -129,3 +129,14 @@ class MyDocScheduleAppointmentClass extends ChangeNotifier {
   }
   
 }
+
+class UpdateStatusAppointmentClass extends ChangeNotifier {
+  Future<void> updateStatus(AppointmentScheduleModel body, String idUser,
+      String idDoctor, BuildContext context) async {
+    notifyListeners();
+    http.Response response =
+        (await updateAppointmentStatus(body, idUser, context, idDoctor))!;
+    debugPrint(response.statusCode.toString());
+    notifyListeners();
+  }
+}

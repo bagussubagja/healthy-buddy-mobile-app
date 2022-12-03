@@ -4,7 +4,9 @@ import 'package:cache_manager/cache_manager.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:sizer/sizer.dart';
 
 class StatePageUI extends StatefulWidget {
   const StatePageUI({super.key});
@@ -15,6 +17,7 @@ class StatePageUI extends StatefulWidget {
 
 class _StatePageUIState extends State<StatePageUI> {
   bool hasInternet = false;
+  bool isLoading = true;
   ConnectivityResult result = ConnectivityResult.none;
 
   Future initiateCache() async {}
@@ -42,6 +45,7 @@ class _StatePageUIState extends State<StatePageUI> {
             Navigator.pushNamedAndRemoveUntil(
                 context, AppRoutes.bodyScreen, (route) => false);
           });
+      isLoading = false;
     }
   }
 
@@ -54,8 +58,24 @@ class _StatePageUIState extends State<StatePageUI> {
     getConnectionResult();
     return Scaffold(
       backgroundColor: bgColor,
-      body: const Center(
-        child: CircularProgressIndicator(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: defaultPadding,
+            child: Image.asset(
+              'assets/images/logos/full_logo.png',
+              fit: BoxFit.fill,
+            ),
+          ),
+          MarginHeight(height: 1.5.h),
+          Center(
+            child: CircularProgressIndicator(
+              color: greenColor,
+            ),
+          ),
+        ],
       ),
     );
   }
