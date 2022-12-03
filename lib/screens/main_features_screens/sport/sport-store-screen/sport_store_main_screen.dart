@@ -1,29 +1,19 @@
-import 'dart:async';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:badges/badges.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
-import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
-import 'package:healthy_buddy_mobile_app/core/wishlist/sport_wishlist_notifier.dart';
-import 'package:healthy_buddy_mobile_app/models/sport_model/wishlist_sport_model.dart';
-import 'package:healthy_buddy_mobile_app/routes/routes.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_detail_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
-import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/authentication/user_notifier.dart';
-import '../../../../core/foodies/food_receipt_notifier.dart';
-import '../../../../core/wishlist/foodies_wishlist_notifier.dart';
+import '../../../../core/sport/sport_store_notifier.dart';
+import '../../../../core/wishlist/sport_wishlist_notifier.dart';
 import '../../../../models/user_model/user_model.dart';
-import '../../../home/wishslist/wishslist_screen.dart';
+import '../../../../shared/assets_directory.dart';
+import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
 
 class SportStoreMainScreen extends StatefulWidget {
@@ -34,35 +24,16 @@ class SportStoreMainScreen extends StatefulWidget {
 }
 
 class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
-  bool _isVisible = false;
-  bool _isGridViewItemList = true;
-  void showContent() {
-    if (mounted) {
-      setState(() {
-        _isVisible = true;
-      });
-    }
-  }
-
-  List<bool> _selectedToogle = [true, false, false, false, false];
-
-  List<String> _foodStoreCategory = [
-    "General",
-    "Soccer",
-    "Athletic",
-    "Badminton",
-    "Swimming"
-  ];
-
   String? idUser;
-
   int _currentIndex = 0;
 
   int _cartItemQuantity = 0;
   int? _foodQuantity;
   int? _sportQuantity;
+
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     final itemGeneral =
         Provider.of<SportStoreGeneralClass>(context, listen: false);
@@ -80,120 +51,69 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
         Provider.of<SportStoreSwimmingClass>(context, listen: false);
     itemSwimming.getSport(context: context, category: "Swimming");
     final user = Provider.of<UserClass>(context, listen: false);
+    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
+
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         idUser = value;
         user.getUser(context: context, idUser: value);
+        itemSport.getWishlist(context: context, idUser: value);
       });
     });
-    Timer(const Duration(seconds: 2), showContent);
+    _sportQuantity = itemSport.wishlistSport?.length;
+    if (itemSport.wishlistSport?.length != null) {
+      setState(() {
+        _cartItemQuantity = _sportQuantity!;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final itemFoodies =
-        Provider.of<FoodiesWishlistClass>(context, listen: false);
-    itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
-    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
-    itemSport.getWishlist(context: context, idUser: idUser ?? "");
-    _foodQuantity = itemFoodies.wishlistFoodies?.length;
-    _sportQuantity = itemSport.wishlistSport?.length;
-    if (itemFoodies.wishlistFoodies?.length != null) {
-      setState(() {
-        _cartItemQuantity = _foodQuantity! + _sportQuantity!;
-      });
-    }
     return Scaffold(
-      floatingActionButton: Badge(
-        badgeContent: Text(
-          _cartItemQuantity.toString(),
-          style: regularStyle.copyWith(color: whiteColor),
-        ),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return WishlistScreen();
-              },
-            ));
-          },
-          backgroundColor: greenColor,
-          child: Icon(
-            Icons.shopping_cart_outlined,
-            color: whiteColor,
-          ),
-        ),
-      ),
+      backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: bgColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: blackColor,
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  _isGridViewItemList = !_isGridViewItemList;
-                });
-              },
-              icon: Icon(
-                !_isGridViewItemList
-                    ? Icons.grid_view_rounded
-                    : Icons.list_rounded,
-                color: blackColor,
-              ))
-        ],
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              color: blackColor,
+            )),
       ),
-      backgroundColor: bgColor,
       body: SafeArea(
-        child: Padding(
-          padding: defaultPadding,
-          child: Visibility(
-            visible: _isVisible,
-            replacement: const Center(
-              child: CircularProgressIndicator(),
+          child: Padding(
+        padding: defaultPadding,
+        child: ListView(
+          children: [
+            Text(
+              'Sport Store',
+              style: titleStyle.copyWith(color: greenColor),
             ),
-            child: ListView(
-              children: [
-                Text(
-                  'Sport Store',
-                  style: titleStyle.copyWith(color: greenColor),
-                ),
-                Text(
-                  'Dapatkan makanan sehatmu dimana saja!',
-                  style: regularStyle.copyWith(
-                    color: greyTextColor,
-                  ),
-                ),
-                MarginHeight(
-                  height: 2.h,
-                ),
-                Visibility(
-                  visible: _isVisible,
-                  replacement: const Center(child: CircularProgressIndicator()),
-                  child: _discountSection(context),
-                ),
-                MarginHeight(
-                  height: 2.h,
-                ),
-                _sportStoreToogleButton(),
-                MarginHeight(height: 2.h),
-                _isGridViewItemList
-                    ? _gridViewItemList(_currentIndex)
-                    : _listViewItemList(_currentIndex)
-                // _gridViewItemList()
-              ],
+            Text(
+              'Dapatkan makanan sehatmu dimana saja!',
+              style: regularStyle.copyWith(
+                color: greyTextColor,
+              ),
             ),
-          ),
+            MarginHeight(
+              height: 2.h,
+            ),
+            _discountSection(context),
+            MarginHeight(
+              height: 2.h,
+            ),
+            _sportStoreToogleButton(),
+            MarginHeight(
+              height: 2.h,
+            ),
+            _listViewItemList(_currentIndex)
+          ],
         ),
-      ),
+      )),
     );
   }
 
@@ -280,6 +200,15 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
   }
 
   Widget _sportStoreToogleButton() {
+    List<bool> _selectedToogle = [true, false, false, false, false];
+
+    List<String> _foodStoreCategory = [
+      "General",
+      "Soccer",
+      "Athletic",
+      "Badminton",
+      "Swimming"
+    ];
     return Center(
       child: SizedBox(
         height: 5.h,
@@ -330,212 +259,6 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
             },
             itemCount: 5),
       ),
-    );
-  }
-
-  Widget _gridViewItemList(int currentIndex) {
-    final itemGeneral = Provider.of<SportStoreGeneralClass>(context);
-    final itemSoccer = Provider.of<SportStoreSoccerClass>(context);
-    final itemAthletic = Provider.of<SportStoreAthleticClass>(context);
-    final itemBadminton = Provider.of<SportStoreBadmintonClass>(context);
-    final itemSwimming = Provider.of<SportStoreSwimmingClass>(context);
-    int itemCount(int x) {
-      if (x == 0) {
-        return itemGeneral.sportStore?.length ?? 0;
-      } else if (x == 1) {
-        return itemSoccer.sportStore?.length ?? 0;
-      } else if (x == 2) {
-        return itemAthletic.sportStore?.length ?? 0;
-      } else if (x == 3) {
-        return itemBadminton.sportStore?.length ?? 0;
-      } else if (x == 4) {
-        return itemSwimming.sportStore?.length ?? 0;
-      } else {
-        return 0;
-      }
-    }
-
-    return GridView.builder(
-      shrinkWrap: true,
-      primary: false,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 43.h,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20),
-      itemCount: itemCount(_currentIndex),
-      itemBuilder: (BuildContext ctx, index) {
-        return GestureDetector(
-          onTap: () {
-            if (_currentIndex == 0) {
-              final general = itemGeneral.sportStore?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return SportStoreDetailScreen(
-                    sportStoreModel: general,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 1) {
-              final soccer = itemSoccer.sportStore?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return SportStoreDetailScreen(
-                    sportStoreModel: soccer,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 2) {
-              final athlectic = itemAthletic.sportStore?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return SportStoreDetailScreen(
-                    sportStoreModel: athlectic,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 3) {
-              final badminton = itemBadminton.sportStore?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return SportStoreDetailScreen(
-                    sportStoreModel: badminton,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 4) {
-              final swimming = itemSwimming.sportStore?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return SportStoreDetailScreen(
-                    sportStoreModel: swimming,
-                  );
-                },
-              ));
-            }
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  _currentIndex == 0
-                      ? CachedNetworkImage(
-                          imageUrl:
-                              itemGeneral.sportStore?[index].gallery?[0] ??
-                                  imgPlaceHolder,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => const Center(
-                            child: Icon(Icons.error),
-                          ),
-                        )
-                      : _currentIndex == 1
-                          ? CachedNetworkImage(
-                              imageUrl:
-                                  itemSoccer.sportStore?[index].gallery?[0] ??
-                                      imgPlaceHolder,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Center(
-                                child: Icon(Icons.error),
-                              ),
-                            )
-                          : _currentIndex == 2
-                              ? CachedNetworkImage(
-                                  imageUrl: itemAthletic
-                                          .sportStore?[index].gallery?[0] ??
-                                      imgPlaceHolder,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Icon(Icons.error),
-                                  ),
-                                )
-                              : _currentIndex == 3
-                                  ? CachedNetworkImage(
-                                      imageUrl: itemBadminton
-                                              .sportStore?[index].gallery?[0] ??
-                                          imgPlaceHolder,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Center(
-                                        child: Icon(Icons.error),
-                                      ),
-                                    )
-                                  : CachedNetworkImage(
-                                      imageUrl: itemSwimming
-                                              .sportStore?[index].gallery?[0] ??
-                                          imgPlaceHolder,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Center(
-                                        child: Icon(Icons.error),
-                                      ),
-                                    )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 

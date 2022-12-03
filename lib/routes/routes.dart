@@ -29,7 +29,7 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/det
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/top_doctor_screen/top_doctor_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-article-screen/sport_article_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
+
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-website-screen/sport_website_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
@@ -55,7 +55,7 @@ class AppRoutes {
   static const String sportScreen = '/sport';
   static const String sportArticle = '/sportArticle';
   static const String sportWebsite = '/sportWebsite';
-  static const String sportStore = '/sportStore';
+  // static const String sportStore = '/sportStore';
   static const String myDocScreen = '/myDocScreen';
   static const String myDocCategoryScreen = '/myDocCategory';
   static const String myDocDetailScreen = '/myDocDetailScreen';
@@ -84,7 +84,7 @@ class AppRoutes {
     foodStoreMenu: (context) => FoodStoreMainScreen(),
     sportScreen: (context) => const SportScreen(),
     sportArticle: (context) => const SportArticleScreen(),
-    sportStore: (context) => SportStoreMainScreen(),
+    // sportStore: (context) => SportStoreMainScreen(),
     myDocScreen: (context) => MyDocMainScreen(),
     topUpScreen: (context) => TopUpScreen(),
     statePageUI: (context) => const StatePageUI(),
@@ -154,7 +154,10 @@ class AppRoutes {
       case AppRoutes.myDocAppointmentScreen:
         return getPage(AppointmentConfirmationScreen());
       case AppRoutes.myDocAppointmentHistoryScreen:
-        return getPage(MyDocAppointmentHistoryScreen());
+        final id = settings.arguments as int;
+        return getPage(MyDocAppointmentHistoryScreen(
+          
+        ));
       case AppRoutes.myDocTopDocScreen:
         return getPage(TopDoctorScreen());
       case AppRoutes.sportScreen:
@@ -163,8 +166,8 @@ class AppRoutes {
         return getPage(SportArticleScreen());
       case AppRoutes.sportWebsite:
         return getPage(SportWebsiteScreen());
-      case AppRoutes.sportStore:
-        return getPage(const SportStoreMainScreen());
+      // case AppRoutes.sportStore:
+      //   return getPage(const SportStoreMainScreen());
       case AppRoutes.topUpScreen:
         return getPage(TopUpScreen());
       case AppRoutes.accountSettingScreen:

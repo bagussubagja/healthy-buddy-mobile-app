@@ -86,8 +86,8 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
                       PopupMenuItem(
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context,
-                                AppRoutes.myDocAppointmentHistoryScreen);
+                            // Navigator.pushNamed(context,
+                            //     AppRoutes.myDocAppointmentHistoryScreen,arguments: );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,

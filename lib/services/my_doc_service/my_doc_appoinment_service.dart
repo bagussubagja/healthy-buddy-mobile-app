@@ -13,10 +13,10 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
-    {required BuildContext context, required String idUser}) async {
+    {required BuildContext context, required String idUser, required int idDoctor}) async {
   var client = http.Client();
   var uri = Uri.parse(
-      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?select=*&apikey=$apiKey&id_user=eq.$idUser');
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?select=*,users(*),my_doc(*)&apikey=$apiKey&id_doctor=eq.$idDoctor&media=eq.Video+Call');
   try {
     var respone =
         await client.get(uri, headers: {'Authorization': 'Bearer $bearer'});
@@ -24,6 +24,7 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
       var json = respone.body;
       return appointmentScheduleModelFromJson(json);
     }
+    print(respone.request);
   } catch (e) {
     debugPrint(e.toString());
   }
@@ -34,7 +35,7 @@ Future<List<AppointmentScheduleModel>?> deleteAppointmentScheduleById(
     {required int id, required BuildContext context}) async {
   var client = http.Client();
   var uri = Uri.parse(
-      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?id=eq.$id&apikey=$apiKey');
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?id=eq.$id&apikey=$apiKey');
   try {
     var respone =
         await client.delete(uri, headers: {'Authorization': 'Bearer $bearer'});
@@ -66,13 +67,15 @@ Future<http.Response?> addAppointmentScheduleData(
   try {
     respone = await http.post(
         Uri.parse(
-            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_appointment_doctor?apikey=$apiKey'),
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?apikey=$apiKey'),
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
           'Authorization': 'Bearer $bearer',
           // 'Prefer': 'resolution=merge-duplicates'
         },
         body: jsonEncode(data.toJson()));
+    print(respone.request);
+    print(respone.statusCode.toString());
   } catch (e) {
     debugPrint(e.toString());
   }

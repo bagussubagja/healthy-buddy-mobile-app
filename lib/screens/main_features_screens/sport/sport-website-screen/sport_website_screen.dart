@@ -219,7 +219,7 @@ class _SportWebsiteScreenState extends State<SportWebsiteScreen> {
                       border: Border.all(color: greenColor),
                     ),
                     child: Icon(
-                      Icons.sports_football_rounded,
+                      Icons.web_outlined,
                       color: greenColor,
                     ),
                   ),

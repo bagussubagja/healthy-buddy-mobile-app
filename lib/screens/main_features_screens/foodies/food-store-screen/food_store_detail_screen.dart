@@ -218,7 +218,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
         ),
         Text(
           widget.foodStoreModel?.description ?? widget.foodStore!.description!,
-          style: regularStyle.copyWith(color: blackColor),
+          style: regularStyle.copyWith(color: greyTextColor),
           textAlign: TextAlign.justify,
         )
       ],

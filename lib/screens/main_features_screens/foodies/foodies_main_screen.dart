@@ -24,6 +24,15 @@ class FoodiesScreen extends StatefulWidget {
 }
 
 class _FoodiesScreenState extends State<FoodiesScreen> {
+  bool _isLoading = true;
+  void showContent() {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   final String _placeHolder =
       'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
 
@@ -47,6 +56,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     itemCarousel.getDataCarousel(context: context, section: "foodies");
     final item = Provider.of<FoodArticlesClass>(context, listen: false);
     item.getFoodArticleData(context: context);
+    Timer(const Duration(seconds: 2), showContent);
   }
 
   @override
@@ -67,24 +77,28 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: defaultPadding,
-          child: ListView(
-            children: [
-              _headerSection(),
-              MarginHeight(height: 1.h),
-              _carouselSection(),
-              MarginHeight(height: 3.h),
-              _foodiesCategory(context),
-              MarginHeight(height: 2.h),
-              Visibility(
-                visible: true,
-                replacement: LoadingWidget(),
-                child: _articleOfTheDay(),
+        child: _isLoading
+            ? LoadingWidget(
+                color: greenColor,
               )
-            ],
-          ),
-        ),
+            : Padding(
+                padding: defaultPadding,
+                child: ListView(
+                  children: [
+                    _headerSection(),
+                    MarginHeight(height: 1.h),
+                    _carouselSection(),
+                    MarginHeight(height: 3.h),
+                    _foodiesCategory(context),
+                    MarginHeight(height: 2.h),
+                    Visibility(
+                      visible: true,
+                      replacement: LoadingWidget(),
+                      child: _articleOfTheDay(),
+                    )
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -264,10 +278,6 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
               "Article of the Day",
               style: titleStyle.copyWith(color: blackColor),
             ),
-            Text(
-              'Lihat Semua',
-              style: regularStyle.copyWith(color: greyTextColor),
-            )
           ],
         ),
         MarginHeight(height: 1.25.h),
@@ -279,37 +289,45 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                 shrinkWrap: true,
                 primary: false,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: item.foodArticle?.length,
+                itemCount: 2,
                 itemBuilder: (context, index) {
                   final itemArticle = item.foodArticle?[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    padding: defaultPadding,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: CachedNetworkImage(
-                            imageUrl: itemArticle?.thumbnail ?? _placeHolder,
+                  return GestureDetector(
+                    onTap: () async {
+                      final url = Uri.parse(item.foodArticle![index].link!);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      padding: defaultPadding,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: CachedNetworkImage(
+                              imageUrl: itemArticle?.thumbnail ?? _placeHolder,
+                            ),
                           ),
-                        ),
-                        MarginHeight(height: 1.h),
-                        Text(
-                          itemArticle?.title ?? 'Loading...',
-                          style: titleStyle.copyWith(
-                              fontSize: 14.sp, color: blackColor),
-                        ),
-                        Text(
-                          '${itemArticle?.description?.substring(0, 50)}...',
-                          style: regularStyle.copyWith(
-                              fontSize: 12.sp, color: greyTextColor),
-                        ),
-                      ],
+                          MarginHeight(height: 1.h),
+                          Text(
+                            itemArticle?.title ?? 'Loading...',
+                            style: titleStyle.copyWith(
+                                fontSize: 14.sp, color: blackColor),
+                          ),
+                          Text(
+                            '${itemArticle?.description?.substring(0, 50)}...',
+                            style: regularStyle.copyWith(
+                                fontSize: 12.sp, color: greyTextColor),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

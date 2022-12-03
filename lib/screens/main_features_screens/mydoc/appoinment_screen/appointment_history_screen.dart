@@ -10,7 +10,8 @@ import 'package:sizer/sizer.dart';
 import '../../../../shared/assets_directory.dart';
 
 class MyDocAppointmentHistoryScreen extends StatefulWidget {
-  const MyDocAppointmentHistoryScreen({super.key});
+  int? id;
+   MyDocAppointmentHistoryScreen({super.key, this.id});
 
   @override
   State<MyDocAppointmentHistoryScreen> createState() =>
@@ -36,7 +37,7 @@ class _MyDocAppointmentHistoryScreenState
   Widget build(BuildContext context) {
     final item =
         Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
-    item.getSchedule(context: context, idUser: idUser ?? "");
+    item.getSchedule(context: context, idUser: idUser ?? "", idDoctor: widget.id ?? 1);
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -92,7 +93,7 @@ class _MyDocAppointmentHistoryScreenState
             elevation: 0,
             child: ExpansionTile(
               title: Text(
-                '${item.schedule?[index].doctorName}',
+                '${item.schedule?[index].myDoc?.name}',
                 style: regularStyle,
               ),
               subtitle: Text(
@@ -108,8 +109,8 @@ class _MyDocAppointmentHistoryScreenState
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
-                      imageUrl:
-                          item.schedule?[index].thumbnail ?? imgPlaceHolder,
+                      imageUrl: item.schedule?[index].myDoc?.thumbnail ??
+                          imgPlaceHolder,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
@@ -128,15 +129,15 @@ class _MyDocAppointmentHistoryScreenState
               ),
               children: [
                 Text(
-                  'Rumah Sakit : ${item.schedule?[index].hospital}',
+                  'Rumah Sakit : ${item.schedule?[index].myDoc?.hospital}',
                   style: regularStyle,
                 ),
                 Text(
-                  'Spesialis : ${item.schedule?[index].specialist}',
+                  'Spesialis : ${item.schedule?[index].myDoc?.specialist}',
                   style: regularStyle,
                 ),
                 Text(
-                  'Tipe Temu-Janji : ${item.schedule?[index].mediaType}',
+                  'Tipe Temu-Janji : ${item.schedule?[index].media}',
                   style: regularStyle,
                 ),
                 Row(
@@ -156,12 +157,9 @@ class _MyDocAppointmentHistoryScreenState
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                             backgroundColor: greenColor),
-                        child:
-                            Text(item.schedule?[index].mediaType == "Video Call"
-                                ? "Video Call"
-                                : item.schedule?[index].mediaType == "Chat"
-                                    ? "Chat Sekarang"
-                                    : "Temui di Lokasi"))
+                        child: Text(item.schedule?[index].media == "Video Call"
+                            ? "Video Call"
+                            : "Temui di Lokasi"))
                   ],
                 )
               ],

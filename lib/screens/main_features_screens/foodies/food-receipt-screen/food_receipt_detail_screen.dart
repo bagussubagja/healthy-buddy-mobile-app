@@ -85,15 +85,6 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
                   color: blackColor,
                 ),
               ),
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.more_horiz_rounded,
-                    color: blackColor,
-                  ),
-                )
-              ],
             ),
             body: SafeArea(
               child: Padding(

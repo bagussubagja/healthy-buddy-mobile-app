@@ -362,6 +362,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                       thumbnail: widget.myDocModel?.thumbnail ??
                           widget.myDoc?.thumbnail,
                       price: widget.myDocModel?.price ?? widget.myDoc?.price,
+                      idDoctor: widget.myDocModel?.id ?? widget.myDoc?.id,
                     );
                   },
                 ));

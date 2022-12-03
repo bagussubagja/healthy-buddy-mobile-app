@@ -75,10 +75,10 @@ class MyDocByExperienceClass extends ChangeNotifier {
 class MyDocScheduleAppointmentClass extends ChangeNotifier {
   List<AppointmentScheduleModel>? schedule;
   bool isloading = false;
-  getSchedule({required BuildContext context, required String idUser}) async {
+  getSchedule({required BuildContext context, required String idUser, required int idDoctor}) async {
     isloading = true;
     schedule = (await getAppointmentScheduleByUserID(
-        context: context, idUser: idUser));
+        context: context, idUser: idUser,idDoctor: idDoctor));
     isloading = false;
     notifyListeners();
   }

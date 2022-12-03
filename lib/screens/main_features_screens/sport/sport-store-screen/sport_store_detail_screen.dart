@@ -209,7 +209,7 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
         Text(
           widget.sportStoreModel?.description ??
               widget.sportStore!.description!,
-          style: regularStyle.copyWith(color: blackColor),
+          style: regularStyle.copyWith(color: greyTextColor),
         )
       ],
     );

@@ -24,16 +24,17 @@ class AppointmentConfirmationScreen extends StatefulWidget {
   String? specialist;
   String? thumbnail;
   int? price;
-  AppointmentConfirmationScreen({
-    super.key,
-    this.name,
-    this.doctorName,
-    this.dateAppointment,
-    this.hospital,
-    this.specialist,
-    this.thumbnail,
-    this.price,
-  });
+  int? idDoctor;
+  AppointmentConfirmationScreen(
+      {super.key,
+      this.name,
+      this.doctorName,
+      this.dateAppointment,
+      this.hospital,
+      this.specialist,
+      this.thumbnail,
+      this.price,
+      this.idDoctor});
 
   @override
   State<AppointmentConfirmationScreen> createState() =>
@@ -212,21 +213,14 @@ class _AppointmentConfirmationScreenState
               if (_expectedBalance! < 0) {
                 _showFailedTransaction();
               } else {
+                print('object');
                 AppointmentScheduleModel scheduleModel =
                     AppointmentScheduleModel(
-                  dateAppointment: _formattedDateAppointment,
-                  doctorName: widget.doctorName,
-                  hospital: widget.hospital,
-                  idUser: idUser,
-                  mediaType: _currentIndex == 0
-                      ? "Ditempat"
-                      : _currentIndex == 1
-                          ? "Chat"
-                          : "Video Call",
-                  specialist: widget.specialist,
-                  name: widget.name,
-                  thumbnail: widget.thumbnail,
-                );
+                        dateAppointment: _formattedDateAppointment,
+                        idUser: idUser,
+                        media: _currentIndex == 0 ? "Ditempat" : "Video Call",
+                        idDoctor: widget.idDoctor,
+                        idSchedule: "adadad");
                 final item = Provider.of<MyDocScheduleAppointmentClass>(context,
                     listen: false);
                 final balance =
