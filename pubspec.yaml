@@ -31,6 +31,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -54,10 +56,20 @@ dependencies:
   animated_image_list: ^1.0.0
   indonesia: ^2.0.0
   count_stepper: ^0.0.4
+  supabase: ^0.3.6
+  cache_manager: ^1.0.0+4
+  awesome_dialog: ^3.0.2
+  intl: ^0.17.0
 
 dev_dependencies:
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logos/logo_app.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -83,6 +95,7 @@ flutter:
     - assets/fonts/
     - assets/svg/
     - assets/lotties/
+    - assets/images/logos/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

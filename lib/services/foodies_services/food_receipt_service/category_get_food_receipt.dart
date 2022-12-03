@@ -18,11 +18,7 @@ Future<List<FoodReceiptModel>?> getFoodReceiptByCategory(
       return foodReceiptModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+    debugPrint(e.toString());
   }
   return [];
 }

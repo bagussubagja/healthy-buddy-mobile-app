@@ -50,14 +50,6 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_horiz_rounded,
-                color: blackColor,
-              ))
-        ],
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -110,7 +102,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
   Widget _recommendedFoodCard() {
     final item = Provider.of<FoodReceiptClass>(context);
     return SizedBox(
-      height: 40.h,
+      height: 37.h,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
@@ -362,24 +354,26 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                             ? Text(
                                 '${itemByBreakfast.receiptModelCategory?[index].description.substring(0, 100)}..',
                                 style: regularStyle.copyWith(
-                                    fontSize: 10.sp, color: blackColor),
+                                    fontSize: 10.sp, color: greyTextColor),
                               )
                             : _currentIndex == 1
                                 ? Text(
                                     '${itemByLunch.receiptModelCategory?[index].description.substring(0, 100)}..',
                                     style: regularStyle.copyWith(
-                                        fontSize: 10.sp, color: blackColor),
+                                        fontSize: 10.sp, color: greyTextColor),
                                   )
                                 : _currentIndex == 2
                                     ? Text(
                                         '${itemByDinner.receiptModelCategory?[index].description.substring(0, 100)}..',
                                         style: regularStyle.copyWith(
-                                            fontSize: 10.sp, color: blackColor),
+                                            fontSize: 10.sp,
+                                            color: greyTextColor),
                                       )
                                     : Text(
                                         '${itemByDrink.receiptModelCategory?[index].description.substring(0, 100)}..',
                                         style: regularStyle.copyWith(
-                                            fontSize: 10.sp, color: blackColor),
+                                            fontSize: 10.sp,
+                                            color: greyTextColor),
                                       ),
                         MarginHeight(height: 5),
                         Row(

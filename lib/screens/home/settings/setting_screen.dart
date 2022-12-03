@@ -1,10 +1,15 @@
+import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../../shared/assets_directory.dart';
 
 class SettingScreen extends StatefulWidget {
   SettingScreen({super.key});
@@ -42,10 +47,6 @@ class _SettingScreenState extends State<SettingScreen> {
             children: [
               _topSection(),
               MarginHeight(height: 6.h),
-              _userInformation(),
-              MarginHeight(height: 3.h),
-              _darkModeOption(),
-              MarginHeight(height: 3.h),
               _menuSetting()
             ],
           ),
@@ -59,82 +60,13 @@ class _SettingScreenState extends State<SettingScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Setting',
+          'Pengaturan',
           style: titleStyle.copyWith(color: greenColor),
         ),
         Text(
           'Healthy Buddy - Selalu disampingmu',
           style: regularStyle.copyWith(color: greyTextColor),
         )
-      ],
-    );
-  }
-
-  Widget _userInformation() {
-    return Column(
-      children: [
-        UnconstrainedBox(
-          child: SizedBox(
-            height: 30.h,
-            width: 60.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(1000),
-              child: Image.asset(
-                'assets/images/avatar-demo.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-        MarginHeight(height: 3.h),
-        Text(
-          'Bagus Subagja',
-          textAlign: TextAlign.center,
-          style: titleStyle.copyWith(color: greyTextColor),
-        ),
-        Text(
-          'Saldo Kamu : ${rupiah(100000)}',
-          textAlign: TextAlign.center,
-          style: regularStyle.copyWith(color: greyTextColor),
-        ),
-      ],
-    );
-  }
-
-  Widget _darkModeOption() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Container(
-              height: 7.h,
-              width: 7.h,
-              decoration: BoxDecoration(
-                color: greenColor.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(100),
-                border: Border.all(color: greenColor),
-              ),
-              child: Icon(
-                Icons.dark_mode_outlined,
-                color: greenColor,
-              ),
-            ),
-            MarginWidth(width: 5.w),
-            Text(
-              'Dark Mode',
-              style: regularStyle,
-            )
-          ],
-        ),
-        Switch(
-            activeColor: greenColor,
-            value: _isSelected,
-            onChanged: (value) {
-              setState(() {
-                _isSelected = value;
-              });
-            })
       ],
     );
   }
@@ -153,6 +85,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 Navigator.pushNamed(context, AppRoutes.aboutUsScreen);
               } else if (index == 2) {
                 Navigator.pushNamed(context, AppRoutes.helpCenterScreen);
+              } else if (index == 3) {
+                Navigator.pushNamed(context, AppRoutes.purchaseHistoryScreen);
               }
             },
             child: Row(

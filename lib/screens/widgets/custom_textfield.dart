@@ -8,8 +8,10 @@ class CustomTextField extends StatelessWidget {
   String? hintText;
   Color? color;
   TextEditingController? controller;
+  bool? autofocus;
   Widget? widget;
   Widget? suffixIcon;
+  int? maxLength;
   Widget? prefixIcon;
   Function()? onTap;
   Function(String)? onChanged;
@@ -23,7 +25,9 @@ class CustomTextField extends StatelessWidget {
       this.titleText,
       this.hintText,
       this.controller,
+      this.autofocus,
       this.widget,
+      this.maxLength,
       this.onTap,
       this.prefixIcon,
       this.suffixIcon,
@@ -60,10 +64,13 @@ class CustomTextField extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  autofocus: autofocus ?? false,
+                  maxLength: maxLength,
                   onChanged: onChanged,
                   style: readOnly == true
-                      ? regularStyle.copyWith(color: Colors.grey, fontSize: 16)
-                      : regularStyle.copyWith(color: Colors.grey, fontSize: 16),
+                      ? regularStyle.copyWith(color: greenColor, fontSize: 16)
+                      : regularStyle.copyWith(
+                          color: greyTextColor, fontSize: 16),
                   cursorColor: greenColor,
                   keyboardType: textInputType,
                   obscureText: obscureText ?? false,
@@ -73,6 +80,7 @@ class CustomTextField extends StatelessWidget {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     suffixIcon: suffixIcon,
+                    counterText: "",
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 1, color: greenColor)),
                     prefixIcon: prefixIcon,

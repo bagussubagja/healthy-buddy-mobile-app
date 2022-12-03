@@ -1,15 +1,22 @@
+import 'package:healthy_buddy_mobile_app/core/authentication/auth_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/purchase_history/purchase_history_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/sport/sport_website_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import '../core/extras/carousel_item_notifier.dart';
+import '../core/favorites/favorites_notifier.dart';
+import '../core/wishlist/sport_wishlist_notifier.dart';
 
 class ProviderList {
   static List<SingleChildWidget> providers = [
@@ -80,6 +87,21 @@ class ProviderList {
       create: (_) => SportStoreSwimmingClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => SportWebsiteFootballClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteRacingClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteBadmintonClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteBasketClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWebsiteOtherClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => MyDocByPulmonologyClass(),
     ),
     ChangeNotifierProvider(
@@ -95,6 +117,9 @@ class ProviderList {
       create: (_) => MyDocByExperienceClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => MyDocAllClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => MyDocByPulmonologyClass(),
     ),
     ChangeNotifierProvider(
@@ -105,6 +130,51 @@ class ProviderList {
     ),
     ChangeNotifierProvider(
       create: (_) => MyDocByHepatologyClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => MyDocScheduleAppointmentClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => AuthenticationNotifier(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => RegisterDataClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserUpdateNameClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserUpdateAddressClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserUpdateSelfDataClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserTopUpClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => UserDiscountClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => FoodiesWishlistClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => SportWishlistClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => PurchaseHistoryClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => PurchaseHistoryClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => PurchaseHistoryClass(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => FavoriteClass(),
     ),
   ];
 }

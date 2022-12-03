@@ -7,6 +7,8 @@ import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dar
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_main_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_exercise_screen/sport_exercise_screen.dart';
+
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -16,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extras/carousel_item_notifier.dart';
 import '../../../shared/assets_directory.dart';
+import '../../widgets/loading_widget.dart';
 
 class SportScreen extends StatefulWidget {
   const SportScreen({super.key});
@@ -26,9 +29,7 @@ class SportScreen extends StatefulWidget {
 
 class _SportScreenState extends State<SportScreen> {
   bool _isLoading = true;
-  final String _placeHolder =
-      'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
-  void loadingCompleted() {
+  void showContent() {
     if (mounted) {
       setState(() {
         _isLoading = false;
@@ -36,15 +37,20 @@ class _SportScreenState extends State<SportScreen> {
     }
   }
 
+  final String _placeHolder =
+      'https://i.ytimg.com/vi/uBBDMqZKagY/sddefault.jpg';
+
   final List<String> _iconImage = [
     "sport-article.png",
     "sport-pedia.png",
-    "sport-store.png"
+    "sport-store.png",
+    "sport-exercise.png"
   ];
   final List<String> _iconLabel = [
     "Sport Article",
     "Sport Website",
     "Sport Store",
+    "Sport Exercise"
   ];
   final List<String> _exerciseLevel = ["Easy", "Medium", "Hard"];
   List<bool> _selectedToogle = [true, false, false];
@@ -67,7 +73,7 @@ class _SportScreenState extends State<SportScreen> {
     final hardExercise =
         Provider.of<SportExerciseHardClass>(context, listen: false);
     hardExercise.getSport(context: context, category: 'Hard');
-    Timer(const Duration(seconds: 5), loadingCompleted);
+    Timer(const Duration(seconds: 2), showContent);
   }
 
   @override
@@ -86,21 +92,13 @@ class _SportScreenState extends State<SportScreen> {
             color: blackColor,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_horiz_rounded,
-                color: blackColor,
-              ))
-        ],
       ),
-      body: _isLoading == true
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: Padding(
+      body: SafeArea(
+        child: _isLoading
+            ? LoadingWidget(
+                color: greenColor,
+              )
+            : Padding(
                 padding: defaultPadding,
                 child: ListView(
                   children: [
@@ -116,7 +114,7 @@ class _SportScreenState extends State<SportScreen> {
                   ],
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -193,9 +191,16 @@ class _SportScreenState extends State<SportScreen> {
                           style: regularStyle.copyWith(color: whiteColor),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            final url = Uri.parse(itemCarousel
+                                .carousel![0].link[index]
+                                .toString());
+                            if (await canLaunchUrl(url)) {
+                              await launchUrl(url);
+                            }
+                          },
                           child: Text(
-                            "Read More",
+                            "Baca Selengkapnya",
                             style: regularStyle.copyWith(
                                 color: greyTextColor, fontSize: 13),
                           ),
@@ -242,7 +247,18 @@ class _SportScreenState extends State<SportScreen> {
                     } else if (index == 1) {
                       Navigator.pushNamed(context, AppRoutes.sportWebsite);
                     } else if (index == 2) {
-                      Navigator.pushNamed(context, AppRoutes.sportStore);
+                      // Navigator.pushNamed(context, AppRoutes.sportStore);
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return SportStoreMainScreen();
+                        },
+                      ));
+                    } else if (index == 3) {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return SportExerciseScreen();
+                        },
+                      ));
                     }
                   },
                   child: Container(
@@ -456,7 +472,7 @@ class _SportScreenState extends State<SportScreen> {
                                     }
                                   },
                                   child: Text(
-                                    'Try it!',
+                                    'Coba Sekarang!',
                                     style: regularStyle,
                                   ),
                                 ),
@@ -492,7 +508,7 @@ class _SportScreenState extends State<SportScreen> {
                                         }
                                       },
                                       child: Text(
-                                        'Try it!',
+                                        'Coba Sekarang!',
                                         style: regularStyle,
                                       ),
                                     ),
@@ -526,7 +542,7 @@ class _SportScreenState extends State<SportScreen> {
                                         }
                                       },
                                       child: Text(
-                                        'Try it!',
+                                        'Coba Sekarang!',
                                         style: regularStyle,
                                       ),
                                     ),

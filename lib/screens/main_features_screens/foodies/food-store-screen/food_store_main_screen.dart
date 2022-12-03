@@ -2,10 +2,16 @@ import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:badges/badges.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
+import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
+import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/home/wishslist/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
@@ -14,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/foodies/food_receipt_notifier.dart';
+import '../../../../core/wishlist/sport_wishlist_notifier.dart';
 import '../../../widgets/margin_width.dart';
 import '../food-receipt-screen/food_receipt_detail_screen.dart';
 
@@ -35,14 +42,22 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     }
   }
 
+  String? idUser;
+
   List<bool> _selectedToogle = [true, false, false, false];
 
   List<String> _foodStoreCategory = ["Buah", "Sayuran", "Instan", "Minuman"];
 
   int _currentIndex = 0;
+
+  int _cartLength = 0;
+  int _cartItemQuantity = 0;
+  int? _foodQuantity;
+  int? _sportQuantity;
   @override
   void initState() {
     super.initState();
+
     final itemBuah = Provider.of<FoodStoreByBuahClass>(context, listen: false);
     itemBuah.getBuah(context: context, category: 'Buah');
     final itemSayuran =
@@ -54,19 +69,45 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     final itemMinuman =
         Provider.of<FoodStoreByMinumanClass>(context, listen: false);
     itemMinuman.getMinuman(context: context, category: 'Minuman');
+
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+      });
+    });
+
     Timer(const Duration(seconds: 2), showContent);
   }
 
   @override
   Widget build(BuildContext context) {
+    final itemFoodies =
+        Provider.of<FoodiesWishlistClass>(context, listen: false);
+    itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
+    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
+    itemSport.getWishlist(context: context, idUser: idUser ?? "");
+    _foodQuantity = itemFoodies.wishlistFoodies?.length;
+    _sportQuantity = itemSport.wishlistSport?.length;
+    if (itemFoodies.wishlistFoodies?.length != null &&
+        itemSport.wishlistSport?.length != null) {
+      setState(() {
+        _cartItemQuantity = _foodQuantity! + _sportQuantity!;
+      });
+    }
     return Scaffold(
       floatingActionButton: Badge(
         badgeContent: Text(
-          _currentIndex.toString(),
+          _cartItemQuantity.toString(),
           style: regularStyle.copyWith(color: whiteColor),
         ),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return WishlistScreen();
+              },
+            ));
+          },
           backgroundColor: greenColor,
           child: Icon(
             Icons.shopping_cart_outlined,
@@ -86,20 +127,6 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
             color: blackColor,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  _isGridViewItemList = !_isGridViewItemList;
-                });
-              },
-              icon: Icon(
-                !_isGridViewItemList
-                    ? Icons.grid_view_rounded
-                    : Icons.list_rounded,
-                color: blackColor,
-              ))
-        ],
       ),
       backgroundColor: bgColor,
       body: SafeArea(
@@ -135,9 +162,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                 ),
                 _foodStoreToogleButton(),
                 MarginHeight(height: 2.h),
-                _isGridViewItemList
-                    ? _gridViewItemList(_currentIndex)
-                    : _listViewItemList(_currentIndex)
+                _listViewItemList(_currentIndex)
                 // _gridViewItemList()
               ],
             ),
@@ -196,7 +221,12 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                       backgroundColor: whiteColor,
                       elevation: 0,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      UserModel getDiscount = UserModel(hasDiscount: true);
+                      var provider = Provider.of<UserDiscountClass>(context,
+                          listen: false);
+                      await provider.updateStatus(
+                          getDiscount, idUser!, context);
                       final snackBar = SnackBar(
                         elevation: 0,
                         behavior: SnackBarBehavior.floating,
@@ -278,175 +308,175 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     );
   }
 
-  Widget _gridViewItemList(int currentIndex) {
-    final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
-    final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
-    final itemByInstan = Provider.of<FoodStoreByInstanClass>(context);
-    final itemByMinuman = Provider.of<FoodStoreByMinumanClass>(context);
-    int itemCount(int x) {
-      if (x == 0) {
-        return itemByBuah.foodStoreModel?.length ?? 0;
-      } else if (x == 1) {
-        return itemBySayuran.foodStoreModel?.length ?? 0;
-      } else if (x == 2) {
-        return itemByInstan.foodStoreModel?.length ?? 0;
-      } else if (x == 3) {
-        return itemByMinuman.foodStoreModel?.length ?? 0;
-      } else {
-        return 0;
-      }
-    }
+  // Widget _gridViewItemList(int currentIndex) {
+  //   final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
+  //   final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
+  //   final itemByInstan = Provider.of<FoodStoreByInstanClass>(context);
+  //   final itemByMinuman = Provider.of<FoodStoreByMinumanClass>(context);
+  //   int itemCount(int x) {
+  //     if (x == 0) {
+  //       return itemByBuah.foodStoreModel?.length ?? 0;
+  //     } else if (x == 1) {
+  //       return itemBySayuran.foodStoreModel?.length ?? 0;
+  //     } else if (x == 2) {
+  //       return itemByInstan.foodStoreModel?.length ?? 0;
+  //     } else if (x == 3) {
+  //       return itemByMinuman.foodStoreModel?.length ?? 0;
+  //     } else {
+  //       return 0;
+  //     }
+  //   }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      primary: false,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 43.h,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20),
-      itemCount: itemCount(_currentIndex),
-      itemBuilder: (BuildContext ctx, index) {
-        return GestureDetector(
-          onTap: () {
-            if (_currentIndex == 0) {
-              final itemBuah = itemByBuah.foodStoreModel?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return FoodStoreDetailScreen(
-                    foodStoreModel: itemBuah,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 1) {
-              final itemSayuran = itemBySayuran.foodStoreModel?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return FoodStoreDetailScreen(
-                    foodStoreModel: itemSayuran,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 2) {
-              final itemInstan = itemByInstan.foodStoreModel?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return FoodStoreDetailScreen(
-                    foodStoreModel: itemInstan,
-                  );
-                },
-              ));
-            } else if (_currentIndex == 3) {
-              final itemMinuman = itemByMinuman.foodStoreModel?[index];
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return FoodStoreDetailScreen(
-                    foodStoreModel: itemMinuman,
-                  );
-                },
-              ));
-            }
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  _currentIndex == 0
-                      ? CachedNetworkImage(
-                          imageUrl:
-                              itemByBuah.foodStoreModel?[index].gallery[0] ??
-                                  imgPlaceHolder,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => const Center(
-                            child: Icon(Icons.error),
-                          ),
-                        )
-                      : _currentIndex == 1
-                          ? CachedNetworkImage(
-                              imageUrl: itemBySayuran
-                                      .foodStoreModel?[index].gallery[0] ??
-                                  imgPlaceHolder,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Center(
-                                child: Icon(Icons.error),
-                              ),
-                            )
-                          : _currentIndex == 2
-                              ? CachedNetworkImage(
-                                  imageUrl: itemByInstan
-                                          .foodStoreModel?[index].gallery[0] ??
-                                      imgPlaceHolder,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Icon(Icons.error),
-                                  ),
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl: itemByMinuman
-                                          .foodStoreModel?[index].gallery[0] ??
-                                      imgPlaceHolder,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Icon(Icons.error),
-                                  ),
-                                )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  //   return GridView.builder(
+  //     shrinkWrap: true,
+  //     primary: false,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+  //         maxCrossAxisExtent: 43.h,
+  //         childAspectRatio: 3 / 2,
+  //         crossAxisSpacing: 20,
+  //         mainAxisSpacing: 20),
+  //     itemCount: itemCount(_currentIndex),
+  //     itemBuilder: (BuildContext ctx, index) {
+  //       return GestureDetector(
+  //         onTap: () {
+  //           if (_currentIndex == 0) {
+  //             final itemBuah = itemByBuah.foodStoreModel?[index];
+  //             Navigator.push(context, MaterialPageRoute(
+  //               builder: (context) {
+  //                 return FoodStoreDetailScreen(
+  //                   foodStoreModel: itemBuah,
+  //                 );
+  //               },
+  //             ));
+  //           } else if (_currentIndex == 1) {
+  //             final itemSayuran = itemBySayuran.foodStoreModel?[index];
+  //             Navigator.push(context, MaterialPageRoute(
+  //               builder: (context) {
+  //                 return FoodStoreDetailScreen(
+  //                   foodStoreModel: itemSayuran,
+  //                 );
+  //               },
+  //             ));
+  //           } else if (_currentIndex == 2) {
+  //             final itemInstan = itemByInstan.foodStoreModel?[index];
+  //             Navigator.push(context, MaterialPageRoute(
+  //               builder: (context) {
+  //                 return FoodStoreDetailScreen(
+  //                   foodStoreModel: itemInstan,
+  //                 );
+  //               },
+  //             ));
+  //           } else if (_currentIndex == 3) {
+  //             final itemMinuman = itemByMinuman.foodStoreModel?[index];
+  //             Navigator.push(context, MaterialPageRoute(
+  //               builder: (context) {
+  //                 return FoodStoreDetailScreen(
+  //                   foodStoreModel: itemMinuman,
+  //                 );
+  //               },
+  //             ));
+  //           }
+  //         },
+  //         child: ClipRRect(
+  //           borderRadius: BorderRadius.circular(12),
+  //           child: SizedBox(
+  //             child: Stack(
+  //               alignment: Alignment.bottomCenter,
+  //               children: [
+  //                 _currentIndex == 0
+  //                     ? CachedNetworkImage(
+  //                         imageUrl:
+  //                             itemByBuah.foodStoreModel?[index].gallery[0] ??
+  //                                 imgPlaceHolder,
+  //                         imageBuilder: (context, imageProvider) => Container(
+  //                           decoration: BoxDecoration(
+  //                             image: DecorationImage(
+  //                               image: imageProvider,
+  //                               fit: BoxFit.cover,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         placeholder: (context, url) => const Center(
+  //                           child: CircularProgressIndicator(),
+  //                         ),
+  //                         errorWidget: (context, url, error) => const Center(
+  //                           child: Icon(Icons.error),
+  //                         ),
+  //                       )
+  //                     : _currentIndex == 1
+  //                         ? CachedNetworkImage(
+  //                             imageUrl: itemBySayuran
+  //                                     .foodStoreModel?[index].gallery[0] ??
+  //                                 imgPlaceHolder,
+  //                             imageBuilder: (context, imageProvider) =>
+  //                                 Container(
+  //                               decoration: BoxDecoration(
+  //                                 image: DecorationImage(
+  //                                   image: imageProvider,
+  //                                   fit: BoxFit.cover,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             placeholder: (context, url) => const Center(
+  //                               child: CircularProgressIndicator(),
+  //                             ),
+  //                             errorWidget: (context, url, error) =>
+  //                                 const Center(
+  //                               child: Icon(Icons.error),
+  //                             ),
+  //                           )
+  //                         : _currentIndex == 2
+  //                             ? CachedNetworkImage(
+  //                                 imageUrl: itemByInstan
+  //                                         .foodStoreModel?[index].gallery[0] ??
+  //                                     imgPlaceHolder,
+  //                                 imageBuilder: (context, imageProvider) =>
+  //                                     Container(
+  //                                   decoration: BoxDecoration(
+  //                                     image: DecorationImage(
+  //                                       image: imageProvider,
+  //                                       fit: BoxFit.cover,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 placeholder: (context, url) => const Center(
+  //                                   child: CircularProgressIndicator(),
+  //                                 ),
+  //                                 errorWidget: (context, url, error) =>
+  //                                     const Center(
+  //                                   child: Icon(Icons.error),
+  //                                 ),
+  //                               )
+  //                             : CachedNetworkImage(
+  //                                 imageUrl: itemByMinuman
+  //                                         .foodStoreModel?[index].gallery[0] ??
+  //                                     imgPlaceHolder,
+  //                                 imageBuilder: (context, imageProvider) =>
+  //                                     Container(
+  //                                   decoration: BoxDecoration(
+  //                                     image: DecorationImage(
+  //                                       image: imageProvider,
+  //                                       fit: BoxFit.cover,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 placeholder: (context, url) => const Center(
+  //                                   child: CircularProgressIndicator(),
+  //                                 ),
+  //                                 errorWidget: (context, url, error) =>
+  //                                     const Center(
+  //                                   child: Icon(Icons.error),
+  //                                 ),
+  //                               )
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _listViewItemList(int currentIndex) {
     final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
@@ -475,8 +505,13 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
             onTap: () {
               if (_currentIndex == 0) {
                 final itemBuah = itemByBuah.foodStoreModel?[index];
-                Navigator.pushNamed(context, AppRoutes.foodStoreDetailScreen,
-                    arguments: itemBuah);
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return FoodStoreDetailScreen(
+                      foodStoreModel: itemBuah,
+                    );
+                  },
+                ));
               } else if (_currentIndex == 1) {
                 final itemSayuran = itemBySayuran.foodStoreModel?[index];
                 Navigator.push(context, MaterialPageRoute(
@@ -657,24 +692,26 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                             ? Text(
                                 '${itemByBuah.foodStoreModel?[index].description.substring(0, 100)}..',
                                 style: regularStyle.copyWith(
-                                    fontSize: 10.sp, color: blackColor),
+                                    fontSize: 10.sp, color: greyTextColor),
                               )
                             : _currentIndex == 1
                                 ? Text(
                                     '${itemBySayuran.foodStoreModel?[index].description.substring(0, 100)}..',
                                     style: regularStyle.copyWith(
-                                        fontSize: 10.sp, color: blackColor),
+                                        fontSize: 10.sp, color: greyTextColor),
                                   )
                                 : _currentIndex == 2
                                     ? Text(
                                         '${itemByInstan.foodStoreModel?[index].description.substring(0, 100)}..',
                                         style: regularStyle.copyWith(
-                                            fontSize: 10.sp, color: blackColor),
+                                            fontSize: 10.sp,
+                                            color: greyTextColor),
                                       )
                                     : Text(
                                         '${itemByMinuman.foodStoreModel?[index].description.substring(0, 100)}..',
                                         style: regularStyle.copyWith(
-                                            fontSize: 10.sp, color: blackColor),
+                                            fontSize: 10.sp,
+                                            color: greyTextColor),
                                       ),
                         MarginHeight(height: 5),
                         Row(
@@ -711,13 +748,10 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                                               )
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Icon(
-                                Icons.shopping_cart_outlined,
-                                color: greyTextColor,
-                              ),
-                            ),
+                            Icon(
+                              Icons.arrow_right_alt_rounded,
+                              color: greyTextColor,
+                            )
                           ],
                         )
                       ],
@@ -730,156 +764,6 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
         },
         separatorBuilder: (context, index) {
           return MarginHeight(height: 2.5.h);
-        },
-        itemCount: itemCount(_currentIndex));
-  }
-
-  Widget _itemList(int currentIndex) {
-    final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
-    final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
-    final itemByInstan = Provider.of<FoodStoreByInstanClass>(context);
-    final itemByMinuman = Provider.of<FoodStoreByMinumanClass>(context);
-    int itemCount(int x) {
-      if (x == 0) {
-        return itemByBuah.foodStoreModel?.length ?? 0;
-      } else if (x == 1) {
-        return itemBySayuran.foodStoreModel?.length ?? 0;
-      } else if (x == 2) {
-        return itemByInstan.foodStoreModel?.length ?? 0;
-      } else if (x == 3) {
-        return itemByMinuman.foodStoreModel?.length ?? 0;
-      } else {
-        return 0;
-      }
-    }
-
-    return GridView.builder(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 50.h,
-            childAspectRatio: 1.1 / 1,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20),
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.foodStoreDetailScreen);
-            },
-            child: Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _currentIndex == 0
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            itemByBuah.foodStoreModel?[index].gallery[0] ??
-                                imgPlaceHolder,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : _currentIndex == 1
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                itemBySayuran
-                                        .foodStoreModel?[index].gallery[0] ??
-                                    imgPlaceHolder,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : _currentIndex == 2
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    itemByInstan.foodStoreModel?[index]
-                                            .gallery[0] ??
-                                        imgPlaceHolder,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    itemByMinuman.foodStoreModel?[index]
-                                            .gallery[0] ??
-                                        imgPlaceHolder,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                  MarginHeight(height: 0.5.h),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _currentIndex == 0
-                            ? Text(
-                                '${itemByBuah.foodStoreModel?[index].name}...',
-                                style: regularStyle.copyWith(color: blackColor),
-                              )
-                            : _currentIndex == 1
-                                ? Text(
-                                    '${itemBySayuran.foodStoreModel?[index].name}...',
-                                    style: regularStyle.copyWith(
-                                        color: blackColor),
-                                  )
-                                : _currentIndex == 2
-                                    ? Text(
-                                        '${itemByInstan.foodStoreModel?[index].name}...',
-                                        style: regularStyle.copyWith(
-                                            color: blackColor),
-                                      )
-                                    : Text(
-                                        '${itemByMinuman.foodStoreModel?[index].name}...',
-                                        style: regularStyle.copyWith(
-                                            color: blackColor),
-                                      ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _currentIndex == 0
-                                ? Text(
-                                    'Rp ${itemByBuah.foodStoreModel?[index].price}',
-                                    style: regularStyle,
-                                  )
-                                : _currentIndex == 1
-                                    ? Text(
-                                        'Rp ${itemBySayuran.foodStoreModel?[index].price}',
-                                        style: regularStyle,
-                                      )
-                                    : _currentIndex == 2
-                                        ? Text(
-                                            'Rp ${itemByInstan.foodStoreModel?[index].price}',
-                                            style: regularStyle,
-                                          )
-                                        : Text(
-                                            'Rp ${itemByMinuman.foodStoreModel?[index].price}',
-                                            style: regularStyle,
-                                          ),
-                            Icon(
-                              Icons.shopping_cart_outlined,
-                              color: blackColor,
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
         },
         itemCount: itemCount(_currentIndex));
   }

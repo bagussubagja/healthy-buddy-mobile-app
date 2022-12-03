@@ -1,8 +1,17 @@
+import 'package:cache_manager/cache_manager.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:healthy_buddy_mobile_app/core/favorites/favorites_notifier.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
+import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/margin_width.dart';
 
@@ -15,10 +24,35 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   int _currentIndex = 0;
-  List<bool> _selectedToogle = [true, false, false, false];
-  List<String> _categoryLabel = ["All", "Foodies", "MyDoc", "Sport"];
+  String? idUser;
+  List<bool> _selectedToogle = [true, false, false];
+  List<String> _categoryLabel = [
+    "Foodies",
+    "Sport",
+    "MyDoc",
+  ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final item = Provider.of<FavoriteClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+        item.getFavFood(context: context, idUser: value);
+        item.getFavMyDoc(context: context, idUser: value);
+        item.getFavSport(context: context, idUser: value);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final item = Provider.of<FavoriteClass>(context);
+    item.getFavFood(context: context, idUser: idUser ?? "");
+    item.getFavMyDoc(context: context, idUser: idUser ?? "");
+    item.getFavSport(context: context, idUser: idUser ?? "");
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(
@@ -46,7 +80,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           style: titleStyle.copyWith(color: greenColor),
         ),
         Text(
-          'Healthy Buddy - Always by your side!',
+          'Healthy Buddy - Item kesukaanmu ada disini!',
           style: regularStyle.copyWith(color: greyTextColor),
         ),
         Container(
@@ -107,14 +141,34 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               );
             },
             separatorBuilder: (context, index) {
-              return MarginWidth(width: 3.w);
+              return MarginWidth(width: 6.w);
             },
-            itemCount: 4),
+            itemCount: _categoryLabel.length),
       ),
     );
   }
 
   Widget _itemList() {
+    final item = Provider.of<FavoriteClass>(context);
+    int itemCount(int x) {
+      if (x == 0) {
+        return item.food?.length ?? 0;
+      } else if (x == 1) {
+        return item.sport?.length ?? 0;
+      } else if (x == 2) {
+        return item.doc?.length ?? 0;
+      } else {
+        return 0;
+      }
+    }
+
+    if (itemCount(_currentIndex) == 0) {
+      return Text(
+        'Tidak ada item Favorite yang kamu simpan disini!',
+        style: regularStyle.copyWith(color: greyTextColor),
+        textAlign: TextAlign.center,
+      );
+    }
     return ListView.separated(
       separatorBuilder: (context, index) {
         return MarginHeight(height: 2.h);
@@ -122,11 +176,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       shrinkWrap: true,
       primary: false,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 5,
+      itemCount: itemCount(_currentIndex),
       itemBuilder: (context, index) {
         return Container(
           width: double.infinity,
-          height: 15.h,
+          height: 17.h,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: Row(
@@ -138,9 +192,26 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 width: 13.h,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    'assets/images/discount-offers.jpg',
-                    fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    imageUrl: _currentIndex == 0
+                        ? '${item.food?[index].foodReceipt?.galleryPhoto?[0]}'
+                        : _currentIndex == 1
+                            ? '${item.sport?[index].sportExercise?.thumbnail}'
+                            : '${item.doc?[index].myDoc?.thumbnail}',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(Icons.error),
+                    ),
                   ),
                 ),
               ),
@@ -151,14 +222,85 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Sandwich',
-                      style: titleStyle.copyWith(fontSize: 12.sp),
+                    SizedBox(
+                      width: 55.w,
+                      child: Text(
+                        _currentIndex == 0
+                            ? '${item.food?[index].foodReceipt?.name}'
+                            : _currentIndex == 1
+                                ? '${item.sport?[index].sportExercise?.name}'
+                                : '${item.doc?[index].myDoc?.name}',
+                        style: titleStyle.copyWith(fontSize: 12.sp),
+                      ),
                     ),
-                    Text(
-                      'Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.',
-                      style: regularStyle.copyWith(
-                          color: greyTextColor, fontSize: 10.sp),
+                    SizedBox(
+                      width: 55.w,
+                      child: Text(
+                        _currentIndex == 0
+                            ? '${item.food?[index].foodReceipt?.description?.substring(0, 60)}...'
+                            : _currentIndex == 1
+                                ? '${item.sport?[index].sportExercise?.description?.substring(0, 60)}...'
+                                : '${item.doc?[index].myDoc?.description?.substring(0, 60)}...',
+                        style: regularStyle.copyWith(
+                            color: greyTextColor, fontSize: 10.sp),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            if (_currentIndex == 0) {
+                              await item.deleteFavFoodData(
+                                  id: item.food![index].id!, context: context);
+                            } else if (_currentIndex == 1) {
+                              await item.deleteFavSportData(
+                                  id: item.sport![index].id!, context: context);
+                            } else if (_currentIndex == 2) {
+                              await item.deleteFavMyDocData(
+                                  id: item.doc![index].id!, context: context);
+                            }
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            color: blackColor,
+                          ),
+                        ),
+                        MarginWidth(width: 4.h),
+                        GestureDetector(
+                          onTap: () async {
+                            if (_currentIndex == 0) {
+                              final food = item.food?[index].foodReceipt;
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return FoodReceiptDetailScreen(
+                                    foodReceipt: food,
+                                  );
+                                },
+                              ));
+                            } else if (_currentIndex == 1) {
+                              final sport = item.sport?[index].sportExercise;
+                              final url = Uri.parse(sport!.linkVideo!);
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            } else if (_currentIndex == 2) {
+                              final myDoc = item.doc?[index].myDoc;
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return MyDocDetailScreen(
+                                    myDoc: myDoc,
+                                  );
+                                },
+                              ));
+                            }
+                          },
+                          child: Icon(
+                            Icons.arrow_forward_outlined,
+                            color: blackColor,
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),

@@ -1,22 +1,33 @@
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/purchase_history/purchase_history_notifier.dart';
+import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
+import 'package:healthy_buddy_mobile_app/models/purchase_history_model/purchase_history_model.dart';
+import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_status_order_screen.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../models/foodies_model/wishlist_foodies_model.dart';
 import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
 
 class FoodStoreDetailScreen extends StatefulWidget {
   FoodStoreModel? foodStoreModel;
-  FoodStoreDetailScreen({super.key, this.foodStoreModel});
+  FoodStore? foodStore;
+  FoodStoreDetailScreen({super.key, this.foodStoreModel, this.foodStore});
 
   @override
   State<FoodStoreDetailScreen> createState() => _FoodStoreDetailScreenState();
@@ -25,7 +36,27 @@ class FoodStoreDetailScreen extends StatefulWidget {
 class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
   int _itemQuantity = 1;
   int _galleryIndex = 0;
-  int _totalPrice = 0;
+  int _price = 0;
+  double _totalPrice = 0;
+  String? idUser;
+  String? uniqueKey;
+  int _expectedBalance = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final user = Provider.of<UserClass>(context, listen: false);
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+        user.getUser(context: context, idUser: value);
+        uniqueKey =
+            "${value}_${widget.foodStoreModel?.id ?? widget.foodStore?.id}";
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +130,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                 bottomRight: Radius.circular(40)),
             child: CachedNetworkImage(
               imageUrl: widget.foodStoreModel?.gallery[_galleryIndex] ??
-                  imgPlaceHolder,
+                  widget.foodStore?.gallery?[_galleryIndex],
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -131,7 +162,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             SizedBox(
               width: 65.w,
               child: Text(
-                widget.foodStoreModel?.name ?? "Loading",
+                widget.foodStoreModel?.name ?? widget.foodStore!.name!,
                 style: titleStyle.copyWith(color: blackColor),
               ),
             ),
@@ -142,7 +173,8 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                   style: titleStyle.copyWith(color: greenColor),
                 ),
                 Text(
-                  widget.foodStoreModel?.price.toString() ?? "Loading...",
+                  widget.foodStoreModel?.price.toString() ??
+                      widget.foodStore!.price.toString(),
                   style: titleStyle.copyWith(color: blackColor),
                 )
               ],
@@ -154,7 +186,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.foodStoreModel?.category ?? "Loading",
+              widget.foodStoreModel?.category ?? widget.foodStore!.category!,
               style: regularStyle.copyWith(color: greyTextColor),
             ),
             CountStepper(
@@ -185,8 +217,9 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           style: titleStyle.copyWith(color: blackColor),
         ),
         Text(
-          widget.foodStoreModel?.description ?? "Loading",
-          style: regularStyle.copyWith(color: blackColor),
+          widget.foodStoreModel?.description ?? widget.foodStore!.description!,
+          style: regularStyle.copyWith(color: greyTextColor),
+          textAlign: TextAlign.justify,
         )
       ],
     );
@@ -219,7 +252,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
                         imageUrl: widget.foodStoreModel?.gallery[index] ??
-                            imgPlaceHolder,
+                            widget.foodStore!.gallery![index],
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -249,6 +282,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
   }
 
   Widget _buttonPayment() {
+    final itemFoodies = Provider.of<FoodiesWishlistClass>(context);
     return Positioned(
       bottom: 0,
       child: Container(
@@ -266,21 +300,14 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             OutlinedButton(
-              onPressed: () {
-                final snackBar = SnackBar(
-                  elevation: 0,
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.transparent,
-                  content: AwesomeSnackbarContent(
-                    title: 'Berhasil!',
-                    message:
-                        'Kamu berhasil menambahkan item ${widget.foodStoreModel!.name} ke keranjang!',
-                    contentType: ContentType.success,
-                  ),
-                );
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(snackBar);
+              onPressed: () async {
+                WishlistFoodiesModel body = WishlistFoodiesModel(
+                    idFoodiesStoreItem:
+                        widget.foodStoreModel?.id ?? widget.foodStore?.id,
+                    idUser: idUser,
+                    itemUniqueKey: uniqueKey);
+                await itemFoodies.addData(body, context);
+                // showCustomSnackBar();
               },
               child: Row(
                 children: [
@@ -298,9 +325,13 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _totalPrice = widget.foodStoreModel!.price * _itemQuantity;
+                  if (widget.foodStoreModel?.price == null) {
+                    _price = widget.foodStore!.price! * _itemQuantity;
+                  } else {
+                    _price = widget.foodStoreModel!.price * _itemQuantity;
+                  }
                 });
-                showModal();
+                showModalConfirmationOrder();
               },
               style: ElevatedButton.styleFrom(backgroundColor: greenColor),
               child: Row(
@@ -322,7 +353,14 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
     );
   }
 
-  Future showModal() async {
+  Future showModalConfirmationOrder() async {
+    final user = Provider.of<UserClass>(context, listen: false);
+    final userBalance = user.users?[0].balance;
+    setState(() {
+      _totalPrice = (_price - (_price * 0.15));
+      _expectedBalance = userBalance! - _totalPrice.round();
+    });
+
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -356,7 +394,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nama Item\t: ${widget.foodStoreModel!.name}',
+                    'Nama Item\t: ${widget.foodStoreModel?.name ?? widget.foodStore?.name}',
                     style: regularStyle,
                   ),
                   Text(
@@ -364,11 +402,15 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                     style: regularStyle,
                   ),
                   Text(
-                    'Diskon : 0%',
+                    user.users?[0].hasDiscount == true
+                        ? 'Diskon : 15%'
+                        : 'Diskon : 0%',
                     style: regularStyle,
                   ),
                   Text(
-                    'Total Harga : ${rupiah(_totalPrice)}',
+                    user.users?[0].hasDiscount == true
+                        ? 'Total Harga : ${rupiah(_totalPrice.round())}'
+                        : 'Total Harga : ${rupiah(_price)}',
                     style: regularStyle,
                   ),
                   Row(
@@ -376,11 +418,14 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       SizedBox(
                           width: 70.w,
                           child: Text(
-                            'Lokasi : Rancaekek, Kab Bandung.',
+                            '${user.users?[0].address}',
                             style: regularStyle,
                           )),
                       OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.accountSettingScreen);
+                          },
                           child: Text(
                             'Ubah',
                             style: regularStyle,
@@ -404,7 +449,41 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                           style: regularStyle,
                         )),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_expectedBalance < 0) {
+                            _showFailedTransaction();
+                          } else {
+                            PurchaseHistoryModel transactionItem =
+                                PurchaseHistoryModel(
+                              idUser: idUser,
+                              productName: widget.foodStore?.name ??
+                                  widget.foodStoreModel?.name,
+                              category: "Food Store",
+                              createdAt: DateTime.now().toString(),
+                              price: user.users?[0].hasDiscount == true
+                                  ? _totalPrice.round()
+                                  : _price,
+                              quantity: _itemQuantity,
+                              thumbnail: widget.foodStore?.gallery?[0] ??
+                                  widget.foodStoreModel?.gallery[0],
+                            );
+                            UserModel balance =
+                                UserModel(balance: _expectedBalance);
+                            var purchaseTransaction =
+                                Provider.of<PurchaseHistoryClass>(context,
+                                    listen: false);
+                            var updateBalance = Provider.of<UserTopUpClass>(
+                                context,
+                                listen: false);
+                            await purchaseTransaction.addFoodiesTransactionData(
+                                transactionItem, context);
+
+                            await updateBalance.updateTopUp(
+                                balance, idUser!, context);
+                            Navigator.pushNamed(
+                                context, AppRoutes.foodStoreStatusOrder);
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: greenColor),
                         child: Text(
@@ -420,5 +499,26 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
         );
       },
     );
+  }
+
+  _showFailedTransaction() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: true,
+      animType: AnimType.bottomSlide,
+      title: 'Gagal',
+      desc:
+          'Pembayaran kamu gagal karena saldo tidak cukup, kamu harus top up saldo terlebih dahulu!',
+      buttonsTextStyle: regularStyle,
+      btnCancelText: "Kembali",
+      btnOkText: "Top Up",
+      showCloseIcon: false,
+      btnOkOnPress: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, AppRoutes.topUpScreen);
+      },
+      btnCancelOnPress: () {},
+    ).show();
   }
 }

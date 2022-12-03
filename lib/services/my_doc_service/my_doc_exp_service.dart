@@ -20,11 +20,7 @@ Future<List<MyDocModel>?> getDoctorByExperience(
       return myDocModelFromJson(json);
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      e.toString(),
-      style: regularStyle,
-    )));
+  debugPrint(e.toString());
   }
   return [];
 }

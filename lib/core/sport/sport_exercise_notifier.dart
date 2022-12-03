@@ -5,9 +5,11 @@ import 'package:healthy_buddy_mobile_app/services/sport_services/sport_exercise_
 
 class SportExerciseAllClass extends ChangeNotifier {
   List<SportExerciseModel>? sportExercise;
+  bool isLoading = false;
   getSport({required BuildContext context}) async {
-    sportExercise =
-        (await getSportExerciseAllCategory(context: context));
+    isLoading = true;
+    sportExercise = (await getSportExerciseAllCategory(context: context));
+    isLoading = false;
     notifyListeners();
   }
 }
