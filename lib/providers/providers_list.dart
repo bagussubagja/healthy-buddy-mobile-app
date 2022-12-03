@@ -117,6 +117,9 @@ class ProviderList {
       create: (_) => MyDocByExperienceClass(),
     ),
     ChangeNotifierProvider(
+      create: (_) => MyDocAllClass(),
+    ),
+    ChangeNotifierProvider(
       create: (_) => MyDocByPulmonologyClass(),
     ),
     ChangeNotifierProvider(

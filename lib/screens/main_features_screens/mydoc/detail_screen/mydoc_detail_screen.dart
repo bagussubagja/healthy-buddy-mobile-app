@@ -70,7 +70,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
               child: Column(
                 children: [
                   _imageSection(context),
-                  MarginHeight(height: 9.h),
+                  MarginHeight(height: 7.h),
                   Padding(
                     padding: defaultPadding.copyWith(bottom: 8.h),
                     child: Column(
@@ -163,9 +163,9 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
           ),
         ),
         Positioned(
-          top: 320,
-          left: 20,
-          right: 20,
+          top: 37.h,
+          left: 3.h,
+          right: 3.h,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: BackdropFilter(
@@ -273,13 +273,15 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        MarginHeight(height: 1.h),
         Text(
           'Tentang Dokter',
           style: titleStyle.copyWith(color: greenColor),
         ),
+        MarginHeight(height: 1.h),
         Text(
           widget.myDocModel?.description ?? widget.myDoc!.description!,
-          style: regularStyle,
+          style: regularStyle.copyWith(color: greyTextColor),
           textAlign: TextAlign.justify,
         )
       ],

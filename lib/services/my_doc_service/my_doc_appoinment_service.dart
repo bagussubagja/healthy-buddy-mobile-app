@@ -13,10 +13,10 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
-    {required BuildContext context, required String idUser, required int idDoctor}) async {
+    {required BuildContext context, required String idUser}) async {
   var client = http.Client();
   var uri = Uri.parse(
-      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?select=*,users(*),my_doc(*)&apikey=$apiKey&id_doctor=eq.$idDoctor&media=eq.Video+Call');
+      'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?select=*,users(*),my_doc(*)&apikey=$apiKey&id_user=eq.$idUser');
   try {
     var respone =
         await client.get(uri, headers: {'Authorization': 'Bearer $bearer'});

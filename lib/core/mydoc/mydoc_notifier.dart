@@ -9,7 +9,20 @@ import 'package:healthy_buddy_mobile_app/services/my_doc_service/my_doc_appoinme
 import 'package:healthy_buddy_mobile_app/services/my_doc_service/my_doc_exp_service.dart';
 import 'package:healthy_buddy_mobile_app/services/my_doc_service/my_doc_service.dart';
 
+import '../../services/my_doc_service/my_doc_specialist_service.dart';
 import '../../shared/theme.dart';
+
+class MyDocAllClass extends ChangeNotifier {
+  List<MyDocModel>? mydocModel;
+  bool isLoading = false;
+  getDoctor({required BuildContext context}) async {
+    isLoading = true;
+    mydocModel = (await getDoctors(
+        context: context));
+    isLoading = false;
+    notifyListeners();
+  }
+}
 
 class MyDocByPulmonologyClass extends ChangeNotifier {
   List<MyDocModel>? mydocModel;
@@ -75,10 +88,10 @@ class MyDocByExperienceClass extends ChangeNotifier {
 class MyDocScheduleAppointmentClass extends ChangeNotifier {
   List<AppointmentScheduleModel>? schedule;
   bool isloading = false;
-  getSchedule({required BuildContext context, required String idUser, required int idDoctor}) async {
+  getSchedule({required BuildContext context, required String idUser}) async {
     isloading = true;
     schedule = (await getAppointmentScheduleByUserID(
-        context: context, idUser: idUser,idDoctor: idDoctor));
+        context: context, idUser: idUser));
     isloading = false;
     notifyListeners();
   }

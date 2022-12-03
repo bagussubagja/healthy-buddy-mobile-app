@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,12 @@ class AppointmentConfirmationScreen extends StatefulWidget {
 
 class _AppointmentConfirmationScreenState
     extends State<AppointmentConfirmationScreen> {
+  String _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
   final List<String> _mediaLabel = ["Ditempat", "Chat", "Video Call"];
   int? _expectedBalance;
   int? _userBalance;
@@ -213,14 +221,13 @@ class _AppointmentConfirmationScreenState
               if (_expectedBalance! < 0) {
                 _showFailedTransaction();
               } else {
-                print('object');
                 AppointmentScheduleModel scheduleModel =
                     AppointmentScheduleModel(
                         dateAppointment: _formattedDateAppointment,
                         idUser: idUser,
                         media: _currentIndex == 0 ? "Ditempat" : "Video Call",
                         idDoctor: widget.idDoctor,
-                        idSchedule: "adadad");
+                        idSchedule: getRandomString(6));
                 final item = Provider.of<MyDocScheduleAppointmentClass>(context,
                     listen: false);
                 final balance =

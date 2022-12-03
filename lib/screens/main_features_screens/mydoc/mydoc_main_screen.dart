@@ -60,6 +60,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
   @override
   Widget build(BuildContext context) {
     final topDoctor = Provider.of<MyDocByExperienceClass>(context);
+    
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -86,8 +87,9 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
                       PopupMenuItem(
                         child: GestureDetector(
                           onTap: () {
-                            // Navigator.pushNamed(context,
-                            //     AppRoutes.myDocAppointmentHistoryScreen,arguments: );
+                            Navigator.pushNamed(context,
+                                AppRoutes.myDocAppointmentHistoryScreen,
+                                arguments: 1);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,

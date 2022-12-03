@@ -85,14 +85,14 @@ class MyDocSearchResultScreen extends SearchDelegate {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 30.h,
+                            width: 25.h,
                             child: Text(
                               '${data?[index].name}',
                               style: regularStyle,
                             ),
                           ),
                           SizedBox(
-                            width: 30.h,
+                            width: 25.h,
                             child: Text(
                               '${data?[index].description.substring(0, 25)}...',
                               style:

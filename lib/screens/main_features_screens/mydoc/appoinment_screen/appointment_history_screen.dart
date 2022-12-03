@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,12 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../routes/routes.dart';
 import '../../../../shared/assets_directory.dart';
 
 class MyDocAppointmentHistoryScreen extends StatefulWidget {
   int? id;
-   MyDocAppointmentHistoryScreen({super.key, this.id});
+  MyDocAppointmentHistoryScreen({super.key, this.id});
 
   @override
   State<MyDocAppointmentHistoryScreen> createState() =>
@@ -21,23 +23,18 @@ class MyDocAppointmentHistoryScreen extends StatefulWidget {
 class _MyDocAppointmentHistoryScreenState
     extends State<MyDocAppointmentHistoryScreen> {
   String? idUser;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    ReadCache.getString(key: 'cache').then((value) {
-      setState(() {
-        idUser = value;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final item =
         Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
-    item.getSchedule(context: context, idUser: idUser ?? "", idDoctor: widget.id ?? 1);
+
+    ReadCache.getString(key: 'cache').then((value) {
+      setState(() {
+        idUser = value;
+        item.getSchedule(context: context, idUser: value);
+      });
+    });
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -140,16 +137,43 @@ class _MyDocAppointmentHistoryScreenState
                   'Tipe Temu-Janji : ${item.schedule?[index].media}',
                   style: regularStyle,
                 ),
+                Text(
+                  'ID Pertemuan : ${item.schedule?[index].idSchedule}',
+                  style: regularStyle,
+                ),
+                Text(
+                  'Status Pertemuan : ${item.schedule?[index].isCompleted == true ? "Selesai" : "Belum Selesai"}',
+                  style: regularStyle,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     OutlinedButton(
                       onPressed: () async {
-                        await item.deleteAppointmentData(
-                            id: item.schedule![index].id!, context: context);
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.warning,
+                          headerAnimationLoop: true,
+                          animType: AnimType.bottomSlide,
+                          title: 'Konfirmasi',
+                          desc:
+                              'Apakah kamu yakin untuk membatalkan jadwal janji-temu bersama dokter?',
+                          buttonsTextStyle: regularStyle,
+                          btnCancelText: "Tidak",
+                          btnCancelColor: greenColor,
+                          btnOkColor: Colors.red,
+                          btnOkText: "Ya",
+                          showCloseIcon: false,
+                          btnOkOnPress: () async {
+                            await item.deleteAppointmentData(
+                                id: item.schedule![index].id!,
+                                context: context);
+                          },
+                          btnCancelOnPress: () {},
+                        ).show();
                       },
                       child: Text(
-                        'Hapus',
+                        'Batalkan Jadwal',
                         style: regularStyle,
                       ),
                     ),
