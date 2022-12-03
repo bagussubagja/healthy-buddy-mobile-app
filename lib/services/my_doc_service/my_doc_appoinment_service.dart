@@ -26,7 +26,7 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
     }
     print(respone.request);
   } catch (e) {
-    debugPrint(e.toString());
+    debugPrint('Error Appointment : ${e.toString()}');
   }
   return [];
 }

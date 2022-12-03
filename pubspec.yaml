@@ -60,6 +60,7 @@ dependencies:
   cache_manager: ^1.0.0+4
   awesome_dialog: ^3.0.2
   intl: ^0.17.0
+  zego_uikit_prebuilt_call: ^1.2.12
 
 dev_dependencies:
   flutter_lints: ^2.0.1

@@ -139,10 +139,7 @@ class _HomePageState extends State<HomePage> {
                   hintText: "Cari artikel terhangat disini...",
                 ),
               ),
-              Padding(
-                padding: defaultPadding,
-                child: _emotionFeeling(),
-              ),
+              MarginHeight(height: 3.h),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -166,6 +163,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        MarginHeight(height: 2.5.h),
         Text(
           'Kategori',
           style: titleStyle.copyWith(color: greenColor),
@@ -221,7 +219,18 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         MarginHeight(height: 1.h),
-        _topArticle(context)
+        _topArticle(context),
+        MarginHeight(height: 2.5.h),
+        Text(
+          'Food Store',
+          style: titleStyle.copyWith(color: greenColor),
+        ),
+        MarginHeight(height: 1.h),
+        Container(
+          height: 15.h,
+          width: 30.w,
+          color: Colors.green,
+        )
       ],
     );
   }
