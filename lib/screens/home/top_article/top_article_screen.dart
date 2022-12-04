@@ -91,7 +91,7 @@ class _TopArticleScreenState extends State<TopArticleScreen> {
                   itemCount: item.articles?.length ?? 0,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      tileColor: greyColor,
+                      tileColor: whiteColor,
                       onTap: () async {
                         final url = Uri.parse(item.articles![index].link);
                         if (await canLaunchUrl(url)) {
