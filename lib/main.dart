@@ -60,7 +60,7 @@ class HealthyBuddyApp extends StatelessWidget {
             return supportedLocales.first;
           },
           locale: const Locale('id'),
-          title: 'Flutter Demo',
+          title: 'Healthy Buddy Mobile App',
           theme: ThemeData(primarySwatch: Colors.green, fontFamily: "Poppins"),
           initialRoute: AppRoutes.statePageUI,
           routes: AppRoutes.routes,

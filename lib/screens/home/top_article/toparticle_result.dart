@@ -20,11 +20,9 @@ class SearchTopArticleResult extends SearchDelegate {
         );
   }
 
-  SearchTopArticle _searchTopArticle = SearchTopArticle();
+  final SearchTopArticle _searchTopArticle = SearchTopArticle();
   @override
   List<Widget>? buildActions(BuildContext context) {
-    // TODO: implement buildActions
-
     return [
       IconButton(
           onPressed: () {

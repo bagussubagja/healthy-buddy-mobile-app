@@ -1,9 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/wishlist_sport_model.dart';
-import 'package:healthy_buddy_mobile_app/services/wishlist_services/foodies_wishlist_service.dart';
 import 'package:healthy_buddy_mobile_app/services/wishlist_services/sport_wishlist_services.dart';
 
 class SportWishlistClass extends ChangeNotifier {

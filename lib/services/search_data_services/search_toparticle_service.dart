@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/models/top_article_model.dart';
-import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../../credentials/supabase_credential.dart';

@@ -1,15 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/wishlist_sport_model.dart';
-import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<WishlistSportModel>?> getWishlistSportByUserID(

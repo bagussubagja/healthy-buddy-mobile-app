@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +57,7 @@ class _BiodataScreenState extends State<BiodataScreen> {
     }
   }
 
-  List<String> _activityLabel = [
+  final List<String> _activityLabel = [
     "Sangat Rendah",
     "Cukup Rendah",
     "Normal",
@@ -65,17 +67,15 @@ class _BiodataScreenState extends State<BiodataScreen> {
 
   String? _selectedActivityValue = 'Normal';
 
-  double? _dailyCaloriesValue = 0;
-
-  List<String> _genderItem = ['Laki-laki', 'Perempuan'];
+  final List<String> _genderItem = ['Laki-laki', 'Perempuan'];
+  String? _selectedGender = 'Laki-laki';
 
   String? _idUser;
 
-  String? _selectedGender = 'Laki-laki';
+
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     ReadCache.getString(key: "cache").then((idUser) {
       setState(() {

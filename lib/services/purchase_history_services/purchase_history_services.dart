@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:healthy_buddy_mobile_app/models/purchase_history_model/purchase_history_model.dart';
 
 import '../../credentials/supabase_credential.dart';
-import '../../shared/theme.dart';
 
 Future<List<PurchaseHistoryModel>?> getPurchaseHistoryData(
     {required BuildContext context, required String idUser}) async {

@@ -1,22 +1,19 @@
-import 'dart:async';
+// ignore_for_file: prefer_final_fields
 
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'dart:async';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/wishlist/sport_wishlist_notifier.dart';
-import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -32,7 +29,6 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   int _currentIndex = 0;
 
-  bool _isLoading = false;
   List<bool> _selectedToogle = [true, false];
 
   List<String> _foodStoreCategory = ["Foodies Store", "Sport Store"];
@@ -48,7 +44,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
   String? idUser;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Timer(const Duration(seconds: 3), _showContent);
     final user = Provider.of<UserClass>(context, listen: false);

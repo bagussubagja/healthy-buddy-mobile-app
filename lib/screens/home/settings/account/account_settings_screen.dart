@@ -3,19 +3,16 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
-import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../core/authentication/auth_notifier.dart';
 import '../../../widgets/margin_width.dart';
 
 class AccountSettingScreen extends StatefulWidget {
-  AccountSettingScreen({super.key});
+  const AccountSettingScreen({super.key});
 
   @override
   State<AccountSettingScreen> createState() => _AccountSettingScreenState();
@@ -41,7 +38,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
 
-  List<String> _activityLabel = [
+  final List<String> _activityLabel = [
     "Sangat Rendah",
     "Cukup Rendah",
     "Normal",
@@ -50,7 +47,6 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
   ];
   String? _selectedActivityValue = 'Normal';
 
-  double? _dailyCaloriesValue = 0;
 
   double _calorieCalculator(
       String gender, int age, int height, int weight, double activityValue) {
@@ -85,7 +81,6 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {

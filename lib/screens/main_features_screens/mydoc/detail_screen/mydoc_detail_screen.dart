@@ -1,6 +1,6 @@
-import 'dart:ui';
+// ignore_for_file: must_be_immutable
 
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'dart:ui';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/core/read_cache_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,15 +9,12 @@ import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart'
 import 'package:healthy_buddy_mobile_app/core/favorites/favorites_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/favorite_model/fav_mydoc_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
-import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_confirmation_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
-import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
 
 import '../../../widgets/margin_width.dart';
 
@@ -35,7 +32,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   DateTime? _date;
   String? _selectedDate;
 
-  List<String> _numLabel = [];
+  List<String> numLabel = [];
 
   String? idUser;
 
@@ -43,13 +40,13 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
   void initState() {
     super.initState();
     if (widget.myDoc?.name != null) {
-      _numLabel.add(widget.myDoc!.patients.toString());
-      _numLabel.add(widget.myDoc!.yearExp.toString());
-      _numLabel.add(widget.myDoc!.rating.toString());
+      numLabel.add(widget.myDoc!.patients.toString());
+      numLabel.add(widget.myDoc!.yearExp.toString());
+      numLabel.add(widget.myDoc!.rating.toString());
     } else if (widget.myDocModel?.name != null) {
-      _numLabel.add(widget.myDocModel!.patients.toString());
-      _numLabel.add(widget.myDocModel!.yearExp.toString());
-      _numLabel.add(widget.myDocModel!.rating.toString());
+      numLabel.add(widget.myDocModel!.patients.toString());
+      numLabel.add(widget.myDocModel!.yearExp.toString());
+      numLabel.add(widget.myDocModel!.rating.toString());
     }
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
@@ -308,7 +305,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _numLabel[index],
+                      numLabel[index],
                       style: titleStyle.copyWith(color: greenColor),
                       textAlign: TextAlign.center,
                     ),

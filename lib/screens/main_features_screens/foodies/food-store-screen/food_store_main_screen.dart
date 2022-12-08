@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -8,21 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_store_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/wishlist_foodies_model.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
-import 'package:healthy_buddy_mobile_app/screens/home/wishslist/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../core/foodies/food_receipt_notifier.dart';
 import '../../../../core/wishlist/sport_wishlist_notifier.dart';
 import '../../../widgets/margin_width.dart';
-import '../food-receipt-screen/food_receipt_detail_screen.dart';
 
 class FoodStoreMainScreen extends StatefulWidget {
   const FoodStoreMainScreen({super.key});
@@ -33,7 +30,6 @@ class FoodStoreMainScreen extends StatefulWidget {
 
 class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
   bool _isVisible = false;
-  bool _isGridViewItemList = true;
   void showContent() {
     if (mounted) {
       setState(() {
@@ -44,13 +40,17 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
 
   String? idUser;
 
-  List<bool> _selectedToogle = [true, false, false, false];
+  List<bool> selectedToogle = [true, false, false, false];
 
-  List<String> _foodStoreCategory = ["Buah", "Sayuran", "Instan", "Minuman"];
+  final List<String> _foodStoreCategory = [
+    "Buah",
+    "Sayuran",
+    "Instan",
+    "Minuman"
+  ];
 
   int _currentIndex = 0;
 
-  int _cartLength = 0;
   int _cartItemQuantity = 0;
   int? _foodQuantity;
   int? _sportQuantity;
@@ -102,11 +102,7 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
         ),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return WishlistScreen();
-              },
-            ));
+            Navigator.pushNamed(context, AppRoutes.wishlistScreen);
           },
           backgroundColor: greenColor,
           child: Icon(
@@ -266,11 +262,11 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    for (int i = 0; i < _selectedToogle.length; i++) {
+                    for (int i = 0; i < selectedToogle.length; i++) {
                       if (i == index) {
-                        _selectedToogle[i] = true;
+                        selectedToogle[i] = true;
                       } else {
-                        _selectedToogle[i] = false;
+                        selectedToogle[i] = false;
                       }
                     }
                   });
@@ -281,18 +277,18 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                   padding: const EdgeInsets.all(2),
                   width: 20.w,
                   decoration: BoxDecoration(
-                      color: _selectedToogle[index]
+                      color: selectedToogle[index]
                           ? greenColor.withOpacity(0.2)
                           : greyColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                          color: _selectedToogle[index]
+                          color: selectedToogle[index]
                               ? greenDarkerColor
                               : greyTextColor)),
                   child: Text(
                     _foodStoreCategory[index],
                     style: regularStyle.copyWith(
-                        color: _selectedToogle[index]
+                        color: selectedToogle[index]
                             ? greenDarkerColor
                             : greyTextColor,
                         fontSize: 14),

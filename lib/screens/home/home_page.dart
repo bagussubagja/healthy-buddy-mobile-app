@@ -1,4 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
-import 'package:healthy_buddy_mobile_app/services/search_data_services/search_topArticle_service.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -20,24 +18,13 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/authentication/auth_notifier.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> _emoticon = [
-    'angry.png',
-    'happy.png',
-    'sad.png',
-  ];
-
-  final List<String> _emotionTitle = [
-    'Marah',
-    'Bahagia',
-    'Sedih',
-  ];
 
   final List<String> _categoryIcon = [
     'foodies.png',
@@ -50,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item = Provider.of<TopArticleClass>(context, listen: false);
     item.getArticle(context: context);
@@ -139,10 +125,7 @@ class _HomePageState extends State<HomePage> {
                   hintText: "Cari artikel terhangat disini...",
                 ),
               ),
-              Padding(
-                padding: defaultPadding,
-                child: _emotionFeeling(),
-              ),
+              MarginHeight(height: 3.h),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -166,6 +149,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        MarginHeight(height: 2.5.h),
         Text(
           'Kategori',
           style: titleStyle.copyWith(color: greenColor),
@@ -220,56 +204,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        MarginHeight(height: 1.h),
-        _topArticle(context)
-      ],
-    );
-  }
-
-  Widget _emotionFeeling() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Apa Perasaan Kamu Hari Ini?',
-          style: regularStyle.copyWith(color: Colors.white),
-        ),
-        MarginHeight(height: 10),
-        SizedBox(
-          height: 14.h,
-          width: double.infinity,
-          child: Center(
-            child: ListView.separated(
-              separatorBuilder: (context, index) {
-                return MarginWidth(width: 10.w);
-              },
-              itemCount: _emoticon.length,
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 8.h,
-                      decoration: BoxDecoration(
-                        color: greenDarkerColor,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Image.asset('$imageDirectory/${_emoticon[index]}',
-                          scale: 2.h),
-                    ),
-                    Text(
-                      _emotionTitle[index],
-                      style: regularStyle.copyWith(color: Colors.white),
-                    )
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
+        MarginHeight(height: 2.5.h),
+        _topArticle(context),
       ],
     );
   }
@@ -306,10 +242,15 @@ class _HomePageState extends State<HomePage> {
                       '$imageDirectory/ava1.png',
                       fit: BoxFit.cover,
                     )
-                  : Image.asset(
-                      '$imageDirectory/ava2.png',
-                      fit: BoxFit.cover,
-                    ),
+                  : user.users?[0].gender == "Perempuan"
+                      ? Image.asset(
+                          '$imageDirectory/ava2.png',
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          '$imageDirectory/ava-null.png',
+                          fit: BoxFit.cover,
+                        ),
             ),
           ),
         )
@@ -346,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                   shrinkWrap: true,
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 3,
+                  itemCount: 5,
                   itemBuilder: (context, index) {
                     return ListTile(
                       tileColor: greyColor,
@@ -367,9 +308,9 @@ class _HomePageState extends State<HomePage> {
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    filterQuality: FilterQuality.low),
                               ),
                             ),
                             placeholder: (context, url) => const Center(

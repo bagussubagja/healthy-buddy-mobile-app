@@ -12,7 +12,7 @@ import 'package:sizer/sizer.dart';
 import '../../core/authentication/auth_notifier.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:lottie/lottie.dart';

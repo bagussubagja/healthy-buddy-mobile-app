@@ -1,16 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_appointment_model.dart';
-import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
-import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
+
+import '../../routes/routes.dart';
 
 Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
     {required BuildContext context, required String idUser}) async {
@@ -24,9 +23,8 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
       var json = respone.body;
       return appointmentScheduleModelFromJson(json);
     }
-    print(respone.request);
   } catch (e) {
-    debugPrint(e.toString());
+    debugPrint('Error Appointment : ${e.toString()}');
   }
   return [];
 }
@@ -74,11 +72,42 @@ Future<http.Response?> addAppointmentScheduleData(
           // 'Prefer': 'resolution=merge-duplicates'
         },
         body: jsonEncode(data.toJson()));
-    print(respone.request);
-    print(respone.statusCode.toString());
   } catch (e) {
     debugPrint(e.toString());
   }
 
+  return respone;
+}
+
+Future<http.Response?> updateAppointmentStatus(AppointmentScheduleModel data,
+    String idUser, BuildContext context, String idDoctor) async {
+  http.Response? respone;
+  try {
+    respone = await http.patch(
+        Uri.parse(
+            'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?id_user=eq.$idUser&apikey=$apiKey&id_doctor=eq.$idDoctor'),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode(data.updateAppointmentStatus()));
+    if (respone.statusCode == 204) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Selamat!',
+          message:
+              'Kamu telah janji-temu virtual dengan dokter, semoga harimu menyenangkan!',
+          contentType: ContentType.success,
+        ),
+      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.bodyScreen, (route) => false);
+    }
+  } catch (e) {
+    debugPrint(e.toString());
+  }
   return respone;
 }

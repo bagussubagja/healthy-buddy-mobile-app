@@ -7,7 +7,7 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class BodyPageScreen extends StatefulWidget {
-  BodyPageScreen({super.key});
+  const BodyPageScreen({super.key});
 
   @override
   State<BodyPageScreen> createState() => _BodyPageScreenState();
@@ -15,10 +15,10 @@ class BodyPageScreen extends StatefulWidget {
 
 class _BodyPageScreenState extends State<BodyPageScreen> {
   final List<Widget> _bodyScreenList = [
-    HomePage(),
-    FavoriteScreen(),
-    WishlistScreen(),
-    SettingScreen()
+    const HomePage(),
+    const FavoriteScreen(),
+    const WishlistScreen(),
+    const SettingScreen()
   ];
 
   int _currentIndex = 0;

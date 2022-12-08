@@ -12,7 +12,7 @@ import '../widgets/custom_textfield.dart';
 import '../widgets/margin_height.dart';
 
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -22,8 +22,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
 
   final _passwordController = TextEditingController();
-
-  final _nameController = TextEditingController();
 
   bool _isVisible = true;
 

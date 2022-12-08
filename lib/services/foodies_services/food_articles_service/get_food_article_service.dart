@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
-import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<FoodArticleModel>?> getFoodArticles(

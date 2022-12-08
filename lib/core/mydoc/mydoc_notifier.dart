@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:http/http.dart' as http;
@@ -128,4 +127,15 @@ class MyDocScheduleAppointmentClass extends ChangeNotifier {
     notifyListeners();
   }
   
+}
+
+class UpdateStatusAppointmentClass extends ChangeNotifier {
+  Future<void> updateStatus(AppointmentScheduleModel body, String idUser,
+      String idDoctor, BuildContext context) async {
+    notifyListeners();
+    http.Response response =
+        (await updateAppointmentStatus(body, idUser, context, idDoctor))!;
+    debugPrint(response.statusCode.toString());
+    notifyListeners();
+  }
 }

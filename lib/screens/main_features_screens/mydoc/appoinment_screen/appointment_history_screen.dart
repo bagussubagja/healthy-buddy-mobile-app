@@ -1,19 +1,23 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
+// ignore_for_file: prefer_is_empty
+
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/video_call_appointment_screen/video_call_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../routes/routes.dart';
+import '../../../../models/mydoc_model/mydoc_appointment_model.dart';
 import '../../../../shared/assets_directory.dart';
 
 class MyDocAppointmentHistoryScreen extends StatefulWidget {
-  int? id;
-  MyDocAppointmentHistoryScreen({super.key, this.id});
+  const MyDocAppointmentHistoryScreen({super.key});
 
   @override
   State<MyDocAppointmentHistoryScreen> createState() =>
@@ -25,16 +29,22 @@ class _MyDocAppointmentHistoryScreenState
   String? idUser;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     final item =
         Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
-
+    final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         idUser = value;
+        user.getUser(context: context, idUser: value);
         item.getSchedule(context: context, idUser: value);
       });
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
@@ -81,6 +91,12 @@ class _MyDocAppointmentHistoryScreenState
 
   Widget _itemList() {
     final item = Provider.of<MyDocScheduleAppointmentClass>(context);
+    final user = Provider.of<UserClass>(context);
+    if (item.schedule?.length == 0) {
+      return ContentEmptyWidget(
+        content: "Tidak ada jadwal janji-temu bersama dokter!",
+      );
+    }
     return ListView.separated(
         shrinkWrap: true,
         primary: false,
@@ -148,42 +164,45 @@ class _MyDocAppointmentHistoryScreenState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.warning,
-                          headerAnimationLoop: true,
-                          animType: AnimType.bottomSlide,
-                          title: 'Konfirmasi',
-                          desc:
-                              'Apakah kamu yakin untuk membatalkan jadwal janji-temu bersama dokter?',
-                          buttonsTextStyle: regularStyle,
-                          btnCancelText: "Tidak",
-                          btnCancelColor: greenColor,
-                          btnOkColor: Colors.red,
-                          btnOkText: "Ya",
-                          showCloseIcon: false,
-                          btnOkOnPress: () async {
-                            await item.deleteAppointmentData(
-                                id: item.schedule![index].id!,
-                                context: context);
-                          },
-                          btnCancelOnPress: () {},
-                        ).show();
-                      },
-                      child: Text(
-                        'Batalkan Jadwal',
-                        style: regularStyle,
-                      ),
-                    ),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: item.schedule?[index].isCompleted == true
+                            ? null
+                            : () {
+                                if (item.schedule?[index].media ==
+                                    "Video Call") {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return VideoCallScreen(
+                                        conferenceID:
+                                            item.schedule?[index].idSchedule ??
+                                                "",
+                                        name: user.users?[0].name ?? "",
+                                        idDoctor: item.schedule?[index].idDoctor
+                                                .toString() ??
+                                            "",
+                                      );
+                                    },
+                                  ));
+                                } else {
+                                  doUpdate();
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: greenColor),
-                        child: Text(item.schedule?[index].media == "Video Call"
-                            ? "Video Call"
-                            : "Temui di Lokasi"))
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Icon(item.schedule?[index].media == "Video Call"
+                                ? Icons.video_call
+                                : Icons.location_on_outlined),
+                            MarginWidth(width: 1.h),
+                            Text(
+                              item.schedule?[index].media == "Video Call"
+                                  ? "Video Call"
+                                  : "Tandai Sebagai Selesai",
+                            ),
+                          ],
+                        ))
                   ],
                 )
               ],
@@ -194,5 +213,18 @@ class _MyDocAppointmentHistoryScreenState
           return MarginHeight(height: 3.h);
         },
         itemCount: item.schedule?.length ?? 0);
+  }
+
+  doUpdate() async {
+    final item =
+        Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
+    AppointmentScheduleModel model = AppointmentScheduleModel(
+      isCompleted: true,
+    );
+
+    var update =
+        Provider.of<UpdateStatusAppointmentClass>(context, listen: false);
+    await update.updateStatus(model, '${item.schedule?[0].users?.idUser}',
+        '${item.schedule?[0].idDoctor}', context);
   }
 }

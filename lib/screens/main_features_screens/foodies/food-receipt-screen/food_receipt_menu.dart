@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
-import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
@@ -13,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class FoodReceiptMenuScreen extends StatefulWidget {
-  FoodReceiptMenuScreen({super.key});
+  const FoodReceiptMenuScreen({super.key});
 
   @override
   State<FoodReceiptMenuScreen> createState() => _FoodReceiptMenuScreenState();
@@ -21,11 +19,10 @@ class FoodReceiptMenuScreen extends StatefulWidget {
 
 class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
   final List<String> _foodCategory = ["Breakfast", "Lunch", "Dinner", "Drink"];
-  List<bool> _selectedToogle = [true, false, false, false];
+  List<bool> selectedToogle = [true, false, false, false];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item = Provider.of<FoodReceiptClass>(context, listen: false);
     item.getFoodReceipt(context: context);
@@ -191,11 +188,11 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    for (int i = 0; i < _selectedToogle.length; i++) {
+                    for (int i = 0; i < selectedToogle.length; i++) {
                       if (i == index) {
-                        _selectedToogle[i] = true;
+                        selectedToogle[i] = true;
                       } else {
-                        _selectedToogle[i] = false;
+                        selectedToogle[i] = false;
                       }
                     }
                     _currentIndex = index;
@@ -207,18 +204,18 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
                   height: 30,
                   width: 80,
                   decoration: BoxDecoration(
-                      color: _selectedToogle[index]
+                      color: selectedToogle[index]
                           ? greenColor.withOpacity(0.2)
                           : greyColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                          color: _selectedToogle[index]
+                          color: selectedToogle[index]
                               ? greenDarkerColor
                               : greyTextColor)),
                   child: Text(
                     _foodCategory[index],
                     style: regularStyle.copyWith(
-                        color: _selectedToogle[index]
+                        color: selectedToogle[index]
                             ? greenDarkerColor
                             : greyTextColor,
                         fontSize: 14),

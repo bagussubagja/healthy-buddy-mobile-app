@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_website_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -9,16 +11,13 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../widgets/margin_width.dart';
 
 class SportWebsiteScreen extends StatefulWidget {
-  SportWebsiteScreen({super.key});
+  const SportWebsiteScreen({super.key});
 
   @override
   State<SportWebsiteScreen> createState() => _SportWebsiteScreenState();
 }
 
 class _SportWebsiteScreenState extends State<SportWebsiteScreen> {
-  final List<String> _itemLabel = ["Ganti Nama", "Ganti Alamat"];
-
-  final List<IconData> _itemIcon = [Icons.person, Icons.location_on_rounded];
 
   final List<String> _exerciseLevel = [
     "Sepakbola",
@@ -34,7 +33,6 @@ class _SportWebsiteScreenState extends State<SportWebsiteScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final itemFootball =
         Provider.of<SportWebsiteFootballClass>(context, listen: false);

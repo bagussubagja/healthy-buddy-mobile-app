@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_exercise_notifier.dart';
@@ -22,7 +24,6 @@ class _SportExerciseScreenState extends State<SportExerciseScreen> {
   int _currentIndex = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item = Provider.of<SportExerciseAllClass>(context, listen: false);
     item.getSport(context: context);

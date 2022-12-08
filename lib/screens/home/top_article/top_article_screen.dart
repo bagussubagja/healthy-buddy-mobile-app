@@ -6,8 +6,6 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../routes/routes.dart';
 import '../../../shared/assets_directory.dart';
 import '../../widgets/loading_widget.dart';
 
@@ -21,7 +19,6 @@ class TopArticleScreen extends StatefulWidget {
 class _TopArticleScreenState extends State<TopArticleScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final itemArticle = Provider.of<TopArticleClass>(context, listen: false);
     itemArticle.getArticle(context: context);
@@ -81,14 +78,17 @@ class _TopArticleScreenState extends State<TopArticleScreen> {
             ? LoadingWidget()
             : SizedBox(
                 width: double.infinity,
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return MarginHeight(height: 2.h);
+                  },
                   shrinkWrap: true,
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: item.articles?.length ?? 0,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      tileColor: greyColor,
+                      tileColor: whiteColor,
                       onTap: () async {
                         final url = Uri.parse(item.articles![index].link);
                         if (await canLaunchUrl(url)) {

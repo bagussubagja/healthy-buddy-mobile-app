@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/purchase_history/purchase_history_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,6 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
   String? idUser;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item = Provider.of<PurchaseHistoryClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {

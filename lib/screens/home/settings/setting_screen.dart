@@ -1,25 +1,19 @@
-import 'package:cache_manager/cache_manager.dart';
+
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
-import 'package:indonesia/indonesia.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../shared/assets_directory.dart';
-
 class SettingScreen extends StatefulWidget {
-  SettingScreen({super.key});
+  const SettingScreen({super.key});
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  bool _isSelected = false;
 
   final List<IconData> _iconSettingMenu = [
     Icons.person_outline_outlined,

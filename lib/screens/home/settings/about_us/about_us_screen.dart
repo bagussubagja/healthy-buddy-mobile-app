@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
 class AboutUsScreen extends StatelessWidget {
@@ -12,8 +11,24 @@ class AboutUsScreen extends StatelessWidget {
     'Arfi Triawan',
     'Bagus Subagja',
     'M. Faja Sumitra',
-    'Riyandi Firman Pratama',
+    'Riyandi Firman P.',
     'Suci Sukmawati'
+  ];
+
+  final List<String> _memberAvatar = [
+    'arfi.png',
+    'bagus.png',
+    'faja.png',
+    'riyandi.png',
+    'suci.png'
+  ];
+
+  final List<String> _memberRoles = [
+    'Backend Dev',
+    'Mobile Dev',
+    'UI/UX Designer',
+    'Backend Dev',
+    'Project Manager'
   ];
 
   final List<int> _nimOfGroup = [2002890, 2008315, 2007669, 2008672, 2008656];
@@ -56,7 +71,7 @@ class AboutUsScreen extends StatelessWidget {
             MarginHeight(height: 3.h),
             Text(
               'Healthy Buddy is here as a form of our concern for human health. We created an app that caters to a healthy lifestyle for everyone. By providing various kinds of health needs such as healthy food, sports that can improve body fitness, as well as professional doctors who are ready to provide the best service to you!',
-              style: regularStyle,
+              style: regularStyle.copyWith(color: greyTextColor),
               textAlign: TextAlign.justify,
             ),
             MarginHeight(height: 4.h),
@@ -64,13 +79,61 @@ class AboutUsScreen extends StatelessWidget {
               'Team Member :',
               style: regularStyle,
             ),
-            ListView.builder(
+            ListView.separated(
+              separatorBuilder: (context, index) {
+                return MarginHeight(height: 2.h);
+              },
               shrinkWrap: true,
+              primary: false,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: _memberOfGroup.length,
               itemBuilder: (context, index) {
-                return Text(
-                  '- ${(_memberOfGroup[index])} | ${_nimOfGroup[index]}',
-                  style: regularStyle,
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: greenColor,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Container(
+                                height: 10.h,
+                                width: 10.h,
+                                padding: const EdgeInsets.all(8),
+                                child: Image.asset(
+                                    'assets/images/${_memberAvatar[index]}')),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                _memberOfGroup[index],
+                                style: regularStyle.copyWith(
+                                    color: whiteColor, fontSize: 12.sp),
+                              ),
+                              Text(
+                                _nimOfGroup[index].toString(),
+                                style: regularStyle.copyWith(
+                                    color: whiteColor, fontSize: 10.sp),
+                              ),
+
+                            ],
+                          ),
+                        ],
+                      ),
+                      Text(
+                        _memberRoles[index],
+                        style: regularStyle.copyWith(
+                            color: whiteColor, fontSize: 10.sp),
+                      )
+                    ],
+                  ),
                 );
               },
             )

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
@@ -6,12 +8,10 @@ import 'package:count_stepper/count_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/wishlist/sport_wishlist_notifier.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/purchase_history_model/purchase_history_model.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/sport_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/wishlist_sport_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
-import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +41,6 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
   String? uniqueKey;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
@@ -367,8 +366,6 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
       _totalPrice = (_price - (_price * 0.15));
       _expectedBalance = userBalance! - _totalPrice.round();
     });
-    print(_totalPrice);
-    print(_expectedBalance);
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
