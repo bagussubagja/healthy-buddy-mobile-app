@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:badges/badges.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +13,10 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../core/authentication/user_notifier.dart';
 import '../../../../core/sport/sport_store_notifier.dart';
+import '../../../../core/wishlist/foodies_wishlist_notifier.dart';
 import '../../../../core/wishlist/sport_wishlist_notifier.dart';
 import '../../../../models/user_model/user_model.dart';
+import '../../../../routes/routes.dart';
 import '../../../../shared/assets_directory.dart';
 import '../../../widgets/margin_height.dart';
 import '../../../widgets/margin_width.dart';
@@ -33,7 +38,6 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final itemGeneral =
         Provider.of<SportStoreGeneralClass>(context, listen: false);
@@ -70,8 +74,36 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final itemFoodies =
+        Provider.of<FoodiesWishlistClass>(context, listen: false);
+    itemFoodies.getWishlist(context: context, idUser: idUser ?? "");
+    final itemSport = Provider.of<SportWishlistClass>(context, listen: false);
+    itemSport.getWishlist(context: context, idUser: idUser ?? "");
+    _foodQuantity = itemFoodies.wishlistFoodies?.length;
+    _sportQuantity = itemSport.wishlistSport?.length;
+    if (itemFoodies.wishlistFoodies?.length != null &&
+        itemSport.wishlistSport?.length != null) {
+      setState(() {
+        _cartItemQuantity = _foodQuantity! + _sportQuantity!;
+      });
+    }
     return Scaffold(
       backgroundColor: bgColor,
+      floatingActionButton: Badge(
+        badgeContent: Text(
+          _cartItemQuantity.toString(),
+          style: regularStyle.copyWith(color: whiteColor),
+        ),
+        child: FloatingActionButton(
+          child: Icon(
+            Icons.shopping_cart_outlined,
+            color: whiteColor,
+          ),
+          onPressed: () {
+             Navigator.pushNamed(context, AppRoutes.wishlistScreen);
+          },
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -200,9 +232,9 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
   }
 
   Widget _sportStoreToogleButton() {
-    List<bool> _selectedToogle = [true, false, false, false, false];
+    List<bool> selectedToogle = [true, false, false, false, false];
 
-    List<String> _foodStoreCategory = [
+    List<String> foodStoreCategory = [
       "General",
       "Soccer",
       "Athletic",
@@ -220,11 +252,11 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    for (int i = 0; i < _selectedToogle.length; i++) {
+                    for (int i = 0; i < selectedToogle.length; i++) {
                       if (i == index) {
-                        _selectedToogle[i] = true;
+                        selectedToogle[i] = true;
                       } else {
-                        _selectedToogle[i] = false;
+                        selectedToogle[i] = false;
                       }
                     }
                   });
@@ -235,18 +267,18 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                   padding: const EdgeInsets.all(2),
                   width: 25.w,
                   decoration: BoxDecoration(
-                      color: _selectedToogle[index]
+                      color: selectedToogle[index]
                           ? greenColor.withOpacity(0.2)
                           : greyColor,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                          color: _selectedToogle[index]
+                          color: selectedToogle[index]
                               ? greenDarkerColor
                               : greyTextColor)),
                   child: Text(
-                    _foodStoreCategory[index],
+                    foodStoreCategory[index],
                     style: regularStyle.copyWith(
-                        color: _selectedToogle[index]
+                        color: selectedToogle[index]
                             ? greenDarkerColor
                             : greyTextColor,
                         fontSize: 14),

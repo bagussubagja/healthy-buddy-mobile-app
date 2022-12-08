@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
@@ -16,7 +18,7 @@ class FoodCalculatorScreen extends StatelessWidget {
 
   String? _selectedActivityValue = 'Normal';
 
-  List<String> _activityLabel = [
+  final List<String> _activityLabel = [
     "Sangat Rendah",
     "Cukup Rendah",
     "Normal",
@@ -44,7 +46,7 @@ class FoodCalculatorScreen extends StatelessWidget {
     }
   }
 
-  List<String> _genderItem = ['Laki-laki', 'Perempuan'];
+  final List<String> _genderItem = ['Laki-laki', 'Perempuan'];
   String? _selectedGender = 'Laki-laki';
 
   double _calorieValue = 0;
@@ -116,11 +118,11 @@ class FoodCalculatorScreen extends StatelessWidget {
   }
 
   Widget _itemList() {
-    final List<String> _itemFeatureLabel = [
+    final List<String> itemFeatureLabel = [
       "Kalkulator BMI",
       "Kalkulator Kalori Harian"
     ];
-    final List<String> _itemDescription = [
+    final List<String> itemDescription = [
       "Hitung index masa tubuh kamu!",
       "Ketahui berapa jumlah kalori yang kamu perlukan dalam satu hari!"
     ];
@@ -130,7 +132,7 @@ class FoodCalculatorScreen extends StatelessWidget {
         return MarginHeight(height: 2.h);
       },
       shrinkWrap: true,
-      itemCount: _itemFeatureLabel.length,
+      itemCount: itemFeatureLabel.length,
       itemBuilder: (context, index) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,13 +165,13 @@ class FoodCalculatorScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _itemFeatureLabel[index],
+                        itemFeatureLabel[index],
                         style: regularStyle,
                       ),
                       SizedBox(
                         width: 50.w,
                         child: Text(
-                          _itemDescription[index],
+                          itemDescription[index],
                           style: regularStyle.copyWith(
                               color: greyTextColor, fontSize: 9.sp),
                         ),

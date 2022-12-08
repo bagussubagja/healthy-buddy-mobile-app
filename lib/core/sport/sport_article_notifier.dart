@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/sport_model/sport_article_model.dart';
-import 'package:healthy_buddy_mobile_app/models/sport_model/sport_exercise_model.dart';
 import 'package:healthy_buddy_mobile_app/services/sport_services/sport_article_service.dart';
-import 'package:healthy_buddy_mobile_app/services/sport_services/sport_exercise_bylevel_service.dart';
 
 class SportArticleClass extends ChangeNotifier {
   List<SportArticleModel>? sportArticle;

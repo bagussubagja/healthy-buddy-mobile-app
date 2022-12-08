@@ -2,13 +2,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/sport/sport_article_notifier.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../../core/foodies/food_articles_notifier.dart';
 
 class SportArticleScreen extends StatefulWidget {
   const SportArticleScreen({super.key});

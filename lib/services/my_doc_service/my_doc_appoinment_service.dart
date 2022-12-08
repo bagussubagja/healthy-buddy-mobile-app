@@ -1,15 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_article_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_receipt_model.dart';
-import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_appointment_model.dart';
-import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
-import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:http/http.dart' as http;
 
 import '../../routes/routes.dart';
@@ -26,7 +23,6 @@ Future<List<AppointmentScheduleModel>?> getAppointmentScheduleByUserID(
       var json = respone.body;
       return appointmentScheduleModelFromJson(json);
     }
-    print(respone.request);
   } catch (e) {
     debugPrint('Error Appointment : ${e.toString()}');
   }
@@ -76,8 +72,6 @@ Future<http.Response?> addAppointmentScheduleData(
           // 'Prefer': 'resolution=merge-duplicates'
         },
         body: jsonEncode(data.toJson()));
-    print(respone.request);
-    print(respone.statusCode.toString());
   } catch (e) {
     debugPrint(e.toString());
   }
@@ -94,8 +88,6 @@ Future<http.Response?> updateAppointmentStatus(AppointmentScheduleModel data,
             'https://hlrvqhqntrrqjdbcbqxr.supabase.co/rest/v1/schedule_mydoc_appointment?id_user=eq.$idUser&apikey=$apiKey&id_doctor=eq.$idDoctor'),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(data.updateAppointmentStatus()));
-    print(respone.request);
-    print(respone.statusCode);
     if (respone.statusCode == 204) {
       final snackBar = SnackBar(
         elevation: 0,

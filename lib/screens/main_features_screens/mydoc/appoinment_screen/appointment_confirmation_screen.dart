@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, prefer_final_fields, use_build_context_synchronously
+
 import 'dart:math';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -6,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_appointment_model.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/appoinment_screen/appointment_history_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -45,12 +46,12 @@ class AppointmentConfirmationScreen extends StatefulWidget {
 
 class _AppointmentConfirmationScreenState
     extends State<AppointmentConfirmationScreen> {
-  String _chars =
+  String chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  Random _rnd = Random();
+  Random random = Random();
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+      length, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
   final List<String> _mediaLabel = ["Ditempat", "Video Call"];
   int? _expectedBalance;
   int? _userBalance;
@@ -62,7 +63,6 @@ class _AppointmentConfirmationScreenState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
@@ -135,7 +135,6 @@ class _AppointmentConfirmationScreenState
         _expectedBalance = _userBalance! - widget.price!;
       });
     }
-    print(_expectedBalance);
     final localizations = MaterialLocalizations.of(context);
     setState(() {
       _formattedDateAppointment =

@@ -34,8 +34,9 @@ class AuthenticationNotifier extends ChangeNotifier {
             arguments: email);
       });
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
+    return '';
   }
 
   Future<String?> loginUser(
@@ -45,31 +46,21 @@ class AuthenticationNotifier extends ChangeNotifier {
     try {
       dynamic userId = await _authenticationService.loginUser(
           email: email, password: password, context: context);
-      print('userId : $userId');
       WriteCache.setString(key: 'cache', value: userId!).whenComplete(() {
         Navigator.pushNamedAndRemoveUntil(
             context, AppRoutes.statePageUI, (route) => false);
       });
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
+    return '';
   }
 
   Future<void> logOut() async {
     try {
       await _authenticationService.logOut();
     } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> changeEmail(String email) async {
-    try {
-      dynamic updateEmail =
-          await _authenticationService.updateEmailUser(email: email);
-      print(updateEmail);
-    } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 }

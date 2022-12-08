@@ -20,10 +20,9 @@ class MyDocSearchResultScreen extends SearchDelegate {
         );
   }
 
-  SearchMyDoc _searchMyDoc = SearchMyDoc();
+  final SearchMyDoc _searchMyDoc = SearchMyDoc();
   @override
   List<Widget>? buildActions(BuildContext context) {
-    // TODO: implement buildActions
     return [
       IconButton(
           onPressed: () {
@@ -38,7 +37,6 @@ class MyDocSearchResultScreen extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
     return IconButton(
         onPressed: () {
           Navigator.pop(context);
@@ -51,7 +49,6 @@ class MyDocSearchResultScreen extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
     return Padding(
       padding: defaultPadding,
       child: FutureBuilder<List<MyDocModel>>(
@@ -114,7 +111,6 @@ class MyDocSearchResultScreen extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
     return Center(
       child: Text(
         "Coba cari 'Mental Health'...",

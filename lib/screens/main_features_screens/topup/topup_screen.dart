@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class TopUpScreen extends StatefulWidget {
-  TopUpScreen({super.key});
+  const TopUpScreen({super.key});
 
   @override
   State<TopUpScreen> createState() => _TopUpScreenState();
@@ -54,7 +54,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
     }
   }
 
-  List<int> _sugestedNominal = [
+  final List<int> _sugestedNominal = [
     50000,
     100000,
     150000,
@@ -65,7 +65,6 @@ class _TopUpScreenState extends State<TopUpScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
@@ -156,7 +155,6 @@ class _TopUpScreenState extends State<TopUpScreen> {
       onChanged: (p0) {
         _topUpValue = int.parse(_nominalController.text);
         _newBalanceValue = _topUpValue! + value!;
-        print('New Value : ${_newBalanceValue}');
         if (p0.isNotEmpty) {
           _nominal();
         } else if (p0.isEmpty) {

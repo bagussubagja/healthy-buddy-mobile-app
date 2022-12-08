@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_search_result_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -14,7 +13,7 @@ import '../../../shared/assets_directory.dart';
 import '../../widgets/margin_width.dart';
 
 class MyDocMainScreen extends StatefulWidget {
-  MyDocMainScreen({super.key});
+  const MyDocMainScreen({super.key});
 
   @override
   State<MyDocMainScreen> createState() => _MyDocMainScreenState();
@@ -36,7 +35,6 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
   ];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final doctorItemPulmonology =
         Provider.of<MyDocByPulmonologyClass>(context, listen: false);

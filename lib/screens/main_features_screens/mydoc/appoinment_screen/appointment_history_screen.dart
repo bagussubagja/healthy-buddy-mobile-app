@@ -1,11 +1,10 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+// ignore_for_file: prefer_is_empty
+
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/video_call_appointment_screen/video_call_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -15,11 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../models/mydoc_model/mydoc_appointment_model.dart';
-import '../../../../routes/routes.dart';
 import '../../../../shared/assets_directory.dart';
 
 class MyDocAppointmentHistoryScreen extends StatefulWidget {
-  MyDocAppointmentHistoryScreen({super.key});
+  const MyDocAppointmentHistoryScreen({super.key});
 
   @override
   State<MyDocAppointmentHistoryScreen> createState() =>
@@ -32,7 +30,6 @@ class _MyDocAppointmentHistoryScreenState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item =
         Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
@@ -219,8 +216,6 @@ class _MyDocAppointmentHistoryScreenState
   }
 
   doUpdate() async {
-    final user =
-        Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
     final item =
         Provider.of<MyDocScheduleAppointmentClass>(context, listen: false);
     AppointmentScheduleModel model = AppointmentScheduleModel(

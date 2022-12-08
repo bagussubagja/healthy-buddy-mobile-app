@@ -20,7 +20,6 @@ class TopDoctorScreen extends StatefulWidget {
 class _TopDoctorScreenState extends State<TopDoctorScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final doctorItemExp =
         Provider.of<MyDocByExperienceClass>(context, listen: false);

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthy_buddy_mobile_app/core/favorites/favorites_notifier.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
-import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -26,7 +26,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   int _currentIndex = 0;
   String? idUser;
   List<bool> _selectedToogle = [true, false, false];
-  List<String> _categoryLabel = [
+  final List<String> _categoryLabel = [
     "Foodies",
     "Sport",
     "MyDoc",
@@ -34,7 +34,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item = Provider.of<FavoriteClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {

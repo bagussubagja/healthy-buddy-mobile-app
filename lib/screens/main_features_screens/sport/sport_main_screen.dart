@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields, prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';

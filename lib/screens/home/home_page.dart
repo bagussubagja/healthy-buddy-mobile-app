@@ -1,7 +1,5 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
@@ -11,7 +9,6 @@ import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
-import 'package:healthy_buddy_mobile_app/services/search_data_services/search_topArticle_service.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
@@ -21,24 +18,13 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/authentication/auth_notifier.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> _emoticon = [
-    'angry.png',
-    'happy.png',
-    'sad.png',
-  ];
-
-  final List<String> _emotionTitle = [
-    'Marah',
-    'Bahagia',
-    'Sedih',
-  ];
 
   final List<String> _categoryIcon = [
     'foodies.png',
@@ -51,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final item = Provider.of<TopArticleClass>(context, listen: false);
     item.getArticle(context: context);

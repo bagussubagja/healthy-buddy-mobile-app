@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,8 +12,6 @@ import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../shared/assets_directory.dart';
 import '../../../widgets/margin_width.dart';
 
 class MyDocCategoryScreen extends StatefulWidget {
@@ -55,7 +55,6 @@ class _MyDocCategoryScreenState extends State<MyDocCategoryScreen> {
         Provider.of<MyDocByHepatologyClass>(context, listen: false);
     itemHepatology.getDoctor(context: context, specialist: "Hepatology");
     Timer(const Duration(seconds: 3), showContent);
-    print(widget.index);
   }
 
   @override

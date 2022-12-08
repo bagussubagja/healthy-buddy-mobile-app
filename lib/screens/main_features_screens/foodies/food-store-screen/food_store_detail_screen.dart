@@ -1,7 +1,6 @@
-import 'dart:ui';
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:count_stepper/count_stepper.dart';
@@ -13,8 +12,6 @@ import 'package:healthy_buddy_mobile_app/models/foodies_model/food_store_model.d
 import 'package:healthy_buddy_mobile_app/models/purchase_history_model/purchase_history_model.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_status_order_screen.dart';
-import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +41,6 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {

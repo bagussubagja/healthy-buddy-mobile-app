@@ -29,7 +29,6 @@ class _FoodStoreStatusOrderScreenState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Timer(const Duration(seconds: 3), showContent);
   }

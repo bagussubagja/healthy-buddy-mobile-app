@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
 class AboutUsScreen extends StatelessWidget {
