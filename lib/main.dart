@@ -7,17 +7,8 @@ import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
-}
 
 void main() {
-  HttpOverrides.global = MyHttpOverrides();
   runApp(const HealthyBuddy());
 }
 
