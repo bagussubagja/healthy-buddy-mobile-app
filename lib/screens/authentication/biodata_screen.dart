@@ -72,7 +72,24 @@ class _BiodataScreenState extends State<BiodataScreen> {
 
   String? _idUser;
 
-
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Peringatan!'),
+            content:
+                const Text('Kamu harus mengisi form biodata terlebih dahulu'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), //<-- SEE HERE
+                child: const Text('Kembali'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
 
   @override
   void initState() {
@@ -86,35 +103,38 @@ class _BiodataScreenState extends State<BiodataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        backgroundColor: bgColor,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: SafeArea(
-            child: Padding(
-          padding: defaultPadding,
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              _headerSection(),
-              MarginHeight(height: 5.h),
-              _textFieldSection(),
-              MarginHeight(height: 3.h),
-              _dropDownSection(),
-              MarginHeight(height: 3.h),
-              _confirmationButton()
-            ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: bgColor,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
           ),
-        )),
+          body: SafeArea(
+              child: Padding(
+            padding: defaultPadding,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                _headerSection(),
+                MarginHeight(height: 5.h),
+                _textFieldSection(),
+                MarginHeight(height: 3.h),
+                _dropDownSection(),
+                MarginHeight(height: 3.h),
+                _confirmationButton()
+              ],
+            ),
+          )),
+        ),
       ),
     );
   }
@@ -165,7 +185,7 @@ class _BiodataScreenState extends State<BiodataScreen> {
         MarginHeight(height: 3.h),
         CustomTextField(
           titleText: "Berat Badan",
-          hintText: "ex. 50 (dalam satuan kg)58",
+          hintText: "ex. 50 (dalam satuan kg)",
           color: Colors.white,
           controller: _weightController,
           textInputType: TextInputType.number,
