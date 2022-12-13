@@ -2,6 +2,7 @@ import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/purchase_history/purchase_history_notifier.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
@@ -79,6 +80,11 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
 
   Widget _itemList() {
     final item = Provider.of<PurchaseHistoryClass>(context);
+    if (item.purchaseHistory?.length == 0) {
+      return ContentEmptyWidget(
+        content: "Item tidak ditemukan!",
+      );
+    }
     return ListView.separated(
         shrinkWrap: true,
         primary: false,
