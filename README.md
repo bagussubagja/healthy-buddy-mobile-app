@@ -1,16 +1,10 @@
-# healthy_buddy_mobile_app
+# Healthy Buddy Mobile App
 
-A new Flutter project.
+Healthy Buddy Mobile App merupakan sebuah aplikasi informatif seputar kesehatan. Aplikasi ini hadir sebagai bentuk kepedulian kami terhadap kesehatan manusia. Dengan menyediakan berbagai macam kebutuhan kesehatan seperti makanan sehat, daftar olahraga yang dapat kamu lakukan, serta layanan dokter yang siap memberikanmu pelayanan terbaik!
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Our Sincerely : Kelompok 4 Kualitas Perangkat Lunak
+- Arfi Triawan : Backend Developer
+- Bagus Subagja : Mobile Developer
+- M. Faja Sumitra : UI/UX Designer
+- Riyandi Firman P. : Backend Developer
+- Suci Sukmawati : Project Manager
