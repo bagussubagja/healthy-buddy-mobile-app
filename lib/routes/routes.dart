@@ -15,8 +15,8 @@ import 'package:healthy_buddy_mobile_app/screens/home/top_article/top_article_sc
 import 'package:healthy_buddy_mobile_app/screens/home/wishslist/wishslist_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-article-screen/food_article_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-calculator-screen/food_calculator_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_menu.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-recipe-screen/food_recipe_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-recipe-screen/food_recipe_menu.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_status_order_screen.dart';
@@ -34,7 +34,7 @@ import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/spo
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-website-screen/sport_website_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_exercise_screen/sport_exercise_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport_main_screen.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup/topup_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/topup_balance/topup_balance_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/extras/no_internet_found_screen.dart';
 
 

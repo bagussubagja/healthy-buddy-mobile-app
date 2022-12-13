@@ -145,9 +145,9 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
 
               await fav.addFavFoodData(body, context);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.favorite_rounded,
-              color: Colors.pink,
+              color: greyTextColor,
             ))
       ],
     );
@@ -204,51 +204,91 @@ class _FoodReceiptDetailScreenState extends State<FoodReceiptDetailScreen> {
 
   Widget _ingredientSection() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Text(
-          'Ingredients',
+          'Bahan Baku',
           style: titleStyle.copyWith(color: blackColor),
         ),
-        GridView.builder(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 15.h,
-                childAspectRatio: 2 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10),
-            shrinkWrap: true,
-            primary: false,
-            itemBuilder: (context, index) {
-              return Container(
+        Wrap(
+          alignment: WrapAlignment.spaceAround,
+          runSpacing: 10,
+          children: List.generate(
+              widget.foodReceiptModel?.ingredients.length ??
+                  widget.foodReceipt!.ingredients!.length, (index) {
+            return GestureDetector(
+              onTap: () {},
+              child: Container(
                 alignment: Alignment.center,
-                margin: const EdgeInsets.all(10),
+                height: 14.h,
+                width: 14.h,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
                   color: greenColor.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                height: 10.h,
-                width: double.infinity,
                 child: Text(
                   widget.foodReceiptModel?.ingredients[index] ??
                       widget.foodReceipt!.ingredients![index],
                   style: regularStyle.copyWith(color: blackColor),
                   textAlign: TextAlign.center,
                 ),
-              );
-            },
-            itemCount: widget.foodReceiptModel?.ingredients.length ??
-                widget.foodReceipt!.ingredients!.length),
+              ),
+            );
+          }),
+        ),
       ],
     );
   }
+
+  // Widget _ingredientSection() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       Text(
+  //         'Bahan Baku',
+  //         style: titleStyle.copyWith(color: blackColor),
+  //       ),
+  //       GridView.builder(
+  //           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+  //               maxCrossAxisExtent: 15.h,
+  //               childAspectRatio: 2 / 2,
+  //               crossAxisSpacing: 10,
+  //               mainAxisSpacing: 10),
+  //           shrinkWrap: true,
+  //           primary: false,
+  //           itemBuilder: (context, index) {
+  //             return Container(
+  //               alignment: Alignment.center,
+  //               margin: const EdgeInsets.all(10),
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(10),
+  //                 color: greenColor.withOpacity(0.3),
+  //               ),
+  //               height: 10.h,
+  //               width: double.infinity,
+  //               child: Text(
+  //                 widget.foodReceiptModel?.ingredients[index] ??
+  //                     widget.foodReceipt!.ingredients![index],
+  //                 style: regularStyle.copyWith(color: blackColor),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             );
+  //           },
+  //           itemCount: widget.foodReceiptModel?.ingredients.length ??
+  //               widget.foodReceipt!.ingredients!.length),
+  //     ],
+  //   );
+  // }
 
   Widget _foodServiceStyle() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Food Service Style',
+          'Gaya Penyajian Makanan',
           style: titleStyle.copyWith(
             color: blackColor,
           ),

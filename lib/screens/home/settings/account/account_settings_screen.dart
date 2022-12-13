@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cache_manager/cache_manager.dart';
@@ -38,7 +40,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
 
-  final List<String> _activityLabel = [
+  List<String> _activityLabel = [
     "Sangat Rendah",
     "Cukup Rendah",
     "Normal",
@@ -46,7 +48,6 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
     "Sangat Padat"
   ];
   String? _selectedActivityValue = 'Normal';
-
 
   double _calorieCalculator(
       String gender, int age, int height, int weight, double activityValue) {
@@ -385,6 +386,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
           var provider =
               Provider.of<UserUpdateSelfDataClass>(context, listen: false);
           provider.updateSelfData(self, idUser!, context);
+          print(self);
         } else {
           final snackBar = SnackBar(
             elevation: 0,

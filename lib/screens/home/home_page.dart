@@ -1,6 +1,7 @@
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/core/extras/top_article_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
@@ -25,7 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final List<String> _categoryIcon = [
     'foodies.png',
     'sport.png',
@@ -48,97 +48,122 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Konfirmasi?'),
+            content: const Text(
+                'Apakah kamu yakin untuk keluar dari aplikasi Healthy Buddy Mobile App?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => SystemNavigator.pop(),
+                child: const Text('Ya'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Tidak'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final AuthenticationNotifier authenticationNotifier =
         Provider.of<AuthenticationNotifier>(context, listen: false);
 
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        backgroundColor: greenColor,
-        appBar: AppBar(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Scaffold(
           backgroundColor: greenColor,
-          elevation: 0,
-          actions: [
-            PopupMenuButton(
-                elevation: 0,
-                icon: const Icon(Icons.more_horiz_rounded),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(4))),
-                color: bgColor,
-                itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: () async {
-                            DeleteCache.deleteKey(
-                                "cache",
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    AppRoutes.loginScreen, (route) => false));
+          appBar: AppBar(
+            backgroundColor: greenColor,
+            elevation: 0,
+            actions: [
+              PopupMenuButton(
+                  elevation: 0,
+                  icon: const Icon(Icons.more_horiz_rounded),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4))),
+                  color: bgColor,
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: GestureDetector(
+                            onTap: () async {
+                              DeleteCache.deleteKey(
+                                  "cache",
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      AppRoutes.loginScreen, (route) => false));
 
-                            await authenticationNotifier.logOut();
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.exit_to_app,
-                                color: greyTextColor,
-                              ),
-                              Text(
-                                'Log Out',
-                                style: regularStyle,
-                              ),
-                            ],
+                              await authenticationNotifier.logOut();
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.exit_to_app,
+                                  color: greyTextColor,
+                                ),
+                                Text(
+                                  'Log Out',
+                                  style: regularStyle,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ])
-          ],
-        ),
-        drawer: _drawer(),
-        body: SafeArea(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              MarginHeight(height: 15),
-              Padding(
-                padding: defaultPadding,
-                child: _headerIdentity(),
-              ),
-              Padding(
-                padding: defaultPadding,
-                child: CustomTextField(
-                  color: bgColor,
-                  onTap: () {
-                    showSearch(
-                        context: context, delegate: SearchTopArticleResult());
-                  },
-                  readOnly: true,
-                  prefixIcon: const Icon(
-                    Icons.search,
-                  ),
-                  hintText: "Cari artikel terhangat disini...",
-                ),
-              ),
-              MarginHeight(height: 3.h),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                    color: bgColor),
-                child: Padding(
-                  padding: defaultPadding,
-                  child: _whiteSection(context),
-                ),
-              )
+                      ])
             ],
+          ),
+          drawer: _drawer(),
+          body: SafeArea(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                MarginHeight(height: 15),
+                Padding(
+                  padding: defaultPadding,
+                  child: _headerIdentity(),
+                ),
+                Padding(
+                  padding: defaultPadding,
+                  child: CustomTextField(
+                    color: bgColor,
+                    onTap: () {
+                      showSearch(
+                          context: context, delegate: SearchTopArticleResult());
+                    },
+                    readOnly: true,
+                    prefixIcon: const Icon(
+                      Icons.search,
+                    ),
+                    hintText: "Cari artikel terhangat disini...",
+                  ),
+                ),
+                MarginHeight(height: 3.h),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(30),
+                      ),
+                      color: bgColor),
+                  child: Padding(
+                    padding: defaultPadding,
+                    child: _whiteSection(context),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

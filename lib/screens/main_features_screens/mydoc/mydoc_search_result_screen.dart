@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/models/mydoc_model/mydoc_model.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/detail_screen/mydoc_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/services/search_data_services/search_toparticle_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -64,6 +65,15 @@ class MyDocSearchResultScreen extends SearchDelegate {
               return Card(
                 elevation: 0,
                 child: ListTile(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return MyDocDetailScreen(
+                          myDocModel: data?[index],
+                        );
+                      },
+                    ));
+                  },
                   title: Row(
                     children: [
                       ClipRRect(

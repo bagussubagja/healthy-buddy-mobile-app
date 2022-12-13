@@ -6,6 +6,7 @@ import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/sport/sport-store-screen/sport_store_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,16 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
   int _cartItemQuantity = 0;
   int? _foodQuantity;
   int? _sportQuantity;
+
+  List<bool> selectedToogle = [true, false, false, false, false];
+
+  List<String> foodStoreCategory = [
+    "General",
+    "Soccer",
+    "Athletic",
+    "Badminton",
+    "Swimming"
+  ];
 
   @override
   void initState() {
@@ -100,7 +111,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
             color: whiteColor,
           ),
           onPressed: () {
-             Navigator.pushNamed(context, AppRoutes.wishlistScreen);
+            Navigator.pushNamed(context, AppRoutes.wishlistScreen);
           },
         ),
       ),
@@ -232,15 +243,6 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
   }
 
   Widget _sportStoreToogleButton() {
-    List<bool> selectedToogle = [true, false, false, false, false];
-
-    List<String> foodStoreCategory = [
-      "General",
-      "Soccer",
-      "Athletic",
-      "Badminton",
-      "Swimming"
-    ];
     return Center(
       child: SizedBox(
         height: 5.h,
@@ -314,6 +316,12 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
       } else {
         return 0;
       }
+    }
+
+    if (itemCount(_currentIndex) == 0) {
+      return ContentEmptyWidget(
+        content: "Saat ini item tidak tersedia",
+      );
     }
 
     return ListView.separated(
@@ -633,12 +641,9 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
                                                   )
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Icon(
-                                Icons.shopping_cart_outlined,
-                                color: greyTextColor,
-                              ),
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              color: greyTextColor,
                             ),
                           ],
                         )

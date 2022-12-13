@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: ListView(
             children: [
               MarginHeight(height: 2.h),
-              _headerSection(),
+              _headerSection(user),
               MarginHeight(height: 2.h),
               _mainSection()
             ],
@@ -63,8 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _headerSection() {
-    final user = Provider.of<UserClass>(context);
+  Widget _headerSection(UserClass user) {
     return Column(
       children: [
         ClipRRect(
