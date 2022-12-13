@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -30,6 +32,9 @@ class AboutUsScreen extends StatelessWidget {
     'Backend Dev',
     'Project Manager'
   ];
+
+  String _description =
+      "Healthy Buddy Mobile App merupakan sebuah aplikasi informatif seputar kesehatan. Aplikasi ini hadir sebagai bentuk kepedulian kami terhadap kesehatan manusia. Dengan menyediakan berbagai macam kebutuhan kesehatan seperti makanan sehat, daftar olahraga yang dapat kamu lakukan, serta layanan dokter yang siap memberikanmu pelayanan terbaik!";
 
   final List<int> _nimOfGroup = [2002890, 2008315, 2007669, 2008672, 2008656];
 
@@ -70,7 +75,7 @@ class AboutUsScreen extends StatelessWidget {
             ),
             MarginHeight(height: 3.h),
             Text(
-              'Healthy Buddy is here as a form of our concern for human health. We created an app that caters to a healthy lifestyle for everyone. By providing various kinds of health needs such as healthy food, sports that can improve body fitness, as well as professional doctors who are ready to provide the best service to you!',
+              _description,
               style: regularStyle.copyWith(color: greyTextColor),
               textAlign: TextAlign.justify,
             ),
@@ -79,6 +84,7 @@ class AboutUsScreen extends StatelessWidget {
               'Team Member :',
               style: regularStyle,
             ),
+            MarginHeight(height: 1.5.h),
             ListView.separated(
               separatorBuilder: (context, index) {
                 return MarginHeight(height: 2.h);
@@ -122,7 +128,6 @@ class AboutUsScreen extends StatelessWidget {
                                 style: regularStyle.copyWith(
                                     color: whiteColor, fontSize: 10.sp),
                               ),
-
                             ],
                           ),
                         ],

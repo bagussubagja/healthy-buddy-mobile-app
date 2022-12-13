@@ -414,7 +414,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       SizedBox(
                           width: 70.w,
                           child: Text(
-                            '${user.users?[0].address}',
+                            'Alamat : ${user.users?[0].address}',
                             style: regularStyle,
                           )),
                       OutlinedButton(

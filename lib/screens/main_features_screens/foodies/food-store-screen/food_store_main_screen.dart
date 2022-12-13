@@ -13,6 +13,7 @@ import 'package:healthy_buddy_mobile_app/core/wishlist/foodies_wishlist_notifier
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/content_empty.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -304,176 +305,6 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
     );
   }
 
-  // Widget _gridViewItemList(int currentIndex) {
-  //   final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
-  //   final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
-  //   final itemByInstan = Provider.of<FoodStoreByInstanClass>(context);
-  //   final itemByMinuman = Provider.of<FoodStoreByMinumanClass>(context);
-  //   int itemCount(int x) {
-  //     if (x == 0) {
-  //       return itemByBuah.foodStoreModel?.length ?? 0;
-  //     } else if (x == 1) {
-  //       return itemBySayuran.foodStoreModel?.length ?? 0;
-  //     } else if (x == 2) {
-  //       return itemByInstan.foodStoreModel?.length ?? 0;
-  //     } else if (x == 3) {
-  //       return itemByMinuman.foodStoreModel?.length ?? 0;
-  //     } else {
-  //       return 0;
-  //     }
-  //   }
-
-  //   return GridView.builder(
-  //     shrinkWrap: true,
-  //     primary: false,
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-  //         maxCrossAxisExtent: 43.h,
-  //         childAspectRatio: 3 / 2,
-  //         crossAxisSpacing: 20,
-  //         mainAxisSpacing: 20),
-  //     itemCount: itemCount(_currentIndex),
-  //     itemBuilder: (BuildContext ctx, index) {
-  //       return GestureDetector(
-  //         onTap: () {
-  //           if (_currentIndex == 0) {
-  //             final itemBuah = itemByBuah.foodStoreModel?[index];
-  //             Navigator.push(context, MaterialPageRoute(
-  //               builder: (context) {
-  //                 return FoodStoreDetailScreen(
-  //                   foodStoreModel: itemBuah,
-  //                 );
-  //               },
-  //             ));
-  //           } else if (_currentIndex == 1) {
-  //             final itemSayuran = itemBySayuran.foodStoreModel?[index];
-  //             Navigator.push(context, MaterialPageRoute(
-  //               builder: (context) {
-  //                 return FoodStoreDetailScreen(
-  //                   foodStoreModel: itemSayuran,
-  //                 );
-  //               },
-  //             ));
-  //           } else if (_currentIndex == 2) {
-  //             final itemInstan = itemByInstan.foodStoreModel?[index];
-  //             Navigator.push(context, MaterialPageRoute(
-  //               builder: (context) {
-  //                 return FoodStoreDetailScreen(
-  //                   foodStoreModel: itemInstan,
-  //                 );
-  //               },
-  //             ));
-  //           } else if (_currentIndex == 3) {
-  //             final itemMinuman = itemByMinuman.foodStoreModel?[index];
-  //             Navigator.push(context, MaterialPageRoute(
-  //               builder: (context) {
-  //                 return FoodStoreDetailScreen(
-  //                   foodStoreModel: itemMinuman,
-  //                 );
-  //               },
-  //             ));
-  //           }
-  //         },
-  //         child: ClipRRect(
-  //           borderRadius: BorderRadius.circular(12),
-  //           child: SizedBox(
-  //             child: Stack(
-  //               alignment: Alignment.bottomCenter,
-  //               children: [
-  //                 _currentIndex == 0
-  //                     ? CachedNetworkImage(
-  //                         imageUrl:
-  //                             itemByBuah.foodStoreModel?[index].gallery[0] ??
-  //                                 imgPlaceHolder,
-  //                         imageBuilder: (context, imageProvider) => Container(
-  //                           decoration: BoxDecoration(
-  //                             image: DecorationImage(
-  //                               image: imageProvider,
-  //                               fit: BoxFit.cover,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         placeholder: (context, url) => const Center(
-  //                           child: CircularProgressIndicator(),
-  //                         ),
-  //                         errorWidget: (context, url, error) => const Center(
-  //                           child: Icon(Icons.error),
-  //                         ),
-  //                       )
-  //                     : _currentIndex == 1
-  //                         ? CachedNetworkImage(
-  //                             imageUrl: itemBySayuran
-  //                                     .foodStoreModel?[index].gallery[0] ??
-  //                                 imgPlaceHolder,
-  //                             imageBuilder: (context, imageProvider) =>
-  //                                 Container(
-  //                               decoration: BoxDecoration(
-  //                                 image: DecorationImage(
-  //                                   image: imageProvider,
-  //                                   fit: BoxFit.cover,
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                             placeholder: (context, url) => const Center(
-  //                               child: CircularProgressIndicator(),
-  //                             ),
-  //                             errorWidget: (context, url, error) =>
-  //                                 const Center(
-  //                               child: Icon(Icons.error),
-  //                             ),
-  //                           )
-  //                         : _currentIndex == 2
-  //                             ? CachedNetworkImage(
-  //                                 imageUrl: itemByInstan
-  //                                         .foodStoreModel?[index].gallery[0] ??
-  //                                     imgPlaceHolder,
-  //                                 imageBuilder: (context, imageProvider) =>
-  //                                     Container(
-  //                                   decoration: BoxDecoration(
-  //                                     image: DecorationImage(
-  //                                       image: imageProvider,
-  //                                       fit: BoxFit.cover,
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                                 placeholder: (context, url) => const Center(
-  //                                   child: CircularProgressIndicator(),
-  //                                 ),
-  //                                 errorWidget: (context, url, error) =>
-  //                                     const Center(
-  //                                   child: Icon(Icons.error),
-  //                                 ),
-  //                               )
-  //                             : CachedNetworkImage(
-  //                                 imageUrl: itemByMinuman
-  //                                         .foodStoreModel?[index].gallery[0] ??
-  //                                     imgPlaceHolder,
-  //                                 imageBuilder: (context, imageProvider) =>
-  //                                     Container(
-  //                                   decoration: BoxDecoration(
-  //                                     image: DecorationImage(
-  //                                       image: imageProvider,
-  //                                       fit: BoxFit.cover,
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                                 placeholder: (context, url) => const Center(
-  //                                   child: CircularProgressIndicator(),
-  //                                 ),
-  //                                 errorWidget: (context, url, error) =>
-  //                                     const Center(
-  //                                   child: Icon(Icons.error),
-  //                                 ),
-  //                               )
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget _listViewItemList(int currentIndex) {
     final itemByBuah = Provider.of<FoodStoreByBuahClass>(context);
     final itemBySayuran = Provider.of<FoodStoreBySayuranClass>(context);
@@ -491,6 +322,12 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
       } else {
         return 0;
       }
+    }
+
+    if (itemCount(_currentIndex) == 0) {
+      return ContentEmptyWidget(
+        content: "Saat ini item tidak tersedia",
+      );
     }
 
     return ListView.separated(
@@ -745,9 +582,9 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                               ],
                             ),
                             Icon(
-                              Icons.arrow_right_alt_rounded,
+                              Icons.shopping_cart_outlined,
                               color: greyTextColor,
-                            )
+                            ),
                           ],
                         )
                       ],

@@ -46,7 +46,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
     } else if (widget.myDocModel?.name != null) {
       numLabel.add(widget.myDocModel!.patients.toString());
       numLabel.add(widget.myDocModel!.yearExp.toString());
-      numLabel.add(widget.myDocModel!.rating.toString());
+      numLabel.add('${widget.myDocModel!.rating.toString()}/5');
     }
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
@@ -110,7 +110,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: blackColor,
+              color: whiteColor,
             ),
           ),
           IconButton(
@@ -123,9 +123,9 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                       '${idUser}_${widget.myDocModel?.id ?? widget.myDoc?.id}');
               await fav.addFavDocData(body, context);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.favorite,
-              color: Colors.pink,
+              color: whiteColor,
             ),
           ),
         ],

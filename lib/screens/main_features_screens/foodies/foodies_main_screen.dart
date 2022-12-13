@@ -45,7 +45,7 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
   final List<String> _iconLabel = [
     "Food Article",
     "Food Calculator",
-    "Food Receipt",
+    "Food Recipe",
     "Food Store"
   ];
 
@@ -230,7 +230,8 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     if (index == 0) {
                       Navigator.pushNamed(context, AppRoutes.foodArticleMenu);
                     } else if (index == 1) {
-                       Navigator.pushNamed(context, AppRoutes.foodCalculatorScreen);
+                      Navigator.pushNamed(
+                          context, AppRoutes.foodCalculatorScreen);
                     } else if (index == 2) {
                       Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
                     } else if (index == 3) {

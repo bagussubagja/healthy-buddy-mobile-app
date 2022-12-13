@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_receipt_notifier.dart';
-import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-receipt-screen/food_receipt_detail_screen.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-recipe-screen/food_recipe_detail_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
 import 'package:healthy_buddy_mobile_app/shared/assets_directory.dart';
@@ -79,7 +79,7 @@ class _FoodReceiptMenuScreenState extends State<FoodReceiptMenuScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Food Receipt',
+          'Food Recipe',
           style: titleStyle.copyWith(color: greenColor),
         ),
         MarginHeight(height: 0.75.h),
