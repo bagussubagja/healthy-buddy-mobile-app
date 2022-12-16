@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, use_build_context_synchronously
 
 import 'dart:async';
 import 'package:cache_manager/cache_manager.dart';
@@ -92,7 +92,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   SizedBox(
                     width: 75.w,
                     child: Text(
-                      '${user.users?[0].address}',
+                      '${user.users?.address}',
                       style: regularStyle.copyWith(color: greyTextColor),
                     ),
                   ),
@@ -317,21 +317,48 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             )),
                         MarginWidth(width: 10.w),
                         IconButton(
-                            onPressed: () async {
-                              try {
-                                if (_currentIndex == 0) {
-                                  await itemFoodies.deleteFoodiesWishlistData(
-                                      id: itemFoodies
-                                          .wishlistFoodies![index].id!,
-                                      context: context);
-                                } else if (_currentIndex == 1) {
-                                  await itemSport.deleteSportWishlistData(
-                                      id: itemSport.wishlistSport![index].id!,
-                                      context: context);
-                                }
-                              } catch (e) {
-                                debugPrint(e.toString());
-                              }
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Konfirmasi'),
+                                  content: const Text(
+                                      'Apakah kamu yakin untuk menghapus item ini pada keranjang?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () async {
+                                        try {
+                                          if (_currentIndex == 0) {
+                                            await itemFoodies
+                                                .deleteFoodiesWishlistData(
+                                                    id: itemFoodies
+                                                        .wishlistFoodies![index]
+                                                        .id!,
+                                                    context: context);
+                                          } else if (_currentIndex == 1) {
+                                            await itemSport
+                                                .deleteSportWishlistData(
+                                                    id: itemSport
+                                                        .wishlistSport![index]
+                                                        .id!,
+                                                    context: context);
+                                          }
+                                        } catch (e) {
+                                          debugPrint(e.toString());
+                                        }
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Ya'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Tidak'),
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
                             icon: const Icon(
                               Icons.delete,

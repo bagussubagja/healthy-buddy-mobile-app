@@ -94,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
                       },
                       icon: Icon(
-                        Icons.visibility,
+                        _isVisible ? Icons.visibility : Icons.visibility_off,
                         color: greyTextColor,
                       )),
                 ),
@@ -109,12 +109,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: regularStyle,
                     ),
                     onPressed: () async {
-                      if (_emailController.text.isNotEmpty &&
-                          _passwordController.text.isNotEmpty) {
-                        authenticationNotifier.registerUser(
-                            context: context,
-                            email: _emailController.text,
-                            password: _passwordController.text);
+                      if (_passwordController.text.length >= 6) {
+                        if (_emailController.text.isNotEmpty &&
+                            _passwordController.text.isNotEmpty) {
+                          authenticationNotifier.registerUser(
+                              context: context,
+                              email: _emailController.text,
+                              password: _passwordController.text);
+                        } else {
+                          final snackBar = SnackBar(
+                            elevation: 0,
+                            width: double.infinity,
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.transparent,
+                            content: AwesomeSnackbarContent(
+                              title: 'Field Tidak Boleh Kosong!',
+                              message:
+                                  'Kamu harus memasukan email dan password untuk melakukan register!',
+                              contentType: ContentType.warning,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(snackBar);
+                        }
                       } else {
                         final snackBar = SnackBar(
                           elevation: 0,
@@ -122,9 +140,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: Colors.transparent,
                           content: AwesomeSnackbarContent(
-                            title: 'Field Tidak Boleh Kosong!',
+                            title: 'Peringatan',
                             message:
-                                'Kamu harus memasukan email dan password untuk melakukan register!',
+                                'Panjang password tidak boleh kurang dari 6 karakter',
                             contentType: ContentType.warning,
                           ),
                         );

@@ -98,6 +98,9 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
         _cartItemQuantity = _foodQuantity! + _sportQuantity!;
       });
     }
+
+    final user = Provider.of<UserClass>(context, listen: false);
+    user.getUser(context: context, idUser: idUser ?? "");
     return Scaffold(
       backgroundColor: bgColor,
       floatingActionButton: Badge(
@@ -381,7 +384,17 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 3,
+                    blurRadius: 10,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,

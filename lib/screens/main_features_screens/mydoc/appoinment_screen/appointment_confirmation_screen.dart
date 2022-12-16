@@ -129,9 +129,9 @@ class _AppointmentConfirmationScreenState
 
   Widget _mainSection() {
     final user = Provider.of<UserClass>(context);
-    if (user.users?[0].balance != null) {
+    if (user.users?.balance != null) {
       setState(() {
-        _userBalance = user.users?[0].balance;
+        _userBalance = user.users?.balance;
         _expectedBalance = _userBalance! - widget.price!;
       });
     }

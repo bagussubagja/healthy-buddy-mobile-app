@@ -29,13 +29,6 @@ class FavoriteClass extends ChangeNotifier {
     notifyListeners();
   }
 
-  getFavSport({required BuildContext context, required String idUser}) async {
-    isLoading = true;
-    sport = (await getFavSportByIdUser(context: context, idUser: idUser));
-    isLoading = false;
-    notifyListeners();
-  }
-
   deleteFavFoodData({required int id, required BuildContext context}) async {
     food = (await deleteFavReceiptById(id: id, context: context));
     notifyListeners();
@@ -90,8 +83,8 @@ class FavoriteClass extends ChangeNotifier {
 
   Future<void> addFavDocData(FavMyDocModel body, BuildContext context) async {
     notifyListeners();
-    http.Response response = (await addFavMyDocData(body, context))!;
-    if (response.statusCode == 201) {
+    http.Response? response = (await addFavMyDocData(body, context));
+    if (response?.statusCode == 201) {
       final snackBar = SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,

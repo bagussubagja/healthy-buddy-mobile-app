@@ -72,6 +72,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserClass>(context);
     final AuthenticationNotifier authenticationNotifier =
         Provider.of<AuthenticationNotifier>(context, listen: false);
 
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                 MarginHeight(height: 15),
                 Padding(
                   padding: defaultPadding,
-                  child: _headerIdentity(),
+                  child: _headerIdentity(user),
                 ),
                 Padding(
                   padding: defaultPadding,
@@ -235,8 +236,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _headerIdentity() {
-    final user = Provider.of<UserClass>(context);
+  Widget _headerIdentity(UserClass user) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
               style: regularStyle.copyWith(color: Colors.white),
             ),
             Text(
-              user.users?[0].name ?? "Loading...",
+              user.users?.name ?? "Loading...",
               style: titleStyle.copyWith(color: Colors.white),
             )
           ],
@@ -262,12 +262,12 @@ class _HomePageState extends State<HomePage> {
             child: SizedBox(
               height: 50,
               width: 50,
-              child: user.users?[0].gender == "Laki-laki"
+              child: user.users?.gender == "Laki-laki"
                   ? Image.asset(
                       '$imageDirectory/ava1.png',
                       fit: BoxFit.cover,
                     )
-                  : user.users?[0].gender == "Perempuan"
+                  : user.users?.gender == "Perempuan"
                       ? Image.asset(
                           '$imageDirectory/ava2.png',
                           fit: BoxFit.cover,

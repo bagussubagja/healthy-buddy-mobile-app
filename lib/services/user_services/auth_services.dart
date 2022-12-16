@@ -11,6 +11,8 @@ import '../../models/user_model/user_model.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../routes/routes.dart';
+
 class AuthenticationService {
   Future<String?> registerUser(
       {required String email,
@@ -21,13 +23,15 @@ class AuthenticationService {
 
     if (response.error == null) {
       String? id = response.data!.user!.id;
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.biodataScreen, (route) => false,
+          arguments: email);
       return id;
     } else {
       if (response.error?.message == "User already registered") {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
                 "Tidak bisa melakukan registrasi : Email sudah terdaftar!")));
-        
       }
     }
     return '';
@@ -45,6 +49,8 @@ class AuthenticationService {
 
     if (response.error == null) {
       String? id = response.data!.user!.id;
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.statePageUI, (route) => false);
       return id;
     } else {
       if (response.error?.message == "Invalid login credentials") {

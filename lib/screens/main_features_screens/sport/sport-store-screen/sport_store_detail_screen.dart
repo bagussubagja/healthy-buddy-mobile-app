@@ -361,10 +361,14 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
 
   Future showModal() async {
     final user = Provider.of<UserClass>(context, listen: false);
-    final userBalance = user.users?[0].balance;
+    final userBalance = user.users?.balance;
     setState(() {
       _totalPrice = (_price - (_price * 0.15));
-      _expectedBalance = userBalance! - _totalPrice.round();
+      if (user.users?.hasDiscount == true) {
+        _expectedBalance = userBalance! - _totalPrice.round();
+      } else {
+        _expectedBalance = user.users!.balance! - _price;
+      }
     });
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
@@ -407,13 +411,15 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
                     style: regularStyle,
                   ),
                   Text(
-                    user.users?[0].hasDiscount == true
+                    user.users?.hasDiscount == true
                         ? 'Diskon 15%'
                         : 'Diskon : 0%',
                     style: regularStyle,
                   ),
                   Text(
-                    'Total Harga : ${rupiah(_totalPrice)}',
+                    user.users?.hasDiscount == true
+                        ? 'Total Harga : ${rupiah(_totalPrice.round())}'
+                        : 'Total Harga : ${rupiah(_price)}',
                     style: regularStyle,
                   ),
                   Row(
@@ -421,11 +427,14 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
                       SizedBox(
                           width: 70.w,
                           child: Text(
-                            '${user.users?[0].address}',
+                            '${user.users?.address}',
                             style: regularStyle,
                           )),
                       OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.accountSettingScreen);
+                          },
                           child: Text(
                             'Ubah',
                             style: regularStyle,
@@ -457,7 +466,7 @@ class _SportStoreDetailScreenState extends State<SportStoreDetailScreen> {
                                 PurchaseHistoryModel(
                               idUser: idUser,
                               category: "Sport Store",
-                              price: user.users?[0].hasDiscount == true
+                              price: user.users?.hasDiscount == true
                                   ? _totalPrice.round()
                                   : _price,
                               productName:

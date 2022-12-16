@@ -25,8 +25,8 @@ class FoodiesWishlistClass extends ChangeNotifier {
 
   Future<void> addData(WishlistFoodiesModel body, BuildContext context) async {
     notifyListeners();
-    http.Response response = (await addFoodiesWishlist(body, context))!;
-    if (response.statusCode == 201) {
+    http.Response? response = (await addFoodiesWishlist(body, context));
+    if (response?.statusCode == 201) {
       final snackBar = SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,

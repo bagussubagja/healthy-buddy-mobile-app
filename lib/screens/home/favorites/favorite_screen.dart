@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, use_build_context_synchronously
 
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,12 +25,16 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen> {
   int _currentIndex = 0;
   String? idUser;
-  List<bool> _selectedToogle = [true, false, false];
+  List<bool> _selectedToogle = [true, false];
   final List<String> _categoryLabel = [
     "Foodies",
-    "Sport",
     "MyDoc",
   ];
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -41,7 +45,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         idUser = value;
         item.getFavFood(context: context, idUser: value);
         item.getFavMyDoc(context: context, idUser: value);
-        item.getFavSport(context: context, idUser: value);
       });
     });
   }
@@ -51,7 +54,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     final item = Provider.of<FavoriteClass>(context);
     item.getFavFood(context: context, idUser: idUser ?? "");
     item.getFavMyDoc(context: context, idUser: idUser ?? "");
-    item.getFavSport(context: context, idUser: idUser ?? "");
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(
@@ -247,24 +249,51 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                          onTap: () async {
-                            if (_currentIndex == 0) {
-                              await item.deleteFavFoodData(
-                                  id: item.food![index].id!, context: context);
-                            } else if (_currentIndex == 1) {
-                              await item.deleteFavSportData(
-                                  id: item.sport![index].id!, context: context);
-                            } else if (_currentIndex == 2) {
-                              await item.deleteFavMyDocData(
-                                  id: item.doc![index].id!, context: context);
-                            }
-                          },
-                          child: Icon(
-                            Icons.delete,
-                            color: blackColor,
-                          ),
-                        ),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Konfirmasi'),
+                                  content: const Text(
+                                      'Apakah kamu yakin untuk menghapus item ini pada bagian favorite?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () async {
+                                        try {
+                                          if (_currentIndex == 0) {
+                                            await item.deleteFavFoodData(
+                                                id: item.food![index].id!,
+                                                context: context);
+                                          } else if (_currentIndex == 1) {
+                                            await item.deleteFavSportData(
+                                                id: item.sport![index].id!,
+                                                context: context);
+                                          } else if (_currentIndex == 2) {
+                                            await item.deleteFavMyDocData(
+                                                id: item.doc![index].id!,
+                                                context: context);
+                                          }
+                                        } catch (e) {
+                                          debugPrint(e.toString());
+                                        }
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Ya'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Tidak'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                            )),
                         MarginWidth(width: 4.h),
                         GestureDetector(
                           onTap: () async {
