@@ -11,7 +11,6 @@ import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/margin_width.dart';
 
@@ -155,10 +154,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       if (x == 0) {
         return item.food?.length ?? 0;
       } else if (x == 1) {
-        return item.sport?.length ?? 0;
-      } else if (x == 2) {
         return item.doc?.length ?? 0;
-      } else {
+      }  else {
         return 0;
       }
     }
@@ -196,9 +193,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   child: CachedNetworkImage(
                     imageUrl: _currentIndex == 0
                         ? '${item.food?[index].foodReceipt?.galleryPhoto?[0]}'
-                        : _currentIndex == 1
-                            ? '${item.sport?[index].sportExercise?.thumbnail}'
-                            : '${item.doc?[index].myDoc?.thumbnail}',
+                        : '${item.doc?[index].myDoc?.thumbnail}',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
@@ -228,9 +223,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       child: Text(
                         _currentIndex == 0
                             ? '${item.food?[index].foodReceipt?.name}'
-                            : _currentIndex == 1
-                                ? '${item.sport?[index].sportExercise?.name}'
-                                : '${item.doc?[index].myDoc?.name}',
+                            : '${item.doc?[index].myDoc?.name}' ,
                         style: titleStyle.copyWith(fontSize: 12.sp),
                       ),
                     ),
@@ -239,9 +232,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       child: Text(
                         _currentIndex == 0
                             ? '${item.food?[index].foodReceipt?.description?.substring(0, 60)}...'
-                            : _currentIndex == 1
-                                ? '${item.sport?[index].sportExercise?.description?.substring(0, 60)}...'
-                                : '${item.doc?[index].myDoc?.description?.substring(0, 60)}...',
+                            : '${item.doc?[index].myDoc?.description?.substring(0, 60)}...',
                         style: regularStyle.copyWith(
                             color: greyTextColor, fontSize: 10.sp),
                       ),
@@ -266,10 +257,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                                 id: item.food![index].id!,
                                                 context: context);
                                           } else if (_currentIndex == 1) {
-                                            await item.deleteFavSportData(
-                                                id: item.sport![index].id!,
-                                                context: context);
-                                          } else if (_currentIndex == 2) {
                                             await item.deleteFavMyDocData(
                                                 id: item.doc![index].id!,
                                                 context: context);
@@ -307,12 +294,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 },
                               ));
                             } else if (_currentIndex == 1) {
-                              final sport = item.sport?[index].sportExercise;
-                              final url = Uri.parse(sport!.linkVideo!);
-                              if (await canLaunchUrl(url)) {
-                                await launchUrl(url);
-                              }
-                            } else if (_currentIndex == 2) {
                               final myDoc = item.doc?[index].myDoc;
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
@@ -321,7 +302,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                   );
                                 },
                               ));
-                            }
+                            } 
                           },
                           child: Icon(
                             Icons.arrow_forward_outlined,
