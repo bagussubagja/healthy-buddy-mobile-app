@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:healthy_buddy_mobile_app/providers/providers_list.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -29,12 +31,30 @@ void main() {
     if (isDebug) {
       return ErrorWidget(details.exception);
     }
-    return Container(
-      alignment: Alignment.center,
-      child: Text(
-        'Error Ditemukan Pada Aplikasi : ${details.exception}',
-        style: regularStyle,
-      ),
+    return Scaffold(
+      backgroundColor: bgColor,
+      body: SafeArea(
+          child: Padding(
+        padding: defaultPadding,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LottieBuilder.asset('assets/lotties/'),
+              Text(
+                'Error Ditemukan pada Aplikasi!',
+                style: titleStyle,
+              ),
+              MarginHeight(height: 1.h),
+              Text(
+                'Pesan Error : ${details.exception}',
+                style: titleStyle,
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   });
   runApp(const HealthyBuddy());
