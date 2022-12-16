@@ -4,7 +4,7 @@ import 'package:healthy_buddy_mobile_app/services/user_services/user_services.da
 import 'package:http/http.dart' as http;
 
 class UserClass extends ChangeNotifier {
-  List<UserModel>? users;
+  UserModel? users;
   bool isLoading = false;
 
   getUser({required BuildContext context, required String idUser}) async {

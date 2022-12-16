@@ -21,7 +21,6 @@ class SportExerciseScreen extends StatefulWidget {
 }
 
 class _SportExerciseScreenState extends State<SportExerciseScreen> {
-  int _currentIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -52,14 +51,14 @@ class _SportExerciseScreenState extends State<SportExerciseScreen> {
           children: [
             _headerSection(),
             MarginHeight(height: 3.h),
-            _exerciseSection(_currentIndex),
+            _exerciseSection(),
           ],
         ),
       )),
     );
   }
 
-  Widget _exerciseSection(int currentIndex) {
+  Widget _exerciseSection() {
     final item = Provider.of<SportExerciseAllClass>(context);
 
     if (item.isLoading == true) {
@@ -76,6 +75,14 @@ class _SportExerciseScreenState extends State<SportExerciseScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 3,
+                  blurRadius: 10,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(

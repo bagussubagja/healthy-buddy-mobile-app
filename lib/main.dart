@@ -41,7 +41,7 @@ void main() {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              LottieBuilder.asset('assets/lotties/'),
+              LottieBuilder.asset('assets/lotties/not-found-content.json'),
               Text(
                 'Error Ditemukan pada Aplikasi!',
                 style: titleStyle,
@@ -49,7 +49,7 @@ void main() {
               MarginHeight(height: 1.h),
               Text(
                 'Pesan Error : ${details.exception}',
-                style: titleStyle,
+                style: regularStyle,
               ),
             ],
           ),

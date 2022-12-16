@@ -351,7 +351,7 @@ class _MyDocDetailScreenState extends State<MyDocDetailScreen> {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     return AppointmentConfirmationScreen(
-                      name: user.users?[0].name,
+                      name: user.users?.name,
                       doctorName: widget.myDocModel?.name ?? widget.myDoc?.name,
                       dateAppointment: _selectedDate,
                       hospital:

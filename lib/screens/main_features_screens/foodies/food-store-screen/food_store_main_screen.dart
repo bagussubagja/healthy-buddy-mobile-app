@@ -95,6 +95,9 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
         _cartItemQuantity = _foodQuantity! + _sportQuantity!;
       });
     }
+
+    final user = Provider.of<UserClass>(context, listen: false);
+    user.getUser(context: context, idUser: idUser ?? "");
     return Scaffold(
       floatingActionButton: Badge(
         badgeContent: Text(
@@ -149,18 +152,13 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
                 MarginHeight(
                   height: 2.h,
                 ),
-                Visibility(
-                  visible: _isVisible,
-                  replacement: const Center(child: CircularProgressIndicator()),
-                  child: _discountSection(context),
-                ),
+                 _discountSection(context),
                 MarginHeight(
                   height: 2.h,
                 ),
                 _foodStoreToogleButton(),
                 MarginHeight(height: 2.h),
                 _listViewItemList(_currentIndex)
-                // _gridViewItemList()
               ],
             ),
           ),
@@ -378,7 +376,17 @@ class _FoodStoreMainScreenState extends State<FoodStoreMainScreen> {
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 3,
+                    blurRadius: 10,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,

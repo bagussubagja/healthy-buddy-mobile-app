@@ -176,7 +176,7 @@ class _MyDocAppointmentHistoryScreenState
                                         conferenceID:
                                             item.schedule?[index].idSchedule ??
                                                 "",
-                                        name: user.users?[0].name ?? "",
+                                        name: user.users?.name ?? "",
                                         idDoctor: item.schedule?[index].idDoctor
                                                 .toString() ??
                                             "",

@@ -6,7 +6,7 @@ import 'package:healthy_buddy_mobile_app/credentials/supabase_credential.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<UserModel>?> getUserData(
+Future<UserModel?> getUserData(
     {required BuildContext context, required String idUser}) async {
   var client = http.Client();
   var uri = Uri.parse(
@@ -16,12 +16,13 @@ Future<List<UserModel>?> getUserData(
         await client.get(uri, headers: {'Authorization': 'Bearer $bearer'});
     if (respone.statusCode == 200) {
       var json = respone.body;
-      return userModelFromJson(json);
+      List data = jsonDecode(json);
+      return UserModel.fromJson(data.first);
     }
   } catch (e) {
     debugPrint(e.toString());
   }
-  return [];
+  return UserModel();
 }
 
 Future<http.Response?> updateUserNameData(

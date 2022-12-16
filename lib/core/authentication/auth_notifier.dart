@@ -1,6 +1,5 @@
 import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/services/user_services/auth_services.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,11 +27,7 @@ class AuthenticationNotifier extends ChangeNotifier {
     try {
       dynamic userId = await _authenticationService.registerUser(
           email: email, password: password, context: context);
-      WriteCache.setString(key: 'cache', value: userId!).whenComplete(() {
-        Navigator.pushNamedAndRemoveUntil(
-            context, AppRoutes.biodataScreen, (route) => false,
-            arguments: email);
-      });
+      WriteCache.setString(key: 'cache', value: userId!);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -46,10 +41,7 @@ class AuthenticationNotifier extends ChangeNotifier {
     try {
       dynamic userId = await _authenticationService.loginUser(
           email: email, password: password, context: context);
-      WriteCache.setString(key: 'cache', value: userId!).whenComplete(() {
-        Navigator.pushNamedAndRemoveUntil(
-            context, AppRoutes.statePageUI, (route) => false);
-      });
+      WriteCache.setString(key: 'cache', value: userId!);
     } catch (e) {
       debugPrint(e.toString());
     }

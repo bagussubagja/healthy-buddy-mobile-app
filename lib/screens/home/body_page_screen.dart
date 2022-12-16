@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/favorites/favorite_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/home/home_page.dart';
@@ -14,7 +16,7 @@ class BodyPageScreen extends StatefulWidget {
 }
 
 class _BodyPageScreenState extends State<BodyPageScreen> {
-  final List<Widget> _bodyScreenList = [
+   List<Widget> _bodyScreenList = [
     const HomePage(),
     const FavoriteScreen(),
     const WishlistScreen(),

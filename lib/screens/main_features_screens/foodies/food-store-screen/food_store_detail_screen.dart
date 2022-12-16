@@ -351,10 +351,14 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
 
   Future showModalConfirmationOrder() async {
     final user = Provider.of<UserClass>(context, listen: false);
-    final userBalance = user.users?[0].balance;
+    final userBalance = user.users?.balance;
     setState(() {
       _totalPrice = (_price - (_price * 0.15));
-      _expectedBalance = userBalance! - _totalPrice.round();
+     if(user.users?.hasDiscount == true){
+       _expectedBalance = userBalance! - _totalPrice.round();
+     }else{
+       _expectedBalance = user.users!.balance! - _price;
+     }
     });
 
     return showModalBottomSheet(
@@ -398,13 +402,13 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                     style: regularStyle,
                   ),
                   Text(
-                    user.users?[0].hasDiscount == true
+                    user.users?.hasDiscount == true
                         ? 'Diskon : 15%'
                         : 'Diskon : 0%',
                     style: regularStyle,
                   ),
                   Text(
-                    user.users?[0].hasDiscount == true
+                    user.users?.hasDiscount == true
                         ? 'Total Harga : ${rupiah(_totalPrice.round())}'
                         : 'Total Harga : ${rupiah(_price)}',
                     style: regularStyle,
@@ -414,7 +418,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                       SizedBox(
                           width: 70.w,
                           child: Text(
-                            'Alamat : ${user.users?[0].address}',
+                            'Alamat : ${user.users?.address}',
                             style: regularStyle,
                           )),
                       OutlinedButton(
@@ -449,6 +453,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                           if (_expectedBalance < 0) {
                             _showFailedTransaction();
                           } else {
+                           
                             PurchaseHistoryModel transactionItem =
                                 PurchaseHistoryModel(
                               idUser: idUser,
@@ -456,9 +461,7 @@ class _FoodStoreDetailScreenState extends State<FoodStoreDetailScreen> {
                                   widget.foodStoreModel?.name,
                               category: "Food Store",
                               createdAt: DateTime.now().toString(),
-                              price: user.users?[0].hasDiscount == true
-                                  ? _totalPrice.round()
-                                  : _price,
+                              price: user.users?.hasDiscount == true ? _totalPrice.round() : _price,
                               quantity: _itemQuantity,
                               thumbnail: widget.foodStore?.gallery?[0] ??
                                   widget.foodStoreModel?.gallery[0],

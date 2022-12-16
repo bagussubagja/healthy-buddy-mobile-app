@@ -16,8 +16,8 @@ class PurchaseHistoryClass extends ChangeNotifier {
   Future<void> addFoodiesTransactionData(
       PurchaseHistoryModel body, BuildContext context) async {
     notifyListeners();
-    http.Response response = (await addFoodiesTransaction(body, context))!;
-    if (response.statusCode == 201) {
+    http.Response? response = (await addFoodiesTransaction(body, context));
+    if (response?.statusCode == 201) {
       debugPrint('Transaksi Berhasil');
     }
   }

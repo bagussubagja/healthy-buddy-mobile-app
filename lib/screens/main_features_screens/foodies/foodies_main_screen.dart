@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/foodies/food_articles_notifier.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/foodies/food-store-screen/food_store_main_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/loading_widget.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_width.dart';
@@ -235,7 +236,9 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                     } else if (index == 2) {
                       Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
                     } else if (index == 3) {
-                      Navigator.pushNamed(context, AppRoutes.foodStoreMenu);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return const FoodStoreMainScreen();
+                      },));
                     }
                   },
                   child: Container(

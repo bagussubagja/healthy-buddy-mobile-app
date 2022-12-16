@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, use_build_context_synchronously
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -6,6 +6,7 @@ import 'package:cache_manager/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/authentication/user_notifier.dart';
 import 'package:healthy_buddy_mobile_app/models/user_model/user_model.dart';
+import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
 import 'package:healthy_buddy_mobile_app/shared/theme.dart';
@@ -204,7 +205,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
           ),
           CustomTextField(
             controller: _nameController,
-            hintText: user.users?[0].name,
+            hintText: user.users?.name,
             autofocus: true,
           )
         ],
@@ -217,7 +218,15 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
           UserModel updateName = UserModel(name: _nameController.text);
           var provider =
               Provider.of<UserUpdateNameClass>(context, listen: false);
-          provider.updateName(updateName, idUser!, context);
+
+          await provider.updateName(updateName, idUser!, context);
+          Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.bodyScreen, (route) => false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Berhasil Ganti Nama'),
+            ),
+          );
         }
       },
     ).show();
@@ -247,7 +256,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
           ),
           CustomTextField(
             controller: _addressController,
-            hintText: user.users?[0].address,
+            hintText: user.users?.address,
             autofocus: true,
           )
         ],
@@ -260,7 +269,14 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
         var provider =
             Provider.of<UserUpdateAddressClass>(context, listen: false);
 
-        provider.updateAddress(updateAddress, idUser!, context);
+        await provider.updateAddress(updateAddress, idUser!, context);
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.bodyScreen, (route) => false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Berhasil Ganti Alamat'),
+          ),
+        );
       },
     ).show();
   }
@@ -300,7 +316,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
                 ),
                 CustomTextField(
                   controller: _ageController,
-                  hintText: '${user.users?[0].age} Tahun',
+                  hintText: '${user.users?.age} Tahun',
                   autofocus: true,
                   textInputType: TextInputType.number,
                 ),
@@ -312,7 +328,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
                 ),
                 CustomTextField(
                   controller: _weightController,
-                  hintText: '${user.users?[0].weight} kg',
+                  hintText: '${user.users?.weight} kg',
                   autofocus: true,
                   textInputType: TextInputType.number,
                 ),
@@ -324,7 +340,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
                 ),
                 CustomTextField(
                   controller: _heightController,
-                  hintText: '${user.users?[0].height} cm',
+                  hintText: '${user.users?.height} cm',
                   autofocus: true,
                   textInputType: TextInputType.number,
                 ),
@@ -377,7 +393,7 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
             height: int.parse(_heightController.text),
             dailyActivity: _selectedActivityValue,
             dailyCalories: _calorieCalculator(
-                user.users?[0].gender ?? "Laki-laki",
+                user.users?.gender ?? "Laki-laki",
                 int.parse(_ageController.text),
                 int.parse(_heightController.text),
                 int.parse(_weightController.text),
@@ -385,8 +401,14 @@ class _AccountSettingScreenState extends State<AccountSettingScreen> {
           );
           var provider =
               Provider.of<UserUpdateSelfDataClass>(context, listen: false);
-          provider.updateSelfData(self, idUser!, context);
-          print(self);
+          await provider.updateSelfData(self, idUser!, context);
+          Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.bodyScreen, (route) => false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Berhasil Ganti Data Diri'),
+            ),
+          );
         } else {
           final snackBar = SnackBar(
             elevation: 0,

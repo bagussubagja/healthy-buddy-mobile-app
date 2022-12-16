@@ -137,7 +137,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
 
   Widget _nominalTextField() {
     final user = Provider.of<UserClass>(context);
-    int? value = user.users?[0].balance;
+    int? value = user.users?.balance;
     return CustomTextField(
       titleText: "Masukan total top up saldo kamu :",
       hintText: "ex. 100000",
@@ -209,7 +209,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
 
   Widget _confirmationButton() {
     final user = Provider.of<UserClass>(context);
-    int? value = user.users?[0].balance;
+    int? value = user.users?.balance;
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10),
       height: 8.h,
@@ -293,7 +293,9 @@ class _TopUpScreenState extends State<TopUpScreen> {
       desc: 'Transaksi pengisian saldo kamu berhasil!',
       buttonsTextStyle: regularStyle,
       showCloseIcon: false,
-      btnOkOnPress: () {},
+      btnOkOnPress: () {
+        Navigator.pop(context);
+      },
     ).show();
   }
 }

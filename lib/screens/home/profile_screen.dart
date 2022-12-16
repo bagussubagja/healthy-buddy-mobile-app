@@ -20,13 +20,25 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     final user = Provider.of<UserClass>(context, listen: false);
     ReadCache.getString(key: 'cache').then((value) {
       setState(() {
         user.getUser(context: context, idUser: value);
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<UserClass>(context);
+
     return Scaffold(
       backgroundColor: greenColor,
       appBar: AppBar(
@@ -71,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: SizedBox(
             height: 20.h,
             width: 20.h,
-            child: user.users?[0].gender == "Laki-laki"
+            child: user.users?.gender == "Laki-laki"
                 ? Image.asset(
                     '$imageDirectory/ava1.png',
                     fit: BoxFit.cover,
@@ -84,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         MarginHeight(height: 1.h),
         Text(
-          '${user.users?[0].name}',
+          '${user.users?.name}',
           style: titleStyle.copyWith(
             color: whiteColor,
             fontSize: 16.sp,
@@ -92,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          "Saldo : ${rupiah(user.users?[0].balance)}",
+          "Saldo : ${rupiah(user.users?.balance)}",
           style: regularStyle.copyWith(
             color: whiteColor,
             fontSize: 13.sp,
@@ -100,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          '${user.users?[0].age} Tahun\t|\t${user.users?[0].height} cm\t|\t${user.users?[0].weight} kg',
+          '${user.users?.age} Tahun\t|\t${user.users?.height} cm\t|\t${user.users?.weight} kg',
           style: regularStyle.copyWith(
             color: whiteColor,
             fontSize: 11.sp,
@@ -108,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         MarginHeight(height: 0.5.h),
         Text(
-          '${user.users?[0].dailyActivity} - ${user.users?[0].dailyCalories} kkal',
+          '${user.users?.dailyActivity} - ${user.users?.dailyCalories} kkal',
           style: regularStyle.copyWith(
             color: whiteColor,
             fontSize: 11.sp,
@@ -128,20 +140,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Icons.email_outlined,
             color: greenColor,
           ),
-          hintText: '${user.users?[0].email}',
+          hintText: '${user.users?.email}',
         ),
         MarginHeight(height: 2.h),
         CustomTextField(
           readOnly: true,
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${user.users?[0].address}')));
+                SnackBar(content: Text('${user.users?.address}')));
           },
           prefixIcon: Icon(
             Icons.location_on_outlined,
             color: greenColor,
           ),
-          hintText: '${user.users?[0].address}',
+          hintText: '${user.users?.address}',
         ),
         MarginHeight(height: 4.h),
         ElevatedButton(
