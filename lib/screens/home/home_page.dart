@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 child: const Text('Ya'),
               ),
               TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () {},
                 child: const Text('Tidak'),
               ),
             ],
