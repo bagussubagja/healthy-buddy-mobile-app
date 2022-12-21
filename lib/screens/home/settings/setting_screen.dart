@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/routes/routes.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -14,7 +13,6 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-
   final List<IconData> _iconSettingMenu = [
     Icons.person_outline_outlined,
     Icons.supervised_user_circle_outlined,
@@ -71,7 +69,7 @@ class _SettingScreenState extends State<SettingScreen> {
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          return GestureDetector(
+          return InkWell(
             onTap: () {
               if (index == 0) {
                 Navigator.pushNamed(context, AppRoutes.accountSettingScreen);

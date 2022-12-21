@@ -58,11 +58,7 @@ class _HomePageState extends State<HomePage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () => SystemNavigator.pop(),
-                child: const Text('Ya'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Tidak'),
+                child: const Text('Keluar dari Aplikasi'),
               ),
             ],
           ),

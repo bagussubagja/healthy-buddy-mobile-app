@@ -127,75 +127,85 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
     return CarouselSlider.builder(
       itemCount: 3,
       itemBuilder: (context, index, realIndex) {
-        return ClipRRect(
+        return InkWell(
           borderRadius: BorderRadius.circular(12),
-          child: Container(
-            color: greyColor,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  child: CachedNetworkImage(
-                    imageUrl: item?.thumbnail[index] ?? _placeHolder,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(Icons.error),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.black,
-                      greyColor.withOpacity(0.1),
-                    ],
-                  )),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${item?.title[index].substring(0, 45)}..",
-                          style: regularStyle.copyWith(color: whiteColor),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            final url = Uri.parse(itemCarousel
-                                .carousel![0].link[index]
-                                .toString());
-                            if (await canLaunchUrl(url)) {
-                              await launchUrl(url);
-                            }
-                          },
-                          child: Text(
-                            "Baca Selengkapnya",
-                            style: regularStyle.copyWith(
-                                color: greyTextColor, fontSize: 13),
+          onTap: () async {
+            final url =
+                Uri.parse(itemCarousel.carousel![0].link[index].toString());
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url);
+            }
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              color: greyColor,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ClipRRect(
+                    child: CachedNetworkImage(
+                      imageUrl: item?.thumbnail[index] ?? _placeHolder,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ],
+                      ),
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Center(
+                        child: Icon(Icons.error),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black,
+                        greyColor.withOpacity(0.1),
+                      ],
+                    )),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${item?.title[index].substring(0, 45)}..",
+                            style: regularStyle.copyWith(color: whiteColor),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              final url = Uri.parse(itemCarousel
+                                  .carousel![0].link[index]
+                                  .toString());
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            },
+                            child: Text(
+                              "Baca Selengkapnya",
+                              style: regularStyle.copyWith(
+                                  color: greyTextColor, fontSize: 13),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -222,26 +232,28 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    if (index == 0) {
-                      Navigator.pushNamed(context, AppRoutes.foodArticleMenu);
-                    } else if (index == 1) {
-                      Navigator.pushNamed(
-                          context, AppRoutes.foodCalculatorScreen);
-                    } else if (index == 2) {
-                      Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
-                    } else if (index == 3) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return const FoodStoreMainScreen();
-                      },));
-                    }
-                  },
-                  child: Container(
+            return InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                if (index == 0) {
+                  Navigator.pushNamed(context, AppRoutes.foodArticleMenu);
+                } else if (index == 1) {
+                  Navigator.pushNamed(context, AppRoutes.foodCalculatorScreen);
+                } else if (index == 2) {
+                  Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
+                } else if (index == 3) {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const FoodStoreMainScreen();
+                    },
+                  ));
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
                     height: 7.h,
                     decoration: BoxDecoration(
                       color: greenColor.withOpacity(0.5),
@@ -252,13 +264,13 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                       scale: 1.5.h,
                     ),
                   ),
-                ),
-                Text(
-                  _iconLabel[index].replaceAll(" ", "\n"),
-                  style: regularStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  Text(
+                    _iconLabel[index].replaceAll(" ", "\n"),
+                    style: regularStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             );
           },
         ),

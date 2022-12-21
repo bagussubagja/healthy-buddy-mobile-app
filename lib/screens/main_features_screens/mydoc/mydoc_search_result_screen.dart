@@ -26,13 +26,23 @@ class MyDocSearchResultScreen extends SearchDelegate {
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
-          onPressed: () {
-            query = "";
-          },
-          icon: Icon(
-            Icons.close,
-            color: blackColor,
-          ))
+        onPressed: () {
+          query = "";
+        },
+        icon: Icon(
+          Icons.close,
+          color: blackColor,
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+          showResults(context);
+        },
+        icon: Icon(
+          Icons.search,
+          color: blackColor,
+        ),
+      ),
     ];
   }
 

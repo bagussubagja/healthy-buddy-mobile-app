@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_buddy_mobile_app/core/mydoc/mydoc_notifier.dart';
+import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/category_screen/mydoc_category_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/main_features_screens/mydoc/mydoc_search_result_screen.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/custom_textfield.dart';
 import 'package:healthy_buddy_mobile_app/screens/widgets/margin_height.dart';
@@ -58,7 +59,7 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
   @override
   Widget build(BuildContext context) {
     final topDoctor = Provider.of<MyDocByExperienceClass>(context);
-    
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -187,10 +188,17 @@ class _MyDocMainScreenState extends State<MyDocMainScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.myDocCategoryScreen,
-                        arguments: index);
+                    // Navigator.pushNamed(context, AppRoutes.myDocCategoryScreen,
+                    //     arguments: index);
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return MyDocCategoryScreen(
+                          index: index,
+                        );
+                      },
+                    ));
                   },
                   child: Container(
                     height: 7.h,
