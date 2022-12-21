@@ -222,26 +222,28 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    if (index == 0) {
-                      Navigator.pushNamed(context, AppRoutes.foodArticleMenu);
-                    } else if (index == 1) {
-                      Navigator.pushNamed(
-                          context, AppRoutes.foodCalculatorScreen);
-                    } else if (index == 2) {
-                      Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
-                    } else if (index == 3) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return const FoodStoreMainScreen();
-                      },));
-                    }
-                  },
-                  child: Container(
+            return InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                if (index == 0) {
+                  Navigator.pushNamed(context, AppRoutes.foodArticleMenu);
+                } else if (index == 1) {
+                  Navigator.pushNamed(context, AppRoutes.foodCalculatorScreen);
+                } else if (index == 2) {
+                  Navigator.pushNamed(context, AppRoutes.foodReceiptMenu);
+                } else if (index == 3) {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const FoodStoreMainScreen();
+                    },
+                  ));
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
                     height: 7.h,
                     decoration: BoxDecoration(
                       color: greenColor.withOpacity(0.5),
@@ -252,13 +254,13 @@ class _FoodiesScreenState extends State<FoodiesScreen> {
                       scale: 1.5.h,
                     ),
                   ),
-                ),
-                Text(
-                  _iconLabel[index].replaceAll(" ", "\n"),
-                  style: regularStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  Text(
+                    _iconLabel[index].replaceAll(" ", "\n"),
+                    style: regularStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             );
           },
         ),

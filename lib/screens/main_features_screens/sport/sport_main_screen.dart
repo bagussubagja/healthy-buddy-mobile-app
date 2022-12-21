@@ -242,14 +242,13 @@ class _SportScreenState extends State<SportScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     if (index == 0) {
                       Navigator.pushNamed(context, AppRoutes.sportArticle);
                     } else if (index == 1) {
                       Navigator.pushNamed(context, AppRoutes.sportWebsite);
                     } else if (index == 2) {
-                      // Navigator.pushNamed(context, AppRoutes.sportStore);
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
                           return SportStoreMainScreen();
