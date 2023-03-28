@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:cache_manager/cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +103,7 @@ class _SportStoreMainScreenState extends State<SportStoreMainScreen> {
     user.getUser(context: context, idUser: idUser ?? "");
     return Scaffold(
       backgroundColor: bgColor,
-      floatingActionButton: Badge(
+      floatingActionButton: badges.Badge(
         badgeContent: Text(
           _cartItemQuantity.toString(),
           style: regularStyle.copyWith(color: whiteColor),
