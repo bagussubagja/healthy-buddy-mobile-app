@@ -79,6 +79,7 @@ class HealthyBuddyApp extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           supportedLocales: const [
             Locale('id', 'ID'),
             Locale('en', 'US'),
