@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 MarginHeight(height: 10),
                 CustomTextField(
                   titleText: "Alamat Email",
-                  hintText: "ex. bagus@gmail.com",
+                  hintText: "ex. subagja@gmail.com",
                   color: Colors.white,
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,
