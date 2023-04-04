@@ -25,5 +25,7 @@ This project is proposed for final assignment in Kualitas Perangkat Lunak (Softw
 #### Notes
 Backend services using Supabase (free plan). So it can be paused whenever the app is not used by the user. And MyDoc - Appointment feature is using ZegoCloud, if this feature is not working correctly, consider changing the API Key on your own.
 <br/>
+This app has a companion named "Healthy Buddy Companion App". This application functions to support appointments with doctors.
+Link : https://github.com/bagussubagja/healthy-buddy-companion-app
 <br/>
 Created with ❤️ - Bagus Subagja
