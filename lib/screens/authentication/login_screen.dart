@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 MarginHeight(height: 15),
                 CustomTextField(
                   titleText: "Alamat Email",
-                  hintText: "ex. suci@gmail.com",
+                  hintText: "ex. bagus@gmail.com",
                   color: Colors.white,
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,

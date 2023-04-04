@@ -155,7 +155,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         return item.food?.length ?? 0;
       } else if (x == 1) {
         return item.doc?.length ?? 0;
-      }  else {
+      } else {
         return 0;
       }
     }
@@ -178,12 +178,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       itemBuilder: (context, index) {
         return Container(
           width: double.infinity,
-          height: 17.h,
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(12)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: 13.h,
@@ -223,7 +224,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       child: Text(
                         _currentIndex == 0
                             ? '${item.food?[index].foodReceipt?.name}'
-                            : '${item.doc?[index].myDoc?.name}' ,
+                            : '${item.doc?[index].myDoc?.name}',
                         style: titleStyle.copyWith(fontSize: 12.sp),
                       ),
                     ),
@@ -302,7 +303,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                   );
                                 },
                               ));
-                            } 
+                            }
                           },
                           child: Icon(
                             Icons.arrow_forward_outlined,
